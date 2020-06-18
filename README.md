@@ -23,7 +23,7 @@ Avant de faire quoi que ce soit ! lisez bien.
 - Menu Personnel
 - Un "pole emploi" pour vos métier (priver/public)
 - ghmattimysql pour ce qui est de requete sql.
-et plein d'autre possibilité.
+- connexion du joueur via license, plus besoin de steam.
 
 ## Discord SourceV2 :
 
@@ -31,7 +31,7 @@ https://discord.gg/NKHJTqn
 
 
 ## Installation :
-
+- Installé la dernière version recommandait des artefacts sur FiveM : https://runtime.fivem.net/artifacts/fivem/build_server_windows/master/
 - Installé puis configurer votre base de donnée, une vidéo est faite sur le discord.
 - Entrer votre mot de passe dans le fichier config qui se trouve dans [GTA_Core]/ghmattimysql/config.json
 - Installé le fichier GTA_Serveur.sql dans votre base de donnée.

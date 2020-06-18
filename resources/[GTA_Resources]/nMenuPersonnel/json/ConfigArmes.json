@@ -1,0 +1,48 @@
+[
+    {
+      "idArme" : 1,
+      "idMunition" : 2,
+      "nomHash" : "WEAPON_PISTOL",
+      "typeMunitions" : "AMMO_PISTOL"
+    },
+    
+    {
+      "idArme" : 3,
+      "nomHash" : "WEAPON_HAMMER"
+    },
+
+    {
+      "idArme" : 4,
+      "nomHash" : "WEAPON_BAT"
+    },
+
+    {
+      "idArme" : 5,
+      "nomHash" : "WEAPON_CROWBAR"
+    },
+    
+    {
+      "idArme" : 6,
+      "nomHash" : "WEAPON_KNIFE"
+    },
+
+    {
+      "idArme" : 7,
+      "nomHash" : "WEAPON_HANDCUFFS"
+    },
+
+    {
+      "idArme" : 8,
+      "nomHash" : "WEAPON_HATCHET"
+    },
+
+    {
+      "idArme" : 9,
+      "nomHash" : "WEAPON_MACHETE"
+    },
+
+    {
+      "idArme" : 10,
+      "nomHash" : "WEAPON_KNUCKLE"
+    }
+]
