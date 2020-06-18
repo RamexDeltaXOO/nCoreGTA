@@ -3,7 +3,7 @@ Player.__index = Player
 
 --> Version de la Resource : 
 local LatestVersion = ''; CurrentVersion = '1.3.3'
-PerformHttpRequest('https://raw.githubusercontent.com/NinjaSourceV2/nCoreGTA/master/resources/%5BGTA_Core%5D/nCoreGTA/VERSION?token=AG2XZ743TVCNKFACO4QHJV265OESQ', function(Error, NewestVersion, Header)
+PerformHttpRequest('https://raw.githubusercontent.com/NinjaSourceV2/nCoreGTA/master/resources/%5BGTA_Core%5D/nCoreGTA/VERSION?token=AG2XZ72KGBYWYXXJMIPTNY265OFPM', function(Error, NewestVersion, Header)
     LatestVersion = NewestVersion
     if CurrentVersion ~= NewestVersion then
         print("\n\r ^2[nCoreGTA]^1 La version que vous utilisé n'est plus a jours, veuillez télécharger la dernière version. ^3\n\r")
