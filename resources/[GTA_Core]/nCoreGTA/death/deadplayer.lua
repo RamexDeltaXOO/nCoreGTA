@@ -60,11 +60,11 @@ Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
 		local playerPed = PlayerPedId()
-		if IsPedFatallyInjured(playerPed) and not IsPedDead then
+		if IsEntityDead(playerPed) and not IsPedDead then
 			IsPedDead = true
 			_nBeginDeadTimer()
 			_nSendSignal()
-		elseif not IsPedFatallyInjured(playerPed) then
+		elseif not IsEntityDead(playerPed) then
 			IsPedDead = false
 		end
 	end
@@ -86,11 +86,8 @@ HideHUDThisFrame = function()
 	HideHudComponentThisFrame(8)
 	HideHudComponentThisFrame(9)
 	HideHudComponentThisFrame(13)
-	HideHudComponentThisFrame(11)
-	HideHudComponentThisFrame(12)
-	HideHudComponentThisFrame(15)
-	HideHudComponentThisFrame(18)
-	HideHudComponentThisFrame(19)
+	HideHudComponentThisFrame(17)
+	HideHudComponentThisFrame(20)
 end
 
 DrawGenericTextThisFrame = function()

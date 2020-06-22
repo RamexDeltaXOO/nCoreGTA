@@ -23,7 +23,7 @@ config.argentSale = 150
 config.banque = 5000
 
 --> Traffic PNJ :
-config.vehiculeDensiter = 0.5
+config.vehiculeDensiter = 0.3
 config.pedDensiter = 1.0
 
 -->JobMedic :
@@ -32,17 +32,13 @@ config.utilisationJobMedic = false
 --> Whitelist :
 --> Pour avoir la license du player, faite le connecter une fois au serveur sans qui puisse rejoindre, il sera afficher sur la console.
 config.activerWhitelist = false
-config.lienDiscord  = 'https://discord.gg/xXxUPA'
+config.lienDiscord  = 'https://discord.gg/NKHJTqn'
 
 ---> Listes des joueurs whitelist :
 config.JoueursWhitelist    = {
     --[[ EXEMPLE :
-        'license:40423b6fc9a87b1c16c005a43d3a74863fdd96db',
-        'license:26d08f65594884f85b889c7612bd966c815479ec',
-        "license:dad22062e0444e3b2485e2d6ef27c8fd7c989325"
+        'license:40423b6fc9a87b1c16c005a43d3a74863fdd96db'
     ]]
     
-    'license:40423b6fc9a87b1c16c005a43d3a74863fdd96db',
-    'license:26d08f65594884f85b889c7612bd966c815479ec',
-    "license:dad22062e0444e3b2485e2d6ef27c8fd7c989325"
+    'license:40423b6fc9a87b1c16c005a43d3a74863fdd96db'
 }

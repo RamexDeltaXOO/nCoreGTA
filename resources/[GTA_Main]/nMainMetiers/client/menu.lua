@@ -1,7 +1,7 @@
 --||@SuperCoolNinja.||--
 local listEmploi = {}
 local menuConfig = json.decode(LoadResourceFile(GetCurrentResourceName(), 'json/ConfigMenu.json'))
-
+local scaleform = nil
 
 local actionEmploi = {
 	opened = false,
@@ -12,14 +12,14 @@ local actionEmploi = {
 	selectedbutton = 1,
 	marker = { r = 0, g = 155, b = 255, a = 200, type = 1 },
 	menu = {
-		x = 0.9,
-		y = 0.26,
-		width = 0.2,
+		x = 0.1 + 0.03,
+		y = 0.0 + 0.03,
+		width = 0.2 + 0.02 + 0.005,
 		height = 0.04,
 		buttons = 10,
 		from = 1,
 		to = 10,
-		scale = 0.4,
+		scale = 0.3 + 0.05, --> Taille.
         font = 0,
         
         ["actionEmploiMain"] = {
@@ -60,7 +60,7 @@ Citizen.CreateThread(function()
     while true do
         Citizen.Wait(0)
 
-        for k in pairs(blips) do
+        for k,_ in pairs(blips) do
             local plyCoords = GetEntityCoords(GetPlayerPed(-1), false)
             local dist = Vdist(plyCoords.x, plyCoords.y, plyCoords.z, blips[k].x, blips[k].y, blips[k].z)
 
@@ -81,7 +81,7 @@ Citizen.CreateThread(function()
 					end
 					if actionEmploi.opened == false then
 						TriggerServerEvent("GTA:GetJobsList")
-						OpenMainEmploi("actionEmploiMain")
+						OpenMainMenu()
 					else
 						CloseMainEmploi()
 					end
@@ -95,10 +95,33 @@ function LocalPed()
 	return GetPlayerPed(-1)
 end
 
-function OpenMainEmploi(open_menu)
-	actionEmploi.currentmenu = open_menu
-	actionEmploi.opened = true
-	actionEmploi.selectedbutton = 1
+function DrawTextMenu(fonteP, stringT, scale, posX, posY)
+    SetTextFont(fonteP)
+    SetTextProportional(0)
+    SetTextScale(scale, scale)
+    SetTextColour(255, 255, 255, 255)
+    SetTextCentre(true)
+    SetTextEntry("STRING")
+    AddTextComponentString(stringT)
+    DrawText(posX, posY)
+end
+
+function OpenMainMenu()
+    if not HasStreamedTextureDictLoaded("ninja_source") then
+        RequestStreamedTextureDict("ninja_source", true)
+    end
+
+    scaleform = RequestScaleformMovie("mp_menu_glare")
+    while not HasScaleformMovieLoaded(scaleform) do
+        Citizen.Wait(0)
+    end
+
+    PushScaleformMovieFunction(scaleform, "initScreenLayout")
+    PopScaleformMovieFunctionVoid()
+    
+    actionEmploi.currentmenu = "actionEmploiMain"
+    actionEmploi.opened = true
+    actionEmploi.selectedbutton = 1
 end
 
 function CloseMainEmploi()
@@ -135,17 +158,18 @@ function drawMenuButton(button,x,y,selected)
 end
 
 function drawMenuTitle(txt,x,y)
-	local menu = actionEmploi.menu
-	SetTextFont(2)
-	SetTextProportional(0)
-	SetTextScale(0.5, 0.5)
-	SetTextColour(255, 255, 255, 255)
-	SetTextEntry("STRING")
-	AddTextComponentString(txt)
+    local menu = actionEmploi.menu
+    SetTextFont(0)
+    SetTextScale(0.4 + 0.008, 0.4 + 0.008)
+    SetTextColour(255, 255, 255, 255)
+    SetTextEntry("STRING")
+    AddTextComponentString(txt)
 	for i=1, #menuConfig do 
 		DrawRect(x,y,menu.width,menu.height, menuConfig[i].couleurTopMenu.r, menuConfig[i].couleurTopMenu.g, menuConfig[i].couleurTopMenu.b, menuConfig[i].couleurTopMenu.a)
 	end
-	DrawText(x - menu.width/2 + 0.005, y - menu.height/2 + 0.0028)
+    DrawTextMenu(1, txt, 0.8,menu.width - 0.4 / 2 + 0.1 + 0.005, y - menu.height/2 + 0.01, 255, 255, 255)
+    DrawSprite("ninja_source", "interaction_bgd", x,y, menu.width,menu.height + 0.04 + 0.007, .0, 255, 255, 255, 255)
+    DrawScaleformMovie(scaleform, 0.42 + 0.003,0.45, 0.9,0.9)
 end
 
 function tablelength(T)
@@ -165,7 +189,6 @@ Citizen.CreateThread(function()
 			local menu = actionEmploi.menu[actionEmploi.currentmenu]
 			drawTxt(actionEmploi.title,1,1,actionEmploi.menu.x,actionEmploi.menu.y,1.0, 255,255,255,255)
 			drawMenuTitle(menu.title, actionEmploi.menu.x,actionEmploi.menu.y + 0.08)
-			drawTxt(actionEmploi.selectedbutton.."/"..tablelength(menu.buttons),0,0,actionEmploi.menu.x + actionEmploi.menu.width/2 - 0.0385,actionEmploi.menu.y + 0.067,0.4, 255,255,255,255)
 			local y = actionEmploi.menu.y + 0.12
 			buttoncount = tablelength(menu.buttons)
 			local selected = false
@@ -177,10 +200,10 @@ Citizen.CreateThread(function()
 					else
 						selected = false
 					end
-					drawMenuButton(button,actionEmploi.menu.x,y,selected)
+					drawMenuButton(button,actionEmploi.menu.x,y + 0.02 + 0.003,selected)
 					y = y + 0.04
 					if selected and IsControlJustPressed(1,201) then --> ENTER
-						PlaySoundFrontend(-1, "SELECT", "HUD_FRONTEND_DEFAULT_SOUNDSET", true)
+						PlaySoundFrontend(-1, "Apt_Style_Purchase", "DLC_APT_Apartment_SoundSet", 0)
 						ButtonSelectedEmploi(button)
 					end
 				end

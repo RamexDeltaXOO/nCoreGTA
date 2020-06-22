@@ -1,6 +1,7 @@
 --||@SuperCoolNinja.||--
 
 local mainTenue = json.decode(LoadResourceFile(GetCurrentResourceName(), 'json/ConfigTenue.json'))
+local scaleform = nil
 
 local menuCreationPerso = {
 	opened = false,
@@ -11,14 +12,14 @@ local menuCreationPerso = {
 	selectedbutton = 1,
 	marker = { r = 0, g = 155, b = 255, a = 200, type = 1 },
 	menu = {
-		x = 0.8 + 0.07,
-		y = 0.05,
-		width = 0.2 + 0.05,
+		x = 0.1 + 0.03,
+		y = 0.0 + 0.03,
+		width = 0.2 + 0.02 + 0.005,
 		height = 0.04,
 		buttons = 20,
 		from = 1,
 		to = 20,
-		scale = 0.4,
+		scale = 0.3 + 0.05, --> Taille.
         font = 0,
         
         ["mainSex"] = {
@@ -181,12 +182,6 @@ local function GetPlayerModel(modelhash)
 	end
 end
 
-local function deletePedPreview()
-	if DoesEntityExist(config.pedPreview) then
-		DeletePed(config.pedPreview)
-	end
-end
-
 function BeginEditeur()
 	if IsPlayerSwitchInProgress() then
 		DisplayRadar(false)
@@ -208,15 +203,10 @@ function BeginEditeur()
 			SetCamFov(config.cam, 37.95373)
 			RenderScriptCams(true, false, 3000, 1, 0, 0)
 		end
-		
-		if not DoesEntityExist(config.pedPreview) then
-			DeletePed(config.pedPreview)
-			config.pedPreview = CreatePed(25, config.Sex, 403.006225894, -996.8715, -99.00, 182.65637207031)
-		end
 
 		Visible()
 		Wait(3500)
-		OpenMainPersonnage("mainSex")
+		OpenMainMenu()
 		config.MenuOpen = true
 	end
 end
@@ -251,6 +241,26 @@ AddEventHandler("GTA:IdentiterMenu", function(argentPropre,argentSale)
 end)
 
 
+
+function OpenMainMenu()
+	if not HasStreamedTextureDictLoaded("commonmenu") then
+        RequestStreamedTextureDict("commonmenu", true)
+	end
+	
+	scaleform = RequestScaleformMovie("mp_menu_glare")
+    while not HasScaleformMovieLoaded(scaleform) do
+        Citizen.Wait(0)
+	end
+	
+	PushScaleformMovieFunction(scaleform, "initScreenLayout")
+	PopScaleformMovieFunctionVoid()
+	
+
+	menuCreationPerso.currentmenu = "mainSex"
+	menuCreationPerso.opened = true
+	menuCreationPerso.selectedbutton = 1
+end
+
 function OpenMainPersonnage(open_menu)
 	menuCreationPerso.currentmenu = open_menu
 	menuCreationPerso.opened = true
@@ -261,6 +271,17 @@ function CloseMainPersonnage()
 	menuCreationPerso.opened = false
 	menuCreationPerso.menu.from = 1
 	menuCreationPerso.menu.to = 20
+end
+
+function DrawTextMenu(fonteP, stringT, scale, posX, posY)
+    SetTextFont(fonteP)
+    SetTextProportional(0)
+    SetTextScale(scale, scale)
+    SetTextColour(255, 255, 255, 255)
+    SetTextCentre(true)
+    SetTextEntry("STRING")
+    AddTextComponentString(stringT)
+    DrawText(posX, posY)
 end
 
 function drawTxt(text,font,centre,x,y,scale,r,g,b,a)
@@ -300,16 +321,18 @@ function drawMenuButton(button,x,y,selected)
 	DrawText(x - menu.width/2 + 0.005, y - menu.height/2 + 0.0028)	
 end
 
+
 function drawMenuTitle(txt,x,y)
-local menu = menuCreationPerso.menu
-	SetTextFont(2)
-	SetTextProportional(0)
-	SetTextScale(0.5, 0.5)
-	SetTextColour(255, 255, 255, 255)
-	SetTextEntry("STRING")
-	AddTextComponentString(txt)
-	DrawRect(x,y,menu.width,menu.height,0,0,0,150)
-	DrawText(x - menu.width/2 + 0.005, y - menu.height/2 + 0.0028)	
+    local menu = menuCreationPerso.menu
+    SetTextFont(0)
+    SetTextScale(0.4 + 0.008, 0.4 + 0.008)
+    SetTextColour(255, 255, 255, 255)
+    SetTextEntry("STRING")
+    AddTextComponentString(txt)
+    DrawRect(x,y,menu.width,menu.height + 0.04 + 0.007, 0, 0, 0, 0)
+    DrawTextMenu(1, txt, 0.8,menu.width - 0.4 / 2 + 0.1 + 0.005, y - menu.height/2 + 0.01, 255, 255, 255)
+    DrawSprite("commonmenu", "interaction_bgd", x,y, menu.width,menu.height + 0.04 + 0.007, .0, 255, 255, 255, 255)
+    DrawScaleformMovie(scaleform, 0.42 + 0.003,0.45, 0.9,0.9)
 end
 
 function tablelength(T)
@@ -328,7 +351,6 @@ function GetPersonnageModel()
 	end
 end
 
-
 local backlock = false
 Citizen.CreateThread(function()
 	while true do
@@ -336,9 +358,7 @@ Citizen.CreateThread(function()
 		if menuCreationPerso.opened then
 			DisableControlAction(0, 172,true) --DESACTIVE CONTROLL HAUT
 			local menu = menuCreationPerso.menu[menuCreationPerso.currentmenu]
-			drawTxt(menuCreationPerso.title,1,1,menuCreationPerso.menu.x,menuCreationPerso.menu.y,1.0, 255,255,255,255)
 			drawMenuTitle(menu.title, menuCreationPerso.menu.x,menuCreationPerso.menu.y + 0.08)
-			drawTxt(menuCreationPerso.selectedbutton.."/"..tablelength(menu.buttons),0,0,menuCreationPerso.menu.x + menuCreationPerso.menu.width/2 - 0.0385,menuCreationPerso.menu.y + 0.067,0.4, 255,255,255,255)
 			local y = menuCreationPerso.menu.y + 0.12
 			buttoncount = tablelength(menu.buttons)
 			local selected = false
@@ -379,10 +399,10 @@ Citizen.CreateThread(function()
 						else
 							selected = false
 						end
-						drawMenuButton(button,menuCreationPerso.menu.x,y,selected)
+						drawMenuButton(button,menuCreationPerso.menu.x,y + 0.02 + 0.003,selected)
 						y = y + 0.04
 						if selected and IsControlJustPressed(1,201) then
-							PlaySoundFrontend(-1, "SELECT", "HUD_FRONTEND_DEFAULT_SOUNDSET", true)
+							PlaySoundFrontend(-1, "Apt_Style_Purchase", "DLC_APT_Apartment_SoundSet", 0)
 							ButtonSelectedPersonnage(button)
 						end
 					end
@@ -424,13 +444,11 @@ function ButtonSelectedPersonnage(button)
 
 	if this == "mainSex" then
 		if btn == "homme" then
-			deletePedPreview()
             TriggerServerEvent("GTA:UpdateSexPersonnage", button.sex)
             GetPlayerModel(button.sex)
             UpdatePosPlayer()
             OpenMainPersonnage("mainVisageHomme")
 		elseif btn == "femme" then
-			deletePedPreview()
             TriggerServerEvent("GTA:UpdateSexPersonnage",button.sex)
             GetPlayerModel(button.sex)
             UpdatePosPlayer()

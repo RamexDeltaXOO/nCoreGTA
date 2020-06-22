@@ -1,6 +1,6 @@
 -- --------------------------------------------------------
 -- Hôte :                        127.0.0.1
--- Version du serveur:           10.3.1-MariaDB - mariadb.org binary distribution
+-- Version du serveur:           10.4.13-MariaDB - mariadb.org binary distribution
 -- SE du serveur:                Win64
 -- HeidiSQL Version:             11.0.0.5919
 -- --------------------------------------------------------
@@ -25,7 +25,6 @@ CREATE TABLE IF NOT EXISTS `gta_joueurs` (
   `argent_sale` int(11) DEFAULT NULL,
   `banque` int(11) DEFAULT NULL,
   `job` varchar(255) COLLATE utf8mb4_bin DEFAULT 'Chomeur',
-  `lastpos` varchar(255) COLLATE utf8mb4_bin DEFAULT '',
   `isFirstConnection` tinyint(1) NOT NULL DEFAULT 1,
   `nom` varchar(128) COLLATE utf8mb4_bin NOT NULL DEFAULT 'Sans Nom',
   `prenom` varchar(128) COLLATE utf8mb4_bin NOT NULL DEFAULT 'Sans Prenom',
@@ -36,6 +35,8 @@ CREATE TABLE IF NOT EXISTS `gta_joueurs` (
   `soif` double DEFAULT 100,
   `serverid` int(11) NOT NULL DEFAULT 0,
   `isAdmin` tinyint(1) DEFAULT 0,
+  `enService` tinyint(1) NOT NULL DEFAULT 0,
+  `lastpos` varchar(255) COLLATE utf8mb4_bin DEFAULT '{-887.48388671875, -2311.68872070313,  -3.50776553153992}',
   PRIMARY KEY (`license`),
   KEY `faim_soif` (`faim`,`soif`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;

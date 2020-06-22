@@ -1,5 +1,4 @@
 blips = {
-	{nom="Emplois", couleur = 57, id=408, x = -55.7898, y = 6525.02, z = 31.4908},
 	{nom="Emplois", couleur = 57, id=408, x = -1083.4, y = -245.893, z = 37.7632},
 }
 

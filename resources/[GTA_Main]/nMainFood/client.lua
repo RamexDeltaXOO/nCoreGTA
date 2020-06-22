@@ -6,7 +6,7 @@ local enableHud = true --> Ici pour changer le status du hud pour afficher votre
 -- TIMER
 Citizen.CreateThread(function ()
 	while true do
-	Citizen.Wait(390000) -->v390000
+	Citizen.Wait(99999999999999999) -->v390000
 		RemoveCalories(1.2)
 		RemoveWater(1.2)
 	end

@@ -39,13 +39,6 @@ AddEventHandler("GTA:GetSexPlayer", function()
 end)
 
 
---> A utilisé uniquement pour debug au reboot du script.
---[[AddEventHandler('onResourceStop', function(resourceName)
-    if resourceName == GetCurrentResourceName() then
-		TriggerEvent("GTA:GetSexPlayer")
-    end
-end)]]
-
 local firstspawn = 0
 AddEventHandler('playerSpawned', function(spawn)
 	if firstspawn == 0 then

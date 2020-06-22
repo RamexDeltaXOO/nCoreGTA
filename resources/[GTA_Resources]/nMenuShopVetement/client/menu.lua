@@ -3,9 +3,7 @@ local vetementConfig = json.decode(LoadResourceFile(GetCurrentResourceName(), 'j
 local menuConfig = json.decode(LoadResourceFile(GetCurrentResourceName(), 'json/ConfigMenu.json'))
 
 --> Blips :
-local VetementBlips = {}
-
---> Prix :
+local VetementBlips = {};
 local prixPantalon = 0;
 
 
@@ -19,14 +17,14 @@ local vetementShops = {
 	selectedbutton = 0,
 	marker = { r = 0, g = 155, b = 255, a = 200, type = 1 },
 	menu = {
-		x = 0.8 + 0.07,
-		y = 0.05,
-		width = 0.2 + 0.05,
+		x = 0.1 + 0.03,
+		y = 0.0 + 0.03,
+		width = 0.2 + 0.02 + 0.005,
 		height = 0.04,
 		buttons = 30,
 		from = 1,
 		to = 10,
-		scale = 0.4,
+		scale = 0.3 + 0.05, --> Taille.
 		font = 0,
 		["mainTshirtsHomme"] = {
 			title = "Tshirts",
@@ -445,6 +443,17 @@ end
 function OpenMainPersonnage(open_menu)
 	CloseCreator()
 	Wait(150)
+	if not HasStreamedTextureDictLoaded("ninja_source") then
+        RequestStreamedTextureDict("ninja_source", true)
+    end
+
+    scaleform = RequestScaleformMovie("mp_menu_glare")
+    while not HasScaleformMovieLoaded(scaleform) do
+        Citizen.Wait(0)
+    end
+
+    PushScaleformMovieFunction(scaleform, "initScreenLayout")
+    PopScaleformMovieFunctionVoid()
 	vetementShops.opened = true
 	vetementShops.currentmenu = open_menu
 	vetementShops.selectedbutton = 1
@@ -478,6 +487,18 @@ function drawMenuButton(button,x,y,selected)
 	DrawText(x - menu.width/2 + 0.005, y - menu.height/2 + 0.0028)
 end
 
+function DrawTextMenu(fonteP, stringT, scale, posX, posY)
+    SetTextFont(fonteP)
+    SetTextProportional(0)
+    SetTextScale(scale, scale)
+    SetTextColour(255, 255, 255, 255)
+    SetTextCentre(true)
+    SetTextEntry("STRING")
+    AddTextComponentString(stringT)
+    DrawText(posX, posY)
+end
+
+
 function drawMenuTitle(txt,x,y)
 	local menu = vetementShops.menu
 	SetTextFont(2)
@@ -489,7 +510,9 @@ function drawMenuTitle(txt,x,y)
 	for i=1, #menuConfig do 
 		DrawRect(x,y,menu.width,menu.height, menuConfig[i].couleurTopMenu.r, menuConfig[i].couleurTopMenu.g, menuConfig[i].couleurTopMenu.b, menuConfig[i].couleurTopMenu.a)
 	end
-	DrawText(x - menu.width/2 + 0.005, y - menu.height/2 + 0.0028)
+	DrawTextMenu(1, txt, 0.8,menu.width - 0.4 / 2 + 0.1 + 0.005, y - menu.height/2 + 0.01, 255, 255, 255)
+    DrawSprite("ninja_source", "interaction_bgd", x,y, menu.width,menu.height + 0.04 + 0.007, .0, 255, 255, 255, 255)
+    DrawScaleformMovie(scaleform, 0.42 + 0.003,0.45, 0.9,0.9)
 end
 
 
@@ -736,10 +759,10 @@ Citizen.CreateThread(function()
 					else
 						selected = false
 					end
-				drawMenuButton(button,vetementShops.menu.x,y,selected)
+				drawMenuButton(button,vetementShops.menu.x,y + 0.02 + 0.003,selected)
 				y = y + 0.04
 					if selected and IsControlJustPressed(1,201) then
-						PlaySoundFrontend(-1, "SELECT", "HUD_FRONTEND_DEFAULT_SOUNDSET", true)
+						PlaySoundFrontend(-1, "Apt_Style_Purchase", "DLC_APT_Apartment_SoundSet", 0)
 						ButtonSelected(button)
 					end
 				end

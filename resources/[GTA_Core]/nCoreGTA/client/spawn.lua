@@ -1,6 +1,7 @@
 --@Super.Cool.Ninja
 local firstTick = false
 local firstspawn = 0
+IsPedDead = 0
 
 local function showLoadingPromt(label, time)
     Citizen.CreateThread(function()
@@ -25,8 +26,8 @@ AddEventHandler("GTA:LASTPOS", function(PosX, PosY, PosZ)
 	
 	FreezeEntityPosition(GetPlayerPed(-1), false)
 	SetEntityVisible(LocalPlayerPed(), true, 0)
-	SwitchInPlayer(LocalPlayerPed())
 	TriggerServerEvent("GTA_Notif:OnPlayerJoin") --> Notif qui affiche le nom du player vient de rejoindre/quitter la ville.
+	PlaySoundFrontend(-1, "CAM_PAN_DARTS", "HUD_MINI_GAME_SOUNDSET", 1)
 end)
 
 Citizen.CreateThread(function()
@@ -42,10 +43,12 @@ Citizen.CreateThread(function()
 
 			showLoadingPromt("PCARD_JOIN_GAME", 8000)
 			Wait(1000)
+			TriggerServerEvent('GTA:LoadArgent')
 		end
 
 		TriggerServerEvent("GTA:CreationPersonnage")
 		TriggerServerEvent("GTA:SPAWNPLAYER")
+		TriggerEvent("GTA:LoadWeaponPlayer")
 		
 		Wait(5000)
 
@@ -54,11 +57,9 @@ Citizen.CreateThread(function()
 
 		Wait(5000)		
 
-		TriggerServerEvent('GTA:LoadArgent')
 		exports.spawnmanager:setAutoSpawn(false)
 		
 		Wait(2000)
-		TriggerEvent("GTA:LoadWeaponPlayer")
 		firstTick = true
 	end
 	local ipls = {'facelobby', 'farm', 'farmint', 'farm_lod', 'farm_props', 
@@ -102,7 +103,6 @@ Citizen.CreateThread(function()
 		end
 	end
 end)
-
 
 AddEventHandler('playerSpawned', function(spawn)
 	if firstspawn == 0 then

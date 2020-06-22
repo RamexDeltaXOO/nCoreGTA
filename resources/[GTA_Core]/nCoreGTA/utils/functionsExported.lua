@@ -15,6 +15,10 @@ local body = {
 
 RequestStreamedTextureDict(body.dict)
 
+
+--> NOTIF SOUND :	PlaySoundFrontend(-1, "Goon_Paid_Small", "GTAO_Boss_Goons_FM_Soundset", 0)
+ 
+
 local function goDown(v, id) -- Notifications will go under the previous notifications
 	for i = 1, #v do
 		if v[i].draw and i ~= id then
@@ -119,7 +123,7 @@ end
 function ShowNotification(text)
     SetNotificationTextEntry( "STRING" )
     AddTextComponentString( text )
-    DrawNotification( false, false )
+	DrawNotification( false, false )
 end
 
 RegisterNetEvent('nMenuNotif:showNotification')

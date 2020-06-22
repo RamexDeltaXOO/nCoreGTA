@@ -66,13 +66,22 @@ end)
 RegisterNetEvent("GTA:AfficherArgentPropre")
 AddEventHandler("GTA:AfficherArgentPropre", function(value)
 	StatSetInt("MP0_WALLET_BALANCE", value, true)
-	ShowHudComponentThisFrame(4)
-	CancelEvent()
+end)
+
+RegisterNetEvent("GTA:AjoutSonPayer")
+AddEventHandler("GTA:AjoutSonPayer", function()
+    PlaySoundFrontend(-1, "Bus_Schedule_Pickup", "DLC_PRISON_BREAK_HEIST_SOUNDS", 0)
 end)
 
 RegisterNetEvent("GTA:AfficherBanque")
 AddEventHandler("GTA:AfficherBanque", function(value)
 	StatSetInt("BANK_BALANCE", value, true)
-	ShowHudComponentThisFrame(3)	
-	CancelEvent()
+end)
+
+AddEventHandler('onResourceStart', function(resourceName)
+    if (GetCurrentResourceName() ~= resourceName) then
+        return
+    end
+    PlaySoundFrontend(-1, "5s_To_Event_Start_Countdown", "GTAO_FM_Events_Soundset", 0)
+    PlaySoundFrontend(-1, "Whistle", "DLC_TG_Running_Back_Sounds", 0)
 end)

@@ -183,6 +183,7 @@ AddEventHandler('GTA:RetirerArgentPropre', function(source, value)
 				local newCash = data.argent_propre - value
 				exports.ghmattimysql:execute("UPDATE gta_joueurs SET argent_propre=@newCash WHERE license = @license", {['license'] = tostring(data.license), ['newCash'] = tostring(newCash)}, function() end)
 				TriggerClientEvent('GTA:AfficherArgentPropre', src, newCash)
+				TriggerClientEvent('GTA:AjoutSonPayer', src)
 			else
 				TriggerClientEvent("nMenuNotif:showNotification", source, "Vous n'avez cette somme d'argent sur vous.")
 			end
@@ -202,6 +203,7 @@ AddEventHandler('GTA:RetirerArgentSale', function(source, value)
 				local newValue = data.argent_sale - value
 				exports.ghmattimysql:execute("UPDATE gta_joueurs SET argent_sale=@newValue WHERE license = @license", {['license'] = tostring(data.license), ['newValue'] = tostring(newValue)}, function() end)
 				--> Si vous utilisé un hud autre que de base, veuillez le refresh ici.
+				TriggerClientEvent('GTA:AjoutSonPayer', src)
 			else
 				TriggerClientEvent("nMenuNotif:showNotification", source, "Vous n'avez cette somme d'argent sur vous.")
 			end
@@ -217,6 +219,7 @@ AddEventHandler('GTA:RetirerArgentBanque', function(source, value)
 			local newValue = data.banque - value
 			exports.ghmattimysql:execute("UPDATE gta_joueurs SET banque=@newValue WHERE license = @license", {['license'] = tostring(data.license), ['newValue'] = tostring(newValue)}, function() end)
 			TriggerClientEvent('GTA:AfficherBanque', src, newValue)
+			TriggerClientEvent('GTA:AjoutSonPayer', src)
 		end
 	end)
 end)
