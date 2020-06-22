@@ -245,7 +245,13 @@ function ButtonSelectedEmploi(button)
 	local index = button.idJob
 
 	if this == "actionEmploiMain" then
-		if button.nomJobs then
+		if button.name == "Mineur" then 
+			TriggerServerEvent("GTA:UpdateJob", button.nomJobs)
+			TriggerServerEvent("GTA:LoadJobsJoueur")
+			TriggerEvent("GTA:ShowMineurBlip", true)
+			CloseMainEmploi()
+	elseif button.nomJobs then
+			TriggerEvent("GTA:ShowMineurBlip", false)
 			TriggerServerEvent("GTA:UpdateJob", button.nomJobs)
 			TriggerServerEvent("GTA:LoadJobsJoueur")
 			CloseMainEmploi()

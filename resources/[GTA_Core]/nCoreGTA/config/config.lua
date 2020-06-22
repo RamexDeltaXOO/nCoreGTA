@@ -3,7 +3,7 @@ config = {}
 
 --> Permet d'activer l'affichage de votre version anticipé :
 config.activerVersionDebug = true
-config.versionCore = "Ninja-Source Accès anticipé version 1.3.3"
+config.versionCore = "Ninja-Source Accès anticipé version 1.3.4"
 
 --> Desactiver le system d'indice de recherche.
 config.activerPoliceWanted = false
