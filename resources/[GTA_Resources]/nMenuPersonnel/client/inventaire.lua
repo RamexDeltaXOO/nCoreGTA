@@ -105,9 +105,7 @@ function add(arg)
 end
 
 function new(item, quantity)
-	RegisterNetEvent("item:setItem")
 	TriggerServerEvent("item:setItem", item, quantity)
-	updateQuantities()
 	TriggerServerEvent("item:getItems")
 end
 

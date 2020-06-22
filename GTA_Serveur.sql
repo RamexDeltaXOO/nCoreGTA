@@ -115,7 +115,7 @@ CREATE TABLE IF NOT EXISTS `gta_metiers` (
   `emploi` varchar(50) DEFAULT 'public'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Listage des données de la table gta_serveur.gta_metiers : ~0 rows (environ)
+-- Listage des données de la table gta_serveur.gta_metiers : ~1 rows (environ)
 /*!40000 ALTER TABLE `gta_metiers` DISABLE KEYS */;
 INSERT INTO `gta_metiers` (`metiers`, `salaire`, `emploi`) VALUES
 	('Chomeur', 150, 'public');
@@ -129,7 +129,7 @@ CREATE TABLE IF NOT EXISTS `items` (
   `isUsable` tinyint(1) DEFAULT 1,
   `type` tinyint(3) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
 
 -- Listage des données de la table gta_serveur.items : ~12 rows (environ)
 /*!40000 ALTER TABLE `items` DISABLE KEYS */;
@@ -151,13 +151,13 @@ INSERT INTO `items` (`id`, `libelle`, `isUsable`, `type`) VALUES
 -- Listage de la structure de la table gta_serveur. user_inventory
 DROP TABLE IF EXISTS `user_inventory`;
 CREATE TABLE IF NOT EXISTS `user_inventory` (
-  `license` varchar(50) NOT NULL DEFAULT '',
-  `item_id` int(11) unsigned NOT NULL,
-  `quantity` int(11) DEFAULT 0,
-  PRIMARY KEY (`license`,`item_id`),
-  KEY `item_id` (`item_id`),
-  CONSTRAINT `user_inventory_ibfk_2` FOREIGN KEY (`item_id`) REFERENCES `items` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `item_id` bigint(20) unsigned NOT NULL DEFAULT 0,
+  `quantity` bigint(20) unsigned NOT NULL DEFAULT 0,
+  `license` varchar(50) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `item_id_license` (`item_id`,`license`)
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
 
 -- Listage des données de la table gta_serveur.user_inventory : ~0 rows (environ)
 /*!40000 ALTER TABLE `user_inventory` DISABLE KEYS */;

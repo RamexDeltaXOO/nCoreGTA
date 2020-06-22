@@ -20,12 +20,13 @@ RegisterServerEvent("item:setItem")
 AddEventHandler("item:setItem", function(item, quantity)
 	local source = source	
 	local license = GetPlayerIdentifiers(source)[1]
-	local valeurs = {license, item, quantity}
-	exports.ghmattimysql:execute("SELECT * FROM user_inventory WHERE license = @username AND item_id = @item", {['@username'] = player, ['@item'] = item}, function(result)
+	exports.ghmattimysql:execute("SELECT * FROM user_inventory WHERE license = @username AND item_id = @item", {['@username'] = license, ['@item'] = item}, function(result)
+		--print(json.encode(result[1]))
 		if(result[1] ~= nil) then
-			exports.ghmattimysql:execute("UPDATE user_inventory SET ? WHERE ? AND ?", { {['quantity'] = quantity}, {['license'] = player}, {['item_id'] = item}})
+			--print(result[1].id)
+			exports.ghmattimysql:execute("UPDATE user_inventory SET ? WHERE ?", { {['quantity'] = quantity}, {['id'] = result[1].id} })
 		else
-			exports.ghmattimysql:execute('INSERT INTO user_inventory (`license`, `item_id`, `quantity`) VALUES ?', { { valeurs } })
+			exports.ghmattimysql:execute('INSERT INTO user_inventory SET ?', { {['license'] = license, ['item_id'] = item, ['quantity'] = quantity} })
 		end
 	end)
 end)
