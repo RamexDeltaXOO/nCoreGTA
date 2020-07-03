@@ -262,6 +262,11 @@ function spawnPlayer(spawnIdx, cb)
 
             -- release the player model
             SetModelAsNoLongerNeeded(spawn.model)
+            
+            -- RDR3 player model bits
+            if N_0x283978a15512b2fe then
+				N_0x283978a15512b2fe(PlayerPedId(), true)
+            end
         end
 
         -- preload collisions for the spawnpoint
@@ -364,3 +369,11 @@ function forceRespawn()
     spawnLock = false
     respawnForced = true
 end
+
+exports('spawnPlayer', spawnPlayer)
+exports('addSpawnPoint', addSpawnPoint)
+exports('removeSpawnPoint', removeSpawnPoint)
+exports('loadSpawns', loadSpawns)
+exports('setAutoSpawn', setAutoSpawn)
+exports('setAutoSpawnCallback', setAutoSpawnCallback)
+exports('forceRespawn', forceRespawn)

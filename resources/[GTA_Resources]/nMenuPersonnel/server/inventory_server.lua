@@ -45,6 +45,13 @@ AddEventHandler("item:updateQuantity", function(qty, id)
 	exports.ghmattimysql:execute("UPDATE user_inventory SET ? WHERE ? AND ?", { {['quantity'] = qty}, {['license'] = player}, {['item_id'] = id}})
 end)
 
+RegisterServerEvent("item:updateQuantityTarget")
+AddEventHandler("item:updateQuantityTarget", function(target, qty, id)
+	local source = source	
+	local player = GetPlayerIdentifiers(target)[1]
+	exports.ghmattimysql:execute("UPDATE user_inventory SET ? WHERE ? AND ?", { {['quantity'] = qty}, {['license'] = player}, {['item_id'] = id}})
+end)
+
 RegisterServerEvent("item:sell")
 AddEventHandler("item:sell", function(id, quantity, price)
 	local source = source	

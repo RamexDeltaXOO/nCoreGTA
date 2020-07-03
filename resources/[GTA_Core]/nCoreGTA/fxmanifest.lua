@@ -1,4 +1,4 @@
-fx_version 'bodacious'
+fx_version 'adamant'
 game 'gta5'
 
 dependencies {'ghmattimysql'}
@@ -14,7 +14,8 @@ server_scripts {
     'server/whitelist.lua',
     'server/admin_command.lua',
     'server/player_pos.lua',
-    'synchronisation/server.lua'
+    'synchronisation/server.lua',
+    'services/server.lua'
 }
 
 client_scripts {
@@ -24,18 +25,19 @@ client_scripts {
     'client/admin_main.lua',
     'client/main.lua',
     'client/spawn.lua',
-    'death/utilsdead.lua',
-    'death/deadplayer.lua',
-    'synchronisation/client.lua'
+    'synchronisation/client.lua',
+    'services/client.lua'
 }
+
 
 files {
     'loadingscreen/index.html',
-    'loadingscreen/styles.css',
-    'loadingscreen/bankgothic.ttf',
-    'loadingscreen/loadscreen.jpg'
+    'loadingscreen/style.css',
+    'loadingscreen/background.png',
+    'loadingscreen/loading.gif'
 }
 
 loadscreen 'loadingscreen/index.html'
+
 
 --@Super.Cool.Ninja

@@ -1,9 +1,7 @@
 --@Super.Cool.Ninja
 config = {}
 
---> Permet d'activer l'affichage de votre version anticipé :
-config.activerVersionDebug = true
-config.versionCore = "Ninja-Source Accès anticipé version 1.3.4"
+config.versionCore = "Version 1.0"
 
 --> Desactiver le system d'indice de recherche.
 config.activerPoliceWanted = false
@@ -23,11 +21,8 @@ config.argentSale = 150
 config.banque = 5000
 
 --> Traffic PNJ :
-config.vehiculeDensiter = 0.3
+config.vehiculeDensiter = 0.5
 config.pedDensiter = 1.0
-
--->JobMedic :
-config.utilisationJobMedic = false
 
 --> Whitelist :
 --> Pour avoir la license du player, faite le connecter une fois au serveur sans qui puisse rejoindre, il sera afficher sur la console.

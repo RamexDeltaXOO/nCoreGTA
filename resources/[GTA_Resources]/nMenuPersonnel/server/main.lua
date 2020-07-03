@@ -9,8 +9,9 @@ AddEventHandler('GTA:ChercherSonIdentiter', function()
 		local travail = data.job
 		local age = data.age
 		local origine = data.origine
-
-		TriggerClientEvent('GTA:RegarderIdentiter', source, tostring(nom), tostring(prenom), tostring(travail), tonumber(age), tostring(origine))
+		local grade = data.grade
+		
+		TriggerClientEvent('GTA:RegarderIdentiter', source, tostring(nom), tostring(prenom), tostring(travail), tonumber(age), tostring(origine), tostring(grade))
 	end)
 end)
 
@@ -25,9 +26,10 @@ AddEventHandler('GTA:MontrerSonIdentiter', function(NearestPlayerSID)
 		local travail = data.job
 		local age = data.age
 		local origine = data.origine
-	
+		local grade = data.grade
+
 		if NearestPlayerSID ~= 0 then
-			TriggerClientEvent('GTA:RegarderIdentiter', NearestPlayerSID, tostring(nom), tostring(prenom), tostring(travail), tonumber(age), tostring(origine))
+			TriggerClientEvent('GTA:RegarderIdentiter', NearestPlayerSID, tostring(nom), tostring(prenom), tostring(travail), tonumber(age), tostring(origine), tostring(grade))
 			TriggerClientEvent('nMenuNotif:showNotification', NearestPlayerSID, "Une personne vous montre son identité.")
 		else
 			TriggerClientEvent('nMenuNotif:showNotification', source, "Aucune personne devant vous")

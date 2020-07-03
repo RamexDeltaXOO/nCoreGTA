@@ -2,6 +2,7 @@
 local isPlayerAdmin = false;
 local godmode = false;
 local qtyArgentPropre = 0;
+local isEnablePosition = false
 
 -----------------------------------------------> Function :
 function LocalPed()
@@ -69,6 +70,7 @@ local function toggleNoClip()
     noclipActive = not noclipActive
     local playerPed = PlayerPedId()
     if(noclipActive == true)then
+        SetEntityCollision(playerPed, false, false)
         SetEntityVisible(playerPed, 0, 0)
         exports.nCoreGTA:nNotificationMain({
             text = "~g~ noclip activer.",
@@ -81,6 +83,7 @@ local function toggleNoClip()
             type = 'basGauche',
             nTimeNotif = 6000,
         })
+        SetEntityCollision(playerPed, true, true)
         SetEntityVisible(playerPed, 1, 1)
     end
 end
@@ -89,6 +92,23 @@ local function degToRad( degs )
     return degs * 3.141592653589793 / 180
 end
 
+local function togglePosition()
+    isEnablePosition = not isEnablePosition
+    
+    if(isEnablePosition == true)then
+        exports.nCoreGTA:nNotificationMain({
+            text = "~g~ Position afficher.",
+            type = 'basGauche',
+            nTimeNotif = 6000,
+        })
+    else
+        exports.nCoreGTA:nNotificationMain({
+            text = "~r~ Position retirer.",
+            type = 'basGauche',
+            nTimeNotif = 6000,
+        })
+    end
+end
 
 -----------------------------------------------> EVENT :
 TriggerServerEvent("GTA:CheckAdmin")
@@ -221,6 +241,72 @@ RegisterCommand("givepistol", function(source, args, rawCommand)
     end
 end, false)
 
+
+
+--> Commande pour s'ajouté des menottes
+--> Pour vous give des menottes faite /givemenotte
+RegisterCommand("givemenotte", function(source, args, rawCommand)
+    qty = args[1]
+    TriggerServerEvent("GTA:CheckAdmin")
+    Wait(50)
+    if (isPlayerAdmin == true) then
+        if tonumber(qty) == nil then
+            qty = 1
+            exports.nCoreGTA:nNotificationMain({
+                text = "Vous avez reçu une pair de ~g~menotte",
+                type = 'basGauche',
+                nTimeNotif = 6000,
+            })
+            TriggerEvent("player:receiveItem", 7, tonumber(qty))
+        else
+            TriggerEvent("player:receiveItem", 7, tonumber(qty))
+            exports.nCoreGTA:nNotificationMain({
+                text = "Vous avez reçu " ..tonumber(qty) .. "~w~ pair de menotte.",
+                type = 'basGauche',
+                nTimeNotif = 6000,
+            })
+        end
+    end
+end, false)
+
+
+--> Commande pour supprimer un véhicule
+--> Pour supprimer un véhicule faite /pv
+RegisterCommand("pv", function(source, args, rawCommand)
+    TriggerServerEvent("GTA:CheckAdmin")
+    Wait(50)
+    if (isPlayerAdmin == true) then
+        local playerPed = GetPlayerPed(-1)
+        local veh = GetVehiclePedIsIn(playerPed)
+        if IsPedInVehicle(playerPed, veh, false) then
+            SetEntityAsMissionEntity(veh, true, true )
+            Citizen.InvokeNative(0xEA386986E786A54F, Citizen.PointerValueIntInitialized(veh))
+            exports.nCoreGTA:nNotificationMain({
+                text = "~g~Véhicule supprimer.",
+                type = 'basGauche',
+                nTimeNotif = 6000,
+            })
+        else
+            exports.nCoreGTA:nNotificationMain({
+                text = "~r~Veuillez monter dans un véhicule.",
+                type = 'basGauche',
+                nTimeNotif = 6000,
+            })
+        end
+    end
+end, false)
+
+
+--> Commande pour afficher votre position x,y,z,h
+--> Pour afficher votre position faite /pos
+RegisterCommand("pos", function(source, args, rawCommand)
+    TriggerServerEvent("GTA:CheckAdmin")
+    Wait(50)
+    if (isPlayerAdmin == true) then
+        togglePosition()
+    end
+end, false)
+
 conf = {
     controls = {
         goUp = 85, -- [[Q]]
@@ -251,106 +337,21 @@ conf = {
     },
 }
 
-function ButtonMessage(text)
-    BeginTextCommandScaleformString("STRING")
-    AddTextComponentScaleform(text)
-    EndTextCommandScaleformString()
-end
-
-function Button(ControlButton)
-    N_0xe83a3e3557a56640(ControlButton)
-end
-
-function setupScaleform(scaleform)
-
-    local scaleform = RequestScaleformMovie(scaleform)
-
-    while not HasScaleformMovieLoaded(scaleform) do
-        Citizen.Wait(1)
-    end
-
-    PushScaleformMovieFunction(scaleform, "CLEAR_ALL")
-    PopScaleformMovieFunctionVoid()
-    
-    PushScaleformMovieFunction(scaleform, "SET_CLEAR_SPACE")
-    PushScaleformMovieFunctionParameterInt(200)
-    PopScaleformMovieFunctionVoid()
-
-    PushScaleformMovieFunction(scaleform, "SET_DATA_SLOT")
-    PushScaleformMovieFunctionParameterInt(4)
-    Button(GetControlInstructionalButton(2, conf.controls.goUp, true))
-    ButtonMessage("Monter")
-    PopScaleformMovieFunctionVoid()
-
-    PushScaleformMovieFunction(scaleform, "SET_DATA_SLOT")
-    PushScaleformMovieFunctionParameterInt(3)
-    Button(GetControlInstructionalButton(2, conf.controls.goDown, true))
-    ButtonMessage("Descendre")
-    PopScaleformMovieFunctionVoid()
-
-    PushScaleformMovieFunction(scaleform, "SET_DATA_SLOT")
-    PushScaleformMovieFunctionParameterInt(2)
-    Button(GetControlInstructionalButton(1, conf.controls.turnRight, true))
-    Button(GetControlInstructionalButton(1, conf.controls.turnLeft, true))
-    ButtonMessage("Tourner Gauche/Droite")
-    PopScaleformMovieFunctionVoid()
-
-    PushScaleformMovieFunction(scaleform, "SET_DATA_SLOT")
-    PushScaleformMovieFunctionParameterInt(1)
-    Button(GetControlInstructionalButton(1, conf.controls.goBackward, true))
-    Button(GetControlInstructionalButton(1, conf.controls.goForward, true))
-    ButtonMessage("Avancer/Reculer")
-    PopScaleformMovieFunctionVoid()
-
-    PushScaleformMovieFunction(scaleform, "SET_DATA_SLOT")
-    PushScaleformMovieFunctionParameterInt(0)
-    Button(GetControlInstructionalButton(2, conf.controls.changeSpeed, true))
-    ButtonMessage("Changer la vitesse ("..conf.speeds[index].label..")")
-    PopScaleformMovieFunctionVoid()
-
-    PushScaleformMovieFunction(scaleform, "DRAW_INSTRUCTIONAL_BUTTONS")
-    PopScaleformMovieFunctionVoid()
-
-    PushScaleformMovieFunction(scaleform, "SET_BACKGROUND_COLOUR")
-    PushScaleformMovieFunctionParameterInt(0)
-    PushScaleformMovieFunctionParameterInt(0)
-    PushScaleformMovieFunctionParameterInt(0)
-    PushScaleformMovieFunctionParameterInt(255)
-    PopScaleformMovieFunctionVoid()
-
-    return scaleform
-end
-
-
---==--==--==--
--- End Of Config
---==--==--==--
-
-noclipActive = false -- [[Wouldn't touch this.]]
-
+noclipActive = false
 index = 1 -- [[Used to determine the index of the speeds table.]]
-
 Citizen.CreateThread(function()
-
     buttons = setupScaleform("instructional_buttons")
-
     currentSpeed = conf.speeds[index].speed
-
     while true do
         Citizen.Wait(1)
-
-        
 
         if IsPedInAnyVehicle(PlayerPedId(), false) then
             noclipEntity = GetVehiclePedIsIn(PlayerPedId(), false)
         else
             noclipEntity = PlayerPedId()
         end
+        
 
-        SetEntityCollision(noclipEntity, not noclipActive, not noclipActive)
-        FreezeEntityPosition(noclipEntity, noclipActive)
-        SetEntityInvincible(noclipEntity, noclipActive)
-        SetVehicleRadioEnabled(noclipEntity, not noclipActive) -- [[Stop radio from appearing when going upwards.]]
 
         if noclipActive then
             DrawScaleformMovieFullscreen(buttons)
@@ -369,30 +370,30 @@ Citizen.CreateThread(function()
                 setupScaleform("instructional_buttons")
             end
 
-			if IsControlPressed(0, conf.controls.goForward) then
+            if IsControlPressed(0, conf.controls.goForward) then
                 yoff = conf.offsets.y
-			end
-			
+            end
+            
             if IsControlPressed(0, conf.controls.goBackward) then
                 yoff = -conf.offsets.y
-			end
-			
+            end
+            
             if IsControlPressed(0, conf.controls.turnLeft) then
                 SetEntityHeading(noclipEntity, GetEntityHeading(noclipEntity)+conf.offsets.h)
-			end
-			
+            end
+            
             if IsControlPressed(0, conf.controls.turnRight) then
                 SetEntityHeading(noclipEntity, GetEntityHeading(noclipEntity)-conf.offsets.h)
-			end
-			
+            end
+            
             if IsControlPressed(0, conf.controls.goUp) then
                 zoff = conf.offsets.z
-			end
-			
+            end
+            
             if IsControlPressed(0, conf.controls.goDown) then
                 zoff = -conf.offsets.z
-			end
-			
+            end
+            
             local newPos = GetOffsetFromEntityInWorldCoords(noclipEntity, 0.0, yoff * (currentSpeed + 0.3), zoff * (currentSpeed + 0.3))
             local heading = GetEntityHeading(noclipEntity)
             SetEntityVelocity(noclipEntity, 0.0, 0.0, 0.0)
@@ -400,5 +401,41 @@ Citizen.CreateThread(function()
             SetEntityHeading(noclipEntity, heading)
             SetEntityCoordsNoOffset(noclipEntity, newPos.x, newPos.y, newPos.z, noclipActive, noclipActive, noclipActive)
         end
+    end
+end)
+
+
+Citizen.CreateThread(function () 
+    while true do 
+        Citizen.Wait(0)
+        if isEnablePosition then
+            local playerPed = GetPlayerPed(-1)
+            local pos = GetEntityCoords(playerPed)
+            local posH = GetEntityHeading(playerPed)
+
+            posX = (Floor((pos.x)*100))/100
+            posY = (Floor((pos.y)*100))/100
+            posZ = (Floor((pos.z)*100))/100
+            posH = (Floor((posH)*100))/100
+
+            if posH > 360 then 
+                posH = 0.0
+            elseif posH < 0 then  
+                posH = 360.0
+            end
+
+            DrawMissionText("~r~x~w~ = ~r~"..posX.." ~g~y~w~ = ~g~"..posY.." ~b~z~w~ = ~b~"..posZ.." ~w~~h~h = "..posH)
+        end
+    end 
+end)
+
+
+AddEventHandler('playerSpawned', function(spawn)
+    TriggerServerEvent("GTA:CheckAdmin")
+    
+    Wait(250)
+
+    if (isPlayerAdmin == true) then
+        TriggerEvent("ActiverNoClipLoop")
     end
 end)

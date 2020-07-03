@@ -1,0 +1,19 @@
+[ 
+    {
+        "VestiaireHopital": {
+            "PriseDeService" : {"x": 268.56, "y" : -1362.88, "z": 24.55},
+            "MarkerCouleur" :  {"type": 25,  "r": 20,"g" : 19, "b": 19, "a": 0.5}
+        },
+
+        "InventaireHopital": {
+            "PositionArmurerie" : {"x": 254.3, "y" : -1343.09,  "z": 24.55},
+            "MarkerCouleur" :     {"type": 25,   "r": 20,"g" : 19, "b": 19, "a": 0.5}
+        },
+
+        "GarageMedic": {
+            "GarageMenu" :        {"x": 1157.5, "y" : -1597.98,  "z": 34.69},
+            "RentrerVeh" :        {"x": 1141.03, "y":  -1602.0,  "z" : 34.69},
+            "MarkerCouleur" :     {"type": 25, "r": 20,"g" : 19, "b": 19, "a": 0.5}
+        }
+    }
+]

@@ -1,66 +1,17 @@
-<html>
+<!DOCTYPE html>
+<html lang="fr">
     <head>
-        <link href="styles.css" rel="stylesheet" type="text/css" />
+        <meta charset="UTF-8">
+        <meta content="width=device-width,initial-scale=1,user-scalable=no" name="viewport">
+        <link href="style.css" rel="stylesheet" type="text/css" media="all"/>
+        <link href="https://fonts.googleapis.com/css?family=Quicksand&display=swap" rel="stylesheet">
     </head>
+
+ 
+
     <body>
-        <div class="backdrop">
-            <div class="top">
-                <h1 title="Ninja Source V2">Ninja Source V2</h1>
-            </div>
+        <div id="background">
 
-            <div class="letni">
-                <div class="loadbar"><div class="thingy"></div></div>
-                <p>Veuillez patientez, chargement en cours...</p>
-            </div>
-            <div class="bottom">
-                <div id="gradient">
-                </div>
-            </div>
-        </div>
-
-<script type="text/javascript">
-var count = 0;
-var thisCount = 0;
-
-const handlers = {
-    startInitFunctionOrder(data)
-    {
-        count = data.count;
-
-        document.querySelector('.letni h3').innerHTML += '';
-    },
-
-    initFunctionInvoking(data)
-    {
-        document.querySelector('.thingy').style.left = '0%';
-        document.querySelector('.thingy').style.width = ((data.idx / count) * 100) + '%';
-    },
-
-    startDataFileEntries(data)
-    {
-        count = data.count;
-
-        document.querySelector('.letni h3').innerHTML += "\u{1f358}";
-    },
-
-    performMapLoadFunction(data)
-    {
-        ++thisCount;
-
-        document.querySelector('.thingy').style.left = '0%';
-        document.querySelector('.thingy').style.width = ((thisCount / count) * 100) + '%';
-    },
-
-    onLogLine(data)
-    {
-        document.querySelector('.letni p').innerHTML = data.message + "..!";
-    }
-};
-
-window.addEventListener('message', function(e)
-{
-    (handlers[e.data.eventName] || function() {})(e.data);
-});
-</script>
+        <img src="loading.gif" class="loading" alt="loading">
     </body>
 </html>

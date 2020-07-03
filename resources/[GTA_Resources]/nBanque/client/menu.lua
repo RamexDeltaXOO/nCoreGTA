@@ -223,7 +223,7 @@ function ButtonSelected(button)
 
 	if this == "atmMenuMain" then
 		if btn == "Retirer" then
-			local quantityMoneyitems = KeyboardInput("Somme d'argent à retirer :", "", 6)
+			local quantityMoneyitems = InputNombre("Somme d'argent à retirer :")
 			if tonumber(quantityMoneyitems) == nil then
 				exports.nCoreGTA:nNotificationMain({
 					text = "Veuillez inserer un nombre correct !",
@@ -235,7 +235,7 @@ function ButtonSelected(button)
 			TriggerServerEvent("nBanqueSolde:PermissionRABanque", quantityMoneyitems)
 			CloseCreator()
 		elseif btn == "Deposer" then
-			local quantityMoneyBanqueitems = KeyboardInput("Somme d'argent à déposer :", "", 6)
+			local quantityMoneyBanqueitems = InputNombre("Somme d'argent à déposer :")
 			if tonumber(quantityMoneyBanqueitems) == nil then
 				exports.nCoreGTA:nNotificationMain({
 					text = "Veuillez inserer un nombre correct !",

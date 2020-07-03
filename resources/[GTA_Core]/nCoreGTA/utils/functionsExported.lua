@@ -186,3 +186,73 @@ Ninja_Core_nRequestAnimSet = function(lib, animSet)
 		SetPedMovementClipset(GetPlayerPed(-1), animSet, true)
 	end
 end
+
+function ButtonMessage(text)
+    BeginTextCommandScaleformString("STRING")
+    AddTextComponentScaleform(text)
+    EndTextCommandScaleformString()
+end
+
+function Button(ControlButton)
+    N_0xe83a3e3557a56640(ControlButton)
+end
+
+function setupScaleform(scaleform)
+
+    local scaleform = RequestScaleformMovie(scaleform)
+
+    while not HasScaleformMovieLoaded(scaleform) do
+        Citizen.Wait(1)
+    end
+
+    PushScaleformMovieFunction(scaleform, "CLEAR_ALL")
+    PopScaleformMovieFunctionVoid()
+    
+    PushScaleformMovieFunction(scaleform, "SET_CLEAR_SPACE")
+    PushScaleformMovieFunctionParameterInt(200)
+    PopScaleformMovieFunctionVoid()
+
+    PushScaleformMovieFunction(scaleform, "SET_DATA_SLOT")
+    PushScaleformMovieFunctionParameterInt(4)
+    Button(GetControlInstructionalButton(2, conf.controls.goUp, true))
+    ButtonMessage("Monter")
+    PopScaleformMovieFunctionVoid()
+
+    PushScaleformMovieFunction(scaleform, "SET_DATA_SLOT")
+    PushScaleformMovieFunctionParameterInt(3)
+    Button(GetControlInstructionalButton(2, conf.controls.goDown, true))
+    ButtonMessage("Descendre")
+    PopScaleformMovieFunctionVoid()
+
+    PushScaleformMovieFunction(scaleform, "SET_DATA_SLOT")
+    PushScaleformMovieFunctionParameterInt(2)
+    Button(GetControlInstructionalButton(1, conf.controls.turnRight, true))
+    Button(GetControlInstructionalButton(1, conf.controls.turnLeft, true))
+    ButtonMessage("Tourner Gauche/Droite")
+    PopScaleformMovieFunctionVoid()
+
+    PushScaleformMovieFunction(scaleform, "SET_DATA_SLOT")
+    PushScaleformMovieFunctionParameterInt(1)
+    Button(GetControlInstructionalButton(1, conf.controls.goBackward, true))
+    Button(GetControlInstructionalButton(1, conf.controls.goForward, true))
+    ButtonMessage("Avancer/Reculer")
+    PopScaleformMovieFunctionVoid()
+
+    PushScaleformMovieFunction(scaleform, "SET_DATA_SLOT")
+    PushScaleformMovieFunctionParameterInt(0)
+    Button(GetControlInstructionalButton(2, conf.controls.changeSpeed, true))
+    ButtonMessage("Changer la vitesse ("..conf.speeds[index].label..")")
+    PopScaleformMovieFunctionVoid()
+
+    PushScaleformMovieFunction(scaleform, "DRAW_INSTRUCTIONAL_BUTTONS")
+    PopScaleformMovieFunctionVoid()
+
+    PushScaleformMovieFunction(scaleform, "SET_BACKGROUND_COLOUR")
+    PushScaleformMovieFunctionParameterInt(0)
+    PushScaleformMovieFunctionParameterInt(0)
+    PushScaleformMovieFunctionParameterInt(0)
+    PushScaleformMovieFunctionParameterInt(255)
+    PopScaleformMovieFunctionVoid()
+
+    return scaleform
+end

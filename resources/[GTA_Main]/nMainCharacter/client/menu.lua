@@ -183,32 +183,37 @@ local function GetPlayerModel(modelhash)
 end
 
 function BeginEditeur()
-	if IsPlayerSwitchInProgress() then
-		DisplayRadar(false)
-		interior = GetInteriorAtCoordsWithType(399.9, -998.7, -100.0, "v_mugshot")
-		LoadInterior(interior)
-		while not IsInteriorReady(interior) do
-			Wait(500)
-		end
-
-		config.cam = CreateCam("DEFAULT_SCRIPTED_CAMERA", true)
-
-		while not DoesCamExist(config.cam) do
-			Wait(500)
-		end
-
-		if DoesCamExist(config.cam) then
-			SetCamCoord(config.cam, 402.7553, -1000.55, -98.48412)
-			SetCamRot(config.cam, -3.589798, 0.0, -0.276381, 2)
-			SetCamFov(config.cam, 37.95373)
-			RenderScriptCams(true, false, 3000, 1, 0, 0)
-		end
-
-		Visible()
-		Wait(3500)
-		OpenMainMenu()
-		config.MenuOpen = true
+	DisplayRadar(false)
+	TriggerEvent("EnableDisableHUDFS", false)
+	interior = GetInteriorAtCoordsWithType(399.9, -998.7, -100.0, "v_mugshot")
+	LoadInterior(interior)
+	while not IsInteriorReady(interior) do
+		Wait(500)
 	end
+
+	config.cam = CreateCam("DEFAULT_SCRIPTED_CAMERA", true)
+
+	while not DoesCamExist(config.cam) do
+		Wait(500)
+	end
+
+	if DoesCamExist(config.cam) then
+		SetCamCoord(config.cam, 402.7553, -1000.55, -98.48412)
+		SetCamRot(config.cam, -3.589798, 0.0, -0.276381, 2)
+		SetCamFov(config.cam, 37.95373)
+		RenderScriptCams(true, false, 3000, 1, 0, 0)
+		FreezeEntityPosition(PlayerPedId(), true)
+	end
+
+	AddTextEntry("text", "Chargement de la création de votre personnage..")
+	BeginTextCommandBusyspinnerOn("text")
+	EndTextCommandBusyspinnerOn(4)
+
+	Visible()
+	Wait(1000)
+	BusyspinnerOff()
+	OpenMainMenu()
+	config.MenuOpen = true
 end
 
 RegisterNetEvent("GTA:OpenMenuCreation")
@@ -588,6 +593,7 @@ function ButtonSelectedPersonnage(button)
 		elseif btname == "~g~Valider votre identité" then
 			menuCreationPerso.opened = false
 			if DoesCamExist(config.cam) then
+				TriggerEvent("EnableDisableHUDFS", true)
             	RenderScriptCams(false, false, 3000, 1, 0, 0)
                 FreezeEntityPosition(PlayerPedId(), false)
                 SetEntityInvincible(PlayerPedId(), false)
@@ -603,7 +609,6 @@ function ButtonSelectedPersonnage(button)
 			
 			config.MenuOpen = false
 			Collision(false)
-
 			Wait(500)
             SetEntityCoords(PlayerPedId(), -491.485, -728.646, 23.9031) --Last pos to join
         	SetEntityHeading(PlayerPedId(), 345.0)        	           

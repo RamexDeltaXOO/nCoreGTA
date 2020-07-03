@@ -2,14 +2,6 @@
 
 RegisterNetEvent("GTA:JoueurLoaded")
 AddEventHandler("GTA:JoueurLoaded", function()
-
-    --> Stop Dispatch
-    Citizen.CreateThread(function()
-        for i = 1, 12 do
-            Citizen.InvokeNative(0xDC0F817884CDD856, i, false)
-        end
-    end)
-
     --> PVP :
     if config.activerPvp == true then
         for _, player in ipairs(GetActivePlayers()) do
@@ -46,42 +38,36 @@ AddEventHandler("GTA:JoueurLoaded", function()
         end
     end)
 
-    --> Permet d'afficher votre version utilisée :
-    if config.activerVersionDebug == true then 
-        Citizen.CreateThread(function()
-            while true do
-                Wait(1)
-                SetTextColour(255, 255, 255, 125)
-                SetTextFont(0)
-                SetTextScale(0.3 + 0.08, 0.3 + 0.08)
-                SetTextCentre(false)
-                SetTextEntry("STRING")
-                AddTextComponentString(config.versionCore)
-                DrawText(0.40, 0.001)
-            end
-        end)
+    local ipls = {'facelobby', 'farm', 'farmint', 'farm_lod', 'farm_props', 
+                'des_farmhouse', 'post_hiest_unload', 'v_tunnel_hole',
+                'rc12b_default', 'refit_unload', 'shr_int'}
+
+    for _,v in pairs(ipls) do
+        if not IsIplActive(v) then
+            RequestIpl(v)
+        end
     end
 end)
 
 RegisterNetEvent("GTA:AfficherArgentPropre")
 AddEventHandler("GTA:AfficherArgentPropre", function(value)
-	StatSetInt("MP0_WALLET_BALANCE", value, true)
-end)
+	StatSetInt("MP0_WALLET_BALANCE", value, false)
+    ShowHudComponentThisFrame(4)
 
-RegisterNetEvent("GTA:AjoutSonPayer")
-AddEventHandler("GTA:AjoutSonPayer", function()
-    PlaySoundFrontend(-1, "Bus_Schedule_Pickup", "DLC_PRISON_BREAK_HEIST_SOUNDS", 0)
+    Wait(1000)
+    RemoveMultiplayerBankCash(0xC7C6789AA1CFEDD0)
 end)
 
 RegisterNetEvent("GTA:AfficherBanque")
 AddEventHandler("GTA:AfficherBanque", function(value)
 	StatSetInt("BANK_BALANCE", value, true)
+    ShowHudComponentThisFrame(3)
+    
+    Wait(1000)
+    RemoveMultiplayerHudCash(0x968F270E39141ECA)
 end)
 
-AddEventHandler('onResourceStart', function(resourceName)
-    if (GetCurrentResourceName() ~= resourceName) then
-        return
-    end
-    PlaySoundFrontend(-1, "5s_To_Event_Start_Countdown", "GTAO_FM_Events_Soundset", 0)
-    PlaySoundFrontend(-1, "Whistle", "DLC_TG_Running_Back_Sounds", 0)
+RegisterNetEvent("GTA:AjoutSonPayer")
+AddEventHandler("GTA:AjoutSonPayer", function()
+    PlaySoundFrontend(-1, "Bus_Schedule_Pickup", "DLC_PRISON_BREAK_HEIST_SOUNDS", 0)
 end)

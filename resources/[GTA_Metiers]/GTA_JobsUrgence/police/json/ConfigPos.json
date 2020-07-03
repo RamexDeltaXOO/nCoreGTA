@@ -1,0 +1,19 @@
+[ 
+    {
+        "VestiairePolice": {
+            "PriseDeService" : {"x": 450.174, "y" : -992.276, "z": 30.6896},
+            "MarkerCouleur" :  {"type": 25,   "r": 20,"g" : 19, "b": 19, "a": 0.5}
+        },
+
+        "ArmureriePolice": {
+            "PositionArmurerie" : {"x": 452.372, "y" : -980.519,  "z": 30.6896},
+            "MarkerCouleur" :     {"type": 25,   "r": 20,"g" : 19, "b": 19, "a": 0.5}
+        },
+
+        "GaragePolice": {
+            "SortieVeh" :         {"x": 442.283, "y" : -1014.85, "z": 28.6427},
+            "RentrerVeh" :        {"x": 451.999, "y":  -997.16,  "z" : 25.7613},
+            "MarkerCouleur" :     {"type": 25, "r": 20,"g" : 19, "b": 19, "a": 0.5}
+        }
+    }
+]

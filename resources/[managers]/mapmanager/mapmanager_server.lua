@@ -114,8 +114,10 @@ AddEventHandler('onResourceStart', function(resource)
             if doesMapSupportGameType(currentGameType, resource) then
                 if TriggerEvent('onMapStart', resource, maps[resource]) then
                     if maps[resource].name then
+                        print('Started map ' .. maps[resource].name)
                         SetMapName(maps[resource].name)
                     else
+                        print('Started map ' .. resource)
                         SetMapName(resource)
                     end
 
@@ -134,7 +136,9 @@ AddEventHandler('onResourceStart', function(resource)
 
                 SetGameType(gtName)
 
-                SetTimeout(0, function()
+                print('Started gametype ' .. gtName)
+
+                SetTimeout(50, function()
                     if not currentMap then
                         local possibleMaps = {}
 

@@ -18,12 +18,14 @@ AddEventHandler('playerDropped', function()
 end)
 
 AddEventHandler('playerConnecting', function(name, setReason)
-  local cv = GetConvarInt('sv_maxclients', 64)
+  local cv = GetConvarInt('sv_maxclients', 32)
 
   print('Connecting: ' .. name .. '^7')
 
   if playerCount >= cv then
-    setReason("La session est plein.")
+    print('Full. :(')
+
+    setReason('This server is full (past ' .. tostring(cv) .. ' players).')
     CancelEvent()
   end
 end)

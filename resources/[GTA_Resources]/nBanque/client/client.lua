@@ -16,27 +16,19 @@ function Ninja_Core__DisplayHelpAlert(msg)
     EndTextCommandDisplayHelp(0, 0, 1, -1);
 end
 
-function KeyboardInput(TextEntry, ExampleText, MaxStringLenght)
-	AddTextEntry('FMMC_KEY_TIP1', TextEntry)
-	DisplayOnscreenKeyboard(1, "FMMC_KEY_TIP1", "", ExampleText, "", "", "", MaxStringLenght)
-	blockinput = true
-
-	while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
-		Citizen.Wait(0)
-	end
-		
-	if UpdateOnscreenKeyboard() ~= 2 then
-		local result = GetOnscreenKeyboardResult()
-		Citizen.Wait(500)
-		blockinput = false
-		return result --Returns the result
-	else
-		Citizen.Wait(500)
-		blockinput = false
-		return nil
-	end
+function InputNombre(reason)
+	local text = ""
+	AddTextEntry('nombre', reason)
+    DisplayOnscreenKeyboard(1, "nombre", "", "", "", "", "", 4)
+    while (UpdateOnscreenKeyboard() == 0) do
+        DisableAllControlActions(0)
+        Wait(10)
+    end
+    if (GetOnscreenKeyboardResult()) then
+        text = GetOnscreenKeyboardResult()
+    end
+    return text
 end
-
 
 function DrawAdvancedText(x,y ,w,h,sc, text, r,g,b,a,font,jus)
 	SetTextFont(font)

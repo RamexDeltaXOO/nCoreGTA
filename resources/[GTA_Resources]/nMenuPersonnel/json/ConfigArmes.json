@@ -1,5 +1,6 @@
 [
     {
+      "Nom" : "Pistolet",
       "idArme" : 1,
       "idMunition" : 2,
       "nomHash" : "WEAPON_PISTOL",
@@ -7,42 +8,62 @@
     },
     
     {
+      "Nom" : "Marteau",
       "idArme" : 3,
       "nomHash" : "WEAPON_HAMMER"
     },
 
     {
+      "Nom" : "Bat",
       "idArme" : 4,
       "nomHash" : "WEAPON_BAT"
     },
 
     {
+      "Nom" : "Pied-de-biche",
       "idArme" : 5,
       "nomHash" : "WEAPON_CROWBAR"
     },
     
     {
+      "Nom" : "Couteau",
       "idArme" : 6,
       "nomHash" : "WEAPON_KNIFE"
     },
 
     {
+      "Nom" : "Menotte",
       "idArme" : 7,
       "nomHash" : "WEAPON_HANDCUFFS"
     },
 
     {
+      "Nom" : "hache",
       "idArme" : 8,
       "nomHash" : "WEAPON_HATCHET"
     },
 
     {
+      "Nom" : "Machete",
       "idArme" : 9,
       "nomHash" : "WEAPON_MACHETE"
     },
 
     {
+      "Nom" : "Poing américain",
       "idArme" : 10,
       "nomHash" : "WEAPON_KNUCKLE"
+    },
+    
+    {
+      "Nom" : "Tazer",
+      "idArme" : 15,
+      "nomHash" : "WEAPON_STUNGUN"
+    },
+
+    {
+      "Nom" : "Matraque",
+      "idArme" : 16,
+      "nomHash" : "WEAPON_NIGHTSTICK"
     }
 ]

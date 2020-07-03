@@ -51,9 +51,10 @@ AddEventHandler('hostingSession', function()
 end)
 
 AddEventHandler('hostedSession', function()
-    -- check if the client is the original locker
     if currentHosting ~= source then
-        DropPlayer(source, 'sessionmanager: vous avez été kick en raison d\'un problème de synchro.')
+        -- TODO: drop client as they're clearly lying
+        print(currentHosting, '~=', source)
+        DropPlayer(source, 'sessionmanager: vous avez étais kick pour un problem de reseau.')
         return
     end
 

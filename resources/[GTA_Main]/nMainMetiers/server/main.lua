@@ -20,19 +20,10 @@ AddEventHandler('GTA:LoadJobsJoueur', function()
 	TriggerEvent('GTA:GetInfoJoueurs', source, function(data)
 		local travail = data.job
 		local service = data.enService
-		TriggerClientEvent('GTA:LoadClientJob', source, tostring(travail), service) --> Update les jobs en générale coté client.
+		local grade = data.grade
+		TriggerClientEvent('GTA:LoadClientJob', source, tostring(travail), service, tostring(grade)) --> Update les jobs en générale coté client.
 	end)
 end)
-
---[[RegisterServerEvent("GTA:GetPlayerGrade") --> Retourne le grade du joueur.
-AddEventHandler("GTA:GetPlayerGrade", function()
-	local source = source
-	local license = GetPlayerIdentifiers(source)[1]
-
-	exports.ghmattimysql:execute("SELECT grade FROM gta_joueurs WHERE license = @username", {['@username'] = license}, function(result)
-		TriggerClientEvent("GTA:LoadClientGrade",source, result[1].grade)
-	end)
-end)]]
 
 RegisterServerEvent("GTA:ShowJobsDispo") --> Retourne le job du joueur.
 AddEventHandler("GTA:ShowJobsDispo", function()
@@ -40,7 +31,7 @@ AddEventHandler("GTA:ShowJobsDispo", function()
 	local license = GetPlayerIdentifiers(source)[1]
 
 	exports.ghmattimysql:execute("SELECT * FROM gta_joueurs WHERE license = @username", {['@username'] = license}, function(result)
-		TriggerClientEvent("GTA:LoadClientJob", source, result[1].job, result[1].enService) --> Refresh le job du joueur.
+		TriggerClientEvent("GTA:LoadClientJob", source, result[1].job, result[1].enService, result[1].grade) --> Refresh le job du joueur.
 	end)
 end)
 

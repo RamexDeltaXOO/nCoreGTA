@@ -4,10 +4,10 @@ local timeOffset = 0
 local freezeTime = false
 local blackout = false
 
-RegisterServerEvent('vSync:requestSync')
-AddEventHandler('vSync:requestSync', function()
-    TriggerClientEvent('vSync:updateWeather', -1, CurrentWeather, blackout)
-    TriggerClientEvent('vSync:updateTime', -1, baseTime, timeOffset, freezeTime)
+RegisterServerEvent('GTA:requestSync')
+AddEventHandler('GTA:requestSync', function()
+    TriggerClientEvent('GTA:updateWeather', -1, CurrentWeather, blackout)
+    TriggerClientEvent('GTA:updateTime', -1, baseTime, timeOffset, freezeTime)
 end)
 
 function ShiftToMinute(minute)
@@ -33,13 +33,13 @@ end)
 Citizen.CreateThread(function()
     while true do
         Citizen.Wait(5000)
-        TriggerClientEvent('vSync:updateTime', -1, baseTime, timeOffset, freezeTime)
+        TriggerClientEvent('GTA:updateTime', -1, baseTime, timeOffset, freezeTime)
     end
 end)
 
 Citizen.CreateThread(function()
     while true do
         Citizen.Wait(300000)
-        TriggerClientEvent('vSync:updateWeather', -1, CurrentWeather, blackout)
+        TriggerClientEvent('GTA:updateWeather', -1, CurrentWeather, blackout)
     end
 end)

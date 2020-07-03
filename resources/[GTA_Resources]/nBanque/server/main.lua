@@ -7,11 +7,9 @@ AddEventHandler('nBanqueSolde:SRender', function()
 	TriggerClientEvent('nBanqueSolde:CRender', source)
 end)
 
-
-
 RegisterServerEvent('nBanqueSolde:PermissionRABanque')
 AddEventHandler('nBanqueSolde:PermissionRABanque', function(somme)
-	local source = source	
+	local source = source			
 	TriggerEvent('GTA:RetirerAtmBanque', source, tonumber(somme))
 end)
 

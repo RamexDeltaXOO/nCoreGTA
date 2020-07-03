@@ -1,12 +1,12 @@
 -- DEFAULT VALUES
 local pFaim = 100
 local pSoif = 100
-local enableHud = true --> Ici pour changer le status du hud pour afficher votre faim/soif.
+local enableHud = false --> Ici pour changer le status du hud pour afficher votre faim/soif.
 
 -- TIMER
 Citizen.CreateThread(function ()
 	while true do
-	Citizen.Wait(99999999999999999) -->v390000
+	Citizen.Wait(390000) -->v390000
 		RemoveCalories(1.2)
 		RemoveWater(1.2)
 	end
@@ -158,8 +158,12 @@ end)
 
 
 RegisterNetEvent('EnableDisableHUDFS')
-AddEventHandler('EnableDisableHUDFS', function()
-	enableHud = not enableHud
+AddEventHandler('EnableDisableHUDFS', function(bool)
+	if bool == true then
+		enableHud = true
+	else
+		enableHud = false
+	end
 end)
 
 -- FUNCTIONS

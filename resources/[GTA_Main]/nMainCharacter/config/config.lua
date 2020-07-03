@@ -46,7 +46,7 @@ couleurTopMenu = {}
 couleurTopMenu.r = 0
 couleurTopMenu.g = 0
 couleurTopMenu.b = 0
-couleurTopMenu.a = 0
+couleurTopMenu.a = 255
 
 ---> Couleur du rect de séléction :
 couleurRectSelectMenu = {}
@@ -54,7 +54,7 @@ couleurRectSelectMenu = {}
 couleurRectSelectMenu.r = 255
 couleurRectSelectMenu.g = 255
 couleurRectSelectMenu.b = 255
-couleurRectSelectMenu.a = 95
+couleurRectSelectMenu.a = 255
 
 
 ---> Couleur du text principale :
@@ -69,7 +69,7 @@ couleurTextMenu.a = 255
 ---> Couleur du text qui change une fois le button séléctionner :
 couleurTextSelectMenu = {}
 
-couleurTextSelectMenu.r = 255
-couleurTextSelectMenu.g = 255
-couleurTextSelectMenu.b = 255
+couleurTextSelectMenu.r = 0
+couleurTextSelectMenu.g = 0
+couleurTextSelectMenu.b = 0
 couleurTextSelectMenu.a = 255

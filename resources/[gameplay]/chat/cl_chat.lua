@@ -54,6 +54,33 @@ AddEventHandler('chat:addMessage', function(message)
   })
 end)
 
+AddEventHandler('chat:addSuggestion', function(name, help, params)
+  SendNUIMessage({
+    type = 'ON_SUGGESTION_ADD',
+    suggestion = {
+      name = name,
+      help = help,
+      params = params or nil
+    }
+  })
+end)
+
+AddEventHandler('chat:addSuggestions', function(suggestions)
+  for _, suggestion in ipairs(suggestions) do
+    SendNUIMessage({
+      type = 'ON_SUGGESTION_ADD',
+      suggestion = suggestion
+    })
+  end
+end)
+
+AddEventHandler('chat:removeSuggestion', function(name)
+  SendNUIMessage({
+    type = 'ON_SUGGESTION_REMOVE',
+    name = name
+  })
+end)
+
 AddEventHandler('chat:addTemplate', function(id, html)
   SendNUIMessage({
     type = 'ON_TEMPLATE_ADD',
@@ -105,7 +132,7 @@ local function refreshCommands()
         end
     end
 
-    TriggerEvent('chat:addSuggestions', suggestions)
+    --TriggerEvent('chat:addSuggestions', suggestions)
   end
 end
 

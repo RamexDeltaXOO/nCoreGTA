@@ -4,20 +4,19 @@ ITEMS = {}
 NewItems = {}
 local maxCapacity = 100 -->Max the slot dans votre inventaire par item
 
-
 --[[INFO : TYPE 1 = SOIF, TYPE 2 = FOOD, TYPE 3 = OBJECT]]
+
 
 --nCoreGTA
 RegisterNetEvent("item:reset")
 RegisterNetEvent("item:getItems")
 RegisterNetEvent("item:sell")
-RegisterNetEvent("gui:getItems")
-RegisterNetEvent("player:sellItem")
 
+RegisterNetEvent("gui:getItems")
 AddEventHandler("gui:getItems", function(THEITEMS)
 	ITEMS = {}
 	ITEMS = THEITEMS
-  InventaireRefreshMenu()
+  	InventaireRefreshMenu()
 end)
 
 function getPods()
@@ -35,7 +34,6 @@ function notFull()
 	end
 	if (pods < (maxCapacity-1)) then return true end
 end
-
 
 RegisterNetEvent("player:receiveItem")
 AddEventHandler("player:receiveItem", function(item, quantity)
@@ -57,6 +55,7 @@ AddEventHandler("player:looseItem", function(item, quantity)
 	end
 end)
 
+RegisterNetEvent("player:sellItem")
 AddEventHandler("player:sellItem", function(item, price)
 	item = tonumber(item)
 	if (ITEMS[item].quantity > 0) then
@@ -66,6 +65,11 @@ end)
 
 RegisterNetEvent("farm:updateQuantity")
 AddEventHandler("farm:updateQuantity", function(qty, id)
+	ITEMS[id].quantity = qty
+end)
+
+RegisterNetEvent("farm:updateQuantityTarget")
+AddEventHandler("farm:updateQuantityTarget", function(qty, id)
 	ITEMS[id].quantity = qty
 end)
 
@@ -90,6 +94,17 @@ function delete(arg)
 	NewItems[itemId] = item.quantity
 	TriggerServerEvent("item:updateQuantity", item.quantity, itemId)
 	TriggerEvent("farm:updateQuantity", item.quantity, itemId)
+  	InventaireRefreshMenu()
+end
+
+function deleteTargetItem(target, arg)
+	local itemId = tonumber(arg[1])
+	local qty = arg[2]
+	local item = ITEMS[itemId]
+	item.quantity = item.quantity - qty
+	NewItems[itemId] = item.quantity
+	TriggerServerEvent("item:updateQuantityTarget",target, item.quantity, itemId)
+	TriggerEvent("farm:updateQuantityTarget", item.quantity, itemId)
   	InventaireRefreshMenu()
 end
 
@@ -122,17 +137,38 @@ function getQuantity(itemId)
     return 0
 end
 
+
 AddEventHandler("player:getQuantity", function(item, call)
 	 call({count=getQuantity(item)})
 end)
 
 function use(itemId, quantity)
-   if ITEMS[tonumber(itemId)].type == 1 then
-	  TriggerEvent("nAddSoif", 25) --> Nombre d'ajout au moment ou il boit
-   elseif ITEMS[tonumber(itemId)].type == 2 then
-	TriggerEvent("nAddFaim", 25)  --> Nombre d'ajout au moment ou il mange
-   end
-   TriggerEvent('player:looseItem', itemId, quantity)
+	if ITEMS[tonumber(itemId)].type == 1 then
+	  	TriggerEvent("nAddSoif", 25) --> Nombre d'ajout au moment ou il boit
+	elseif ITEMS[tonumber(itemId)].type == 2 then
+		TriggerEvent("nAddFaim", 25)  --> Nombre d'ajout au moment ou il mange
+	elseif ITEMS[tonumber(itemId)].type == 4 then --> Seringue d'adrenaline.
+		local target = GetPlayerServerId(GetClosestPlayer())
+		if target ~= 0 then
+			TaskStartScenarioInPlace(GetPlayerPed(-1), 'CODE_HUMAN_MEDIC_KNEEL', 0, true)
+			Citizen.Wait(8000)
+			ClearPedTasks(GetPlayerPed(-1));
+			TriggerServerEvent('GTA_Medic:ReanimerTarget', target)
+			exports.nCoreGTA:nNotificationMain({
+				text =  "~h~Vous avez soigné une personne.",
+				type = 'basGauche',
+				nTimeNotif = 6000,
+			})
+			TriggerEvent('player:looseItem',itemId,1)
+		else
+			exports.nCoreGTA:nNotificationMain({
+				text = "~y~ Aucune personne devant vous !",
+				type = 'basGauche',
+				nTimeNotif = 1000,
+			})
+		end
+	end
+	TriggerEvent('player:looseItem', itemId, quantity)
 end
 
 function round(n)
@@ -140,17 +176,17 @@ function round(n)
 end
 
 function InventaireRefreshMenu()
+	TriggerEvent("GTA:LoadWeaponPlayer")
+
 	for k,v in pairs(inventory_item) do
 		inventory_item[k] = nil
   	end
   
 	for k, v in pairs(ITEMS) do
 		if (v.quantity > 0) then
-			table.insert(inventory_item, {title = v.quantity .. " " .. tostring(v.libelle), name = tostring(v.libelle).. " "..tonumber(round(v.quantity)), itemType = tostring(v.type), itemName = tostring(v.libelle), iteamID = tostring(k), itemqty = tonumber(round(v.quantity))})
+			table.insert(inventory_item, {name = tostring(v.libelle).. " "..tonumber(round(v.quantity)), itemType = tostring(v.type), itemName = tostring(v.libelle), iteamID = tostring(k), itemqty = tonumber(round(v.quantity))})
 		end
-  end
-
-  TriggerEvent("GTA:LoadWeaponPlayer")
+  	end
 end
 
 Citizen.CreateThread(function()

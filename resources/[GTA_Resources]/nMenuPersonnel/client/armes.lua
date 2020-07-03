@@ -1,5 +1,5 @@
 local armesConfig = json.decode(LoadResourceFile(GetCurrentResourceName(), 'json/ConfigArmes.json'))
-
+local playerPed = nil
 local Weapons = {}
 local AmmoTypes = {}
 
@@ -49,13 +49,14 @@ end
 
 RegisterNetEvent("GTA:LoadWeaponPlayer")
 AddEventHandler("GTA:LoadWeaponPlayer", function()
+  local playerPed = GetPlayerPed(-1)
   for _,i in pairs(Weapons) do
       for _,j in pairs(AmmoTypes) do
         local item = GetItemArmes(i.idArme)
         if item and item.quantity > 0 then
           
           local ammo = 0
-          local ammoType = GetPedAmmoTypeFromWeapon(GetPlayerPed(-1), i.nomHash)
+          local ammoType = GetPedAmmoTypeFromWeapon(playerPed, i.nomHash)
 
           if ammoType and AmmoTypes[ammoType] then
             local ammoItem = GetMunitionItem(AmmoTypes[ammoType].idMunition)
@@ -64,15 +65,15 @@ AddEventHandler("GTA:LoadWeaponPlayer", function()
             end
           end
 
-          if HasPedGotWeapon(GetPlayerPed(-1), i.nomHash, false) then
-            if GetAmmoInPedWeapon(GetPlayerPed(-1), i.nomHash) ~= ammo then
-              SetPedAmmo(GetPlayerPed(-1), i.nomHash, ammo)
+          if HasPedGotWeapon(playerPed, i.nomHash, false) then
+            if GetAmmoInPedWeapon(playerPed, i.nomHash) ~= ammo then
+              SetPedAmmo(playerPed, i.nomHash, ammo)
             end
           else
-            GiveWeaponToPed(GetPlayerPed(-1), i.nomHash, ammo, false, false)
+            GiveWeaponToPed(playerPed, i.nomHash, ammo, false, false)
           end
-        elseif HasPedGotWeapon(GetPlayerPed(-1), i.nomHash, false) then
-          RemoveWeaponFromPed(GetPlayerPed(-1), i.nomHash)
+        elseif HasPedGotWeapon(playerPed, i.nomHash, false) then
+          RemoveWeaponFromPed(playerPed, i.nomHash)
         end
       end
     end

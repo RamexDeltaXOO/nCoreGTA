@@ -1,89 +1,24 @@
 --||@SuperCoolNinja.||--
 
-
 -->Variable :
 local menuConfig = json.decode(LoadResourceFile(GetCurrentResourceName(), 'json/ConfigMenu.json'))
-local active, Cashactive = false, false
 local isHautRetirer, isBasRetirer, isChaussureRetirer, isChapeauRetirer = false, false, false, false
-local RequestStreamedTextureDict = RequestStreamedTextureDict
-local SetStreamedTextureDictAsNoLongerNeeded = SetStreamedTextureDictAsNoLongerNeeded
-local drawSprite = DrawSprite
-local color_white = {255, 255, 255}
 local scaleform = nil
+local boolHud = false
 
-
--->Event :
-RegisterNetEvent("GTA:UpdateDirtyCash")
-AddEventHandler("GTA:UpdateDirtyCash", function(dirtycash)
-	dirtyMoney = dirtycash
-end)
-
-RegisterNetEvent('GTA:RegarderIdentiter')
-AddEventHandler('GTA:RegarderIdentiter', function(pNom, pPrenom, pTravail, pAge, pOrigine)
-	active = true
-	playerInfo.nom = tostring(pNom)
-	playerInfo.prenom = tostring(pPrenom)
-	playerInfo.metiers = tostring(pTravail)
-	playerInfo.age = tonumber(pAge)
-	playerInfo.origine = tostring(pOrigine)
-end)
-
-
-RegisterNetEvent('GTA:UpdateCash')
-AddEventHandler('GTA:UpdateCash', function(argentSale, argentPropre)
-	Cashactive = true
-	playerInfo.argentPropre = tonumber(argentPropre)
-	playerInfo.argentSale = tonumber(argentSale)
-end)
-
-RegisterNetEvent('bank:givecash')
-AddEventHandler('bank:givecash', function(toPlayer, amount)
-    TriggerServerEvent("bank:givecash", toPlayer, tonumber(amount))
-end)
-
-
-RegisterNetEvent('bank:givesale')
-AddEventHandler('bank:givesale', function(toPlayer, amount)
-  if(IsNearPlayer(toPlayer) == true) then
-    local player2 = GetPlayerFromServerId(toPlayer)
-    local playing = IsPlayerPlaying(player2)
-    if (playing ~= false) then
-      TriggerServerEvent("bank:givesale", toPlayer, tonumber(amount))
-    else
-		exports.nCoreGTA:nNotificationMain({
-			text = "~r~ Aucune personne devant vous ~w~.",
-			type = 'basGauche',
-			nTimeNotif = 6000,
-		})
-    end
-  end
-end)
 
 ---> Function :
-function DrawAdvancedText2(x,y ,w,h,sc, text, r,g,b,a,font,jus)
-    SetTextFont(font)
-    SetTextProportional(0)
-    SetTextScale(sc, sc)
-    N_0x4e096588b13ffeca(jus)
-    SetTextColour(r, g, b, a)
-    SetTextDropShadow(0, 0, 0, 0,255)
-    SetTextEdge(1, 0, 0, 0, 255)
-    SetTextDropShadow()
-    SetTextOutline()
-    SetTextEntry("STRING")
-    AddTextComponentString(text)
-    DrawText(x - 0.1+w, y - 0.02+h)
-end
-
 local function RenderCarte()
-	DrawRect(0.883000000000001, 0.37, 0.190, 0.325, 0, 0, 0, 220)
-	DrawAdvancedText2(0.975000000000001, 0.239, 0.005, 0.0028, 0.5, "Carte d'identité", 255, 255, 255, 255, 0, 0)
+	DrawRect(0.883000000000001, 0.37, 0.185, 0.350, 0, 0, 0, 155)
+	DrawAdvancedText2(0.975000000000001, 0.239, 0.005, 0.0028, 0.7, "Carte d'identité", 255, 255, 255, 255, 1, 0)
 	
-	DrawAdvancedText2(0.897000000000001, 0.290, 0.005, 0.0028, 0.3, "Nom :~b~ "..playerInfo.nom, 255, 255, 255, 255, 0, 1)
-	DrawAdvancedText2(0.897000000000001, 0.320, 0.005, 0.0028, 0.3, "Prénom :~b~ "..playerInfo.prenom, 255, 255, 255, 255, 0, 1)
-	DrawAdvancedText2(0.897000000000001, 0.350, 0.005, 0.0028, 0.3, "Âge :~b~ "..playerInfo.age.."~w~ ans", 255, 255, 255, 255, 0, 1)
-	DrawAdvancedText2(0.897000000000001, 0.380, 0.005, 0.0028, 0.3, "Métier :~b~ "..playerInfo.metiers, 255, 255, 255, 255, 0, 1)
-	DrawAdvancedText2(0.897000000000001, 0.410, 0.005, 0.0028, 0.3, "Origine : ~b~ "..playerInfo.origine, 255, 255, 255, 255, 0, 1)
+	DrawAdvancedText2(0.897000000000001, 0.290, 0.005, 0.0028, 0.3, "Nom :~b~ "..playerInfo.nom .. " "..playerInfo.prenom, 255, 255, 255, 255, 0, 1)
+	DrawAdvancedText2(0.897000000000001, 0.320, 0.005, 0.0028, 0.3, "Age :~b~ "..playerInfo.age.."~w~ ans", 255, 255, 255, 255, 0, 1)
+	DrawAdvancedText2(0.897000000000001, 0.350, 0.005, 0.0028, 0.3, "Métier :~b~ "..playerInfo.metiers, 255, 255, 255, 255, 0, 1)
+	DrawAdvancedText2(0.897000000000001, 0.380, 0.005, 0.0028, 0.3, "Grade :~b~ "..playerInfo.grade, 255, 255, 255, 255, 0, 1)
+	DrawAdvancedText2(0.897000000000001, 0.410, 0.005, 0.0028, 0.3, "Origine : ~b~"..playerInfo.origine, 255, 255, 255, 255, 0, 1)
+	--DrawAdvancedText2(0.897000000000001, 0.440, 0.005, 0.0028, 0.3, "[SOON] Permis Voiture : "..identitepermis3, 255, 255, 255, 255, 0, 1)
+	--DrawAdvancedText2(0.897000000000001, 0.470, 0.005, 0.0028, 0.3, "[SOON] Permis Port d'armes : "..identitepermis4, 255, 255, 255, 255, 0, 1)
 end
 
 
@@ -122,13 +57,14 @@ local menuPerso = {
 		buttons = 10,
 		from = 1,
 		to = 10,
-		scale = 0.3 + 0.05, --> Taille.
-		font = 0, --> Police d'écriture.
+		scale = 0.3 + 0.05,
+		font = 0,
 		["main"] = { --> Menu Principale
 			title = "Menu Personnel",
 			name = "main",
 			buttons = {
 				{name = "Inventaire", description = "", action = ""},
+				{name = "Appels d'urgence", description = "", action = ""},
 				{name = "Tenue", description = "", action = ""},
 				{name = "Mon Portefeuille", description = "", action = ""},
 				{name = "Mon Identité", description = "", action = ""},
@@ -141,6 +77,15 @@ local menuPerso = {
 			title = "Inventaire" ,
 			name = "Inventaire",
 			buttons = inventory_item
+		},
+
+		["urgence"] = { --> Menu Appel d'urgence.
+			title = "Appels d'urgence" ,
+			name = "urgence",
+			buttons = {
+				{name = "Police", action = "appelPolice"},
+				{name = "Medics", action = "appelMedic"},
+			}
 		},
 
 		["Tenue"] = { --> Menu Tenues Joueur.
@@ -188,14 +133,13 @@ local menuPerso = {
 			}
 		},
 
-		["Hud"] = { --> Menu Jobs
+		["Hud"] = { --> Menu HUD
 			title = "Hud",
 			name = "Hud",
 			buttons = {
 				{name = "Afficher/Cacher Faim/Soif"},
 			}
 		},
-
   	}
 }
 
@@ -318,7 +262,7 @@ function drawMenuTitle(txt,x,y)
 	AddTextComponentString(txt)
 	DrawRect(x,y,menu.width,menu.height + 0.04 + 0.007, 0, 0, 0, 0)
 	DrawTextMenu(1, txt, 0.8,menu.width - 0.4 / 2 + 0.1 + 0.005, y - menu.height/2 + 0.01, 255, 255, 255)
-	drawSprite("ninja_source", "interaction_bgd", x,y, menu.width,menu.height + 0.04 + 0.007, .0, 255, 255, 255, 255)
+	DrawSprite("ninja_source", "interaction_bgd", x,y, menu.width,menu.height + 0.04 + 0.007, .0, 255, 255, 255, 255)
 	DrawScaleformMovie(scaleform, 0.42 + 0.003,0.45, 0.9,0.9)
 end
 
@@ -335,17 +279,16 @@ Citizen.CreateThread(function()
     while true do
         Citizen.Wait(0)
       
-		if IsControlJustReleased(0, 244) then 
+		if IsControlJustReleased(0, 244) then
 			if not menuPerso.opened then
-				OpenMainMenu()
 				TriggerServerEvent("item:getItems")
+				OpenMainMenu()
 			end
 		end
 
 		if menuPerso.opened then
 			DisableControlAction(0, 140, true) --> DESACTIVER LA TOUCHE POUR PUNCH
 			DisableControlAction(0, 172,true) --DESACTIVE CONTROLL HAUT
-			local ped = LocalPed()
 			local menu = menuPerso.menu[menuPerso.currentmenu]
 			drawMenuTitle(menu.title, menuPerso.menu.x,menuPerso.menu.y + 0.08)
 			local y = menuPerso.menu.y + 0.12
@@ -410,7 +353,6 @@ local itemIDSelected = 0
 local itemQty = 0
 local itemName = ""
 function ButtonSelected(button)
-	local ped = GetPlayerPed(-1)
 	local this = menuPerso.currentmenu
 	local btn = button.name
 	local btnAction = button.action
@@ -419,6 +361,8 @@ function ButtonSelected(button)
     if this == "main" then --> Menu Principale
         if btn == "Inventaire" then
 			OpenMenu("Inventaire")
+		elseif btn == "Appels d'urgence" then
+			OpenMenu("urgence")
 		elseif btn == "Tenue" then
 			TriggerEvent("GTA:TenueMenu")
 			OpenMenu("Tenue")
@@ -451,6 +395,30 @@ function ButtonSelected(button)
 			itemName = button.itemName
 			itemIDSelected = button.iteamID
 			itemQty = button.itemqty
+		elseif tonumber(btnTypeItem) == 4 then
+			OpenMenu('ItemUtilisable')
+			itemSelected = button.itemType
+			itemName = button.itemName
+			itemIDSelected = button.iteamID
+			itemQty = button.itemqty
+		end
+	elseif this == "urgence" then --> Appels d'urgence
+		if btnAction == "appelPolice" then
+			local plyPos = GetEntityCoords(GetPlayerPed(-1), true)
+			TriggerEvent("nAppelMobile:callPolice")
+			exports.nCoreGTA:nNotificationMain({
+				text = "~g~ Message d'urgence envoyé !",
+				type = 'basGauche',
+				nTimeNotif = 3000,
+			})
+		elseif btnAction == "appelMedic" then
+			local plyPos = GetEntityCoords(GetPlayerPed(-1), true)
+			TriggerEvent("nAppelMobile:callMedic")
+			exports.nCoreGTA:nNotificationMain({
+				text = "~g~ Message d'urgence envoyé !",
+				type = 'basGauche',
+				nTimeNotif = 3000,
+			})
 		end
 	elseif this == "Tenue" then --> Menu Tenue
 		if btn == "Mettre votre haut" then
@@ -489,16 +457,11 @@ function ButtonSelected(button)
 	elseif this == "ItemUtilisable" then --> Sous menu Inventaire (Item Utilisable)
 		if btn == "utiliser" then
 			OpenMenu("Inventaire")
-			use(itemIDSelected,1)
-			exports.nCoreGTA:nNotificationMain({
-			text = "~h~Vous avez utilisé ~b~x1 ~g~"..itemName,
-			type = 'basGauche',
-			nTimeNotif = 1000,
-		})
+			use(itemIDSelected, 1)
 		elseif btn == "donner" then
 			local ClosestPlayerSID = GetPlayerServerId(GetClosestPlayer())
 			if ClosestPlayerSID ~= 0 then
-				local result = KeyboardInput("Somme d'item à donner :", "", 4)
+				local result = InputNombre("Montant : ")
 				total_items = tonumber(result)
 
 				if tonumber(total_items) == nil then
@@ -529,7 +492,7 @@ function ButtonSelected(button)
 			end
 
 		elseif btn == "jeter" then
-			local result = KeyboardInput("Somme d'item à jeter :", "", 4)
+			local result = InputNombre("Montant : ")
 
 			if tonumber(result) == nil then
 				exports.nCoreGTA:nNotificationMain({
@@ -556,14 +519,14 @@ function ButtonSelected(button)
 					nTimeNotif = 1000,
 				})
 			end
+			result = nil
 		end
 	elseif this == "ItemNonUtilisable" then --> Sous menu Inventaire (Item Non-Utilisable)
 		if btn == "donner" then
 			local ClosestPlayerSID = GetPlayerServerId(GetClosestPlayer())
 			if ClosestPlayerSID ~= 0 then
-				local result = KeyboardInput("Somme d'item à donner :", "", 4)
+				local result = InputNombre("Montant : ")
 				total_items = tonumber(result)
-
 
 				if tonumber(total_items) == nil then
 					exports.nCoreGTA:nNotificationMain({
@@ -594,7 +557,7 @@ function ButtonSelected(button)
 
 		elseif btn == "jeter" then
 			OpenMenu("Inventaire")
-			local result = KeyboardInput("Somme d'item à jeter :", "", 4)
+			local result = InputNombre("Montant : ")
 
 			if tonumber(result) == nil then
 				exports.nCoreGTA:nNotificationMain({
@@ -620,12 +583,13 @@ function ButtonSelected(button)
 					nTimeNotif = 1000,
 				})
 			end
+			result = nil
 		end
 	elseif this == "Mon Portefeuille" then
 		if btn == "Donner de ~g~l'argent propre" then
 			local ClosestPlayerSID = GetPlayerServerId(GetClosestPlayer())
 			if ClosestPlayerSID ~= 0 then
-				local result = KeyboardInput("Somme à donner :", "", 4)
+				local result = InputNombre("Montant : ")
 				total_items = tonumber(result)
 
 				if tonumber(total_items) == nil then
@@ -649,7 +613,7 @@ function ButtonSelected(button)
 		elseif btn == "Donner de ~r~l'argent sale" then
 			local ClosestPlayerSID = GetPlayerServerId(GetClosestPlayer())
 			if ClosestPlayerSID ~= 0 then
-				local result = KeyboardInput("Somme à donner :", "", 4)
+				local result = InputNombre("Montant : ")
 				total_items = tonumber(result)
 
 				if tonumber(total_items) == nil then
@@ -695,7 +659,8 @@ function ButtonSelected(button)
 		end
 	elseif this == "Hud" then
 		if btn == "Afficher/Cacher Faim/Soif" then
-			TriggerEvent("EnableDisableHUDFS")
+			boolHud = not boolHud
+			TriggerEvent("EnableDisableHUDFS", boolHud)
 			CloseMainMenu()
 		end
 	end 
@@ -704,22 +669,8 @@ end
 function Back() --> Option Retour
 	if menuPerso.currentmenu == "main" then
 		CloseMainMenu()
-	elseif menuPerso.currentmenu == "Inventaire" then
+	else
 		OpenMenu("main")
-	elseif menuPerso.currentmenu == "Tenue" then
-		OpenMenu("main")
-	elseif menuPerso.currentmenu == "Mon Portefeuille" then
-		OpenMenu("main")
-	elseif menuPerso.currentmenu == "ItemUtilisable" then
-		OpenMenu("main")
-	elseif menuPerso.currentmenu == "ItemNonUtilisable" then
-		OpenMenu("main")
-	elseif menuPerso.currentmenu == "Mon Identité" then
-		OpenMenu("main")
-	elseif menuPerso.currentmenu == "Hud" then
-		OpenMenu("main")
-	elseif menuPerso.currentmenu == "Action Medic" then
-		OpenMenu("main") --> Retour au menu Action Police
 	end
 end
 
@@ -735,7 +686,7 @@ function table.HasValue( t, val )
 	return false
 end
 
---> Check si la carte d'identié est ouvert, on la ferme aprés 20 seconde :
+--> Check si la carte d'identié est ouvert, on la ferme aprés 10 seconde :
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
@@ -751,10 +702,10 @@ Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
 		if active then
-			Wait(5000) --Permet l'affichage pendant 20 secondes
+			Wait(10000) --Permet l'affichage pendant 10 secondes
 			active = false
 		elseif Cashactive then
-			Wait(5000) --Permet l'affichage pendant 20 secondes
+			Wait(10000) --Permet l'affichage pendant 10 secondes
 			Cashactive = false
 		end
 	end

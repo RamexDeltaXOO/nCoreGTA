@@ -6,8 +6,8 @@ local timer = 0
 local freezeTime = false
 local blackout = false
 
-RegisterNetEvent('vSync:updateWeather')
-AddEventHandler('vSync:updateWeather', function(NewWeather, newblackout)
+RegisterNetEvent('GTA:updateWeather')
+AddEventHandler('GTA:updateWeather', function(NewWeather, newblackout)
     CurrentWeather = NewWeather
     blackout = newblackout
 end)
@@ -36,8 +36,8 @@ Citizen.CreateThread(function()
     end
 end)
 
-RegisterNetEvent('vSync:updateTime')
-AddEventHandler('vSync:updateTime', function(base, offset, freeze)
+RegisterNetEvent('GTA:updateTime')
+AddEventHandler('GTA:updateTime', function(base, offset, freeze)
     freezeTime = freeze
     timeOffset = offset
     baseTime = base
@@ -64,5 +64,5 @@ Citizen.CreateThread(function()
 end)
 
 AddEventHandler('playerSpawned', function()
-    TriggerServerEvent('vSync:requestSync')
+    TriggerServerEvent('GTA:requestSync')
 end)
