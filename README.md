@@ -39,3 +39,6 @@ https://discord.gg/NKHJTqn
 - Installé puis configurer votre base de donnée, une vidéo est faite sur le discord.
 - Entrer votre mot de passe dans le fichier config qui se trouve dans [GTA_Core]/ghmattimysql/config.json
 - Installé le fichier GTA_Serveur.sql dans votre base de donnée.
+
+## License :
+@SuperCoolNinja
