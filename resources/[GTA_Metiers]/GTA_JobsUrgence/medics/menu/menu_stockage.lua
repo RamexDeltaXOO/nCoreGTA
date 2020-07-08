@@ -27,7 +27,7 @@ local menuMedicStockage = {
             title = "Stockage",
             name = "main",
             buttons = {
-                {name = "Seringue d'adrenaline", action = "action2", item = 17},
+                {name = "Seringue d'adrenaline", action = "action2", item = "Seringue d'adrenaline"},
             }
         },
   	}

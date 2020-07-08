@@ -1,69 +1,58 @@
 [
     {
-      "Nom" : "Pistolet",
-      "idArme" : 1,
-      "idMunition" : 2,
+      "libelleArme" : "Pistolet",
+      "libelleMunition" : "Munition 9mm",
       "nomHash" : "WEAPON_PISTOL",
       "typeMunitions" : "AMMO_PISTOL"
     },
     
     {
-      "Nom" : "Marteau",
-      "idArme" : 3,
+      "libelleArme" : "Marteau",
       "nomHash" : "WEAPON_HAMMER"
     },
 
     {
-      "Nom" : "Bat",
-      "idArme" : 4,
+      "libelleArme" : "Batte de baseball",
       "nomHash" : "WEAPON_BAT"
     },
 
     {
-      "Nom" : "Pied-de-biche",
-      "idArme" : 5,
+      "libelleArme" : "Pied-de-biche",
       "nomHash" : "WEAPON_CROWBAR"
     },
     
     {
-      "Nom" : "Couteau",
-      "idArme" : 6,
+      "libelleArme" : "Couteau",
       "nomHash" : "WEAPON_KNIFE"
     },
 
     {
-      "Nom" : "Menotte",
-      "idArme" : 7,
+      "libelleArme" : "Menotte",
       "nomHash" : "WEAPON_HANDCUFFS"
     },
 
     {
-      "Nom" : "hache",
-      "idArme" : 8,
+      "libelleArme" : "Hache",
       "nomHash" : "WEAPON_HATCHET"
     },
 
     {
-      "Nom" : "Machete",
-      "idArme" : 9,
+      "libelleArme" : "Machette",
       "nomHash" : "WEAPON_MACHETE"
     },
 
     {
-      "Nom" : "Poing américain",
-      "idArme" : 10,
+      "libelleArme" : "Poing américain",
       "nomHash" : "WEAPON_KNUCKLE"
     },
     
     {
-      "Nom" : "Tazer",
-      "idArme" : 15,
+      "libelleArme" : "Tazer",
       "nomHash" : "WEAPON_STUNGUN"
     },
 
     {
-      "Nom" : "Matraque",
-      "idArme" : 16,
+      "libelleArme" : "Matraque",
       "nomHash" : "WEAPON_NIGHTSTICK"
     }
 ]

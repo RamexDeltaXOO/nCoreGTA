@@ -256,3 +256,12 @@ function setupScaleform(scaleform)
 
     return scaleform
 end
+
+
+function progression(time) 
+	SendNUIMessage({
+		type = "ui",
+		display = true,
+		time = time
+	})
+end

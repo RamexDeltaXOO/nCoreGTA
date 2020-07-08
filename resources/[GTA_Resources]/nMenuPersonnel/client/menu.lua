@@ -4,7 +4,7 @@
 local menuConfig = json.decode(LoadResourceFile(GetCurrentResourceName(), 'json/ConfigMenu.json'))
 local isHautRetirer, isBasRetirer, isChaussureRetirer, isChapeauRetirer = false, false, false, false
 local scaleform = nil
-local boolHud = false
+local boolHud = true
 
 
 ---> Function :
@@ -83,8 +83,9 @@ local menuPerso = {
 			title = "Appels d'urgence" ,
 			name = "urgence",
 			buttons = {
-				{name = "Police", action = "appelPolice"},
-				{name = "Medics", action = "appelMedic"},
+				{name = "Police", job = "police"},
+				{name = "Medics", job = "medic"},
+				{name = "Mecano", job = "mecano"},
 			}
 		},
 
@@ -153,9 +154,9 @@ AddEventHandler("GTA:TenueMenu", function()
 	menuPerso.menu["Tenue"].buttons = {}
 	
 	if (isHautRetirer == true) then
-    	table.insert(menuPerso.menu["Tenue"].buttons, {title = "Mettre votre haut", 	 name = "Mettre votre haut"})
+    	table.insert(menuPerso.menu["Tenue"].buttons, {title = "Mettre votre haut", name = "Mettre votre haut"})
 	else
-		table.insert(menuPerso.menu["Tenue"].buttons, {title = "Retirer votre haut", 	 name = "Retirer votre haut"})
+		table.insert(menuPerso.menu["Tenue"].buttons, {title = "Retirer votre haut",  name = "Retirer votre haut"})
 	end
 
 	if (isBasRetirer == true) then 
@@ -191,7 +192,7 @@ function dump(o)
    end
 end
 
-function OpenMainMenu()
+local function OpenMainMenu()
 	if not HasStreamedTextureDictLoaded("ninja_source") then
         RequestStreamedTextureDict("ninja_source", true)
 	end
@@ -217,7 +218,7 @@ function CloseMainMenu()
 	end)
 end
 
-function drawMenuButton(button,x,y,selected)
+local function drawMenuButton(button,x,y,selected)
 	local menu = menuPerso.menu
 	SetTextFont(menu.font)
 	SetTextProportional(0)
@@ -242,7 +243,7 @@ function drawMenuButton(button,x,y,selected)
 	DrawText(x - menu.width/2 + 0.005, y - menu.height/2 + 0.0028)
 end
 
-function DrawTextMenu(fonteP, stringT, scale, posX, posY)
+local function DrawTextMenu(fonteP, stringT, scale, posX, posY)
 	SetTextFont(fonteP)
 	SetTextProportional(0)
 	SetTextScale(scale, scale)
@@ -253,7 +254,7 @@ function DrawTextMenu(fonteP, stringT, scale, posX, posY)
 	DrawText(posX, posY)
 end
 
-function drawMenuTitle(txt,x,y)
+local function drawMenuTitle(txt,x,y)
 	local menu = menuPerso.menu
 	SetTextFont(0)
 	SetTextScale(0.4 + 0.008, 0.4 + 0.008)
@@ -266,7 +267,7 @@ function drawMenuTitle(txt,x,y)
 	DrawScaleformMovie(scaleform, 0.42 + 0.003,0.45, 0.9,0.9)
 end
 
-function tablelength(T)
+local function tablelength(T)
 	local count = 0
 	for _ in pairs(T) do 
 		count = count + 1 
@@ -274,7 +275,14 @@ function tablelength(T)
 	return count
 end
 
-local backlock = false
+local function OpenMenu(menu)
+	menuPerso.lastmenu = menuPerso.currentmenu
+	menuPerso.menu.from = 1
+	menuPerso.menu.to = 10
+	menuPerso.selectedbutton = 1
+	menuPerso.currentmenu = menu
+end
+
 Citizen.CreateThread(function()
     while true do
         Citizen.Wait(0)
@@ -340,13 +348,7 @@ Citizen.CreateThread(function()
 end)
 
 
-function OpenMenu(menu)
-	menuPerso.lastmenu = menuPerso.currentmenu
-	menuPerso.menu.from = 1
-	menuPerso.menu.to = 10
-	menuPerso.selectedbutton = 1
-	menuPerso.currentmenu = menu
-end
+
 
 local itemSelected = 0
 local itemIDSelected = 0
@@ -403,17 +405,10 @@ function ButtonSelected(button)
 			itemQty = button.itemqty
 		end
 	elseif this == "urgence" then --> Appels d'urgence
-		if btnAction == "appelPolice" then
+		if btnAction == "appelUrgence" then
+		else
 			local plyPos = GetEntityCoords(GetPlayerPed(-1), true)
-			TriggerEvent("nAppelMobile:callPolice")
-			exports.nCoreGTA:nNotificationMain({
-				text = "~g~ Message d'urgence envoyé !",
-				type = 'basGauche',
-				nTimeNotif = 3000,
-			})
-		elseif btnAction == "appelMedic" then
-			local plyPos = GetEntityCoords(GetPlayerPed(-1), true)
-			TriggerEvent("nAppelMobile:callMedic")
+			TriggerEvent("nAppelMobile:callUrgence", button.job)
 			exports.nCoreGTA:nNotificationMain({
 				text = "~g~ Message d'urgence envoyé !",
 				type = 'basGauche',
@@ -601,7 +596,7 @@ function ButtonSelected(button)
 					return nil
 				end
 				CloseMainMenu()
-				TriggerServerEvent("nArgent:DonnerArgentPropre", ClosestPlayerSID, tonumber(total_items)) --A TESTER
+				TriggerServerEvent("nArgent:DonnerArgentPropre", ClosestPlayerSID, tonumber(total_items))
 			else
 				exports.nCoreGTA:nNotificationMain({
 					text = "~y~ Aucune personne devant vous !",
@@ -626,7 +621,7 @@ function ButtonSelected(button)
 				end
 
 				CloseMainMenu()
-				TriggerServerEvent("GTA:DonnerArgentSale", ClosestPlayerSID, tonumber(total_items)) --A TESTER
+				TriggerServerEvent("GTA:DonnerArgentSale", ClosestPlayerSID, tonumber(total_items))
 			else
 				exports.nCoreGTA:nNotificationMain({
 					text = "~y~ Aucune personne devant vous !",
@@ -661,7 +656,6 @@ function ButtonSelected(button)
 		if btn == "Afficher/Cacher Faim/Soif" then
 			boolHud = not boolHud
 			TriggerEvent("EnableDisableHUDFS", boolHud)
-			CloseMainMenu()
 		end
 	end 
 end
@@ -677,7 +671,6 @@ end
 function stringstarts(String,Start)
    return string.sub(String,1,string.len(Start))==Start
 end
-
 
 function table.HasValue( t, val )
 	for k, v in pairs( t ) do

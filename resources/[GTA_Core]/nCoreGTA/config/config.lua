@@ -1,7 +1,7 @@
 --@Super.Cool.Ninja
 config = {}
 
-config.versionCore = "Version 1.0"
+config.versionCore = "Version 1.1"
 
 --> Desactiver le system d'indice de recherche.
 config.activerPoliceWanted = false
@@ -21,7 +21,7 @@ config.argentSale = 150
 config.banque = 5000
 
 --> Traffic PNJ :
-config.vehiculeDensiter = 0.5
+config.vehiculeDensiter = 1.0
 config.pedDensiter = 1.0
 
 --> Whitelist :

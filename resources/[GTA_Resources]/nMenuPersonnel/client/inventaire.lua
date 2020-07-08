@@ -4,8 +4,7 @@ ITEMS = {}
 NewItems = {}
 local maxCapacity = 100 -->Max the slot dans votre inventaire par item
 
---[[INFO : TYPE 1 = SOIF, TYPE 2 = FOOD, TYPE 3 = OBJECT]]
-
+--[[INFO : TYPE 1 = SOIF, TYPE 2 = FOOD, TYPE 3 = OBJECT,  TYPE 4 = UTILISATION OBJET POUR TARGET]]
 
 --nCoreGTA
 RegisterNetEvent("item:reset")
@@ -32,24 +31,36 @@ function notFull()
 	for _, v in pairs(ITEMS) do
 		pods = pods + v.quantity
 	end
-	if (pods < (maxCapacity-1)) then return true end
+	if (pods <= (maxCapacity-1)) then return true end
 end
 
 RegisterNetEvent("player:receiveItem")
-AddEventHandler("player:receiveItem", function(item, quantity)
-	if (getPods() + quantity < maxCapacity) then
-		item = tonumber(item)
-		if (ITEMS[item] == nil) then
-			new(item, quantity)
+AddEventHandler("player:receiveItem", function(item_name, quantity)
+	if (getPods() + quantity <= maxCapacity) then
+		item_name = tostring(item_name)
+		if (ITEMS[item_name] == nil) then
+			new(item_name, quantity)
 		else
-			add({ item, quantity })
+			add({ item_name, quantity })
 		end
+		exports.nCoreGTA:nNotificationMain({
+            text = "Vous avez reçu ~g~x"..tonumber(quantity).."~b~ "..item_name,
+            type = 'basGauche',
+            nTimeNotif = 6000,
+        })
+	else
+		exports.nCoreGTA:nNotificationMain({
+			text =  "~r~Quantité trop grande ou\nInventaire rempli.",
+			type = 'basGauche',
+			nTimeNotif = 2000,
+		})
 	end
 end)
 
+
 RegisterNetEvent("player:looseItem")
 AddEventHandler("player:looseItem", function(item, quantity)
-	item = tonumber(item)
+	item = tostring(item)
 	if (ITEMS[item].quantity >= quantity) then
 		delete({ item, quantity })
 	end
@@ -57,7 +68,7 @@ end)
 
 RegisterNetEvent("player:sellItem")
 AddEventHandler("player:sellItem", function(item, price)
-	item = tonumber(item)
+	item = tostring(item)
 	if (ITEMS[item].quantity > 0) then
 		sell(item, price)
 	end
@@ -68,59 +79,43 @@ AddEventHandler("farm:updateQuantity", function(qty, id)
 	ITEMS[id].quantity = qty
 end)
 
-RegisterNetEvent("farm:updateQuantityTarget")
-AddEventHandler("farm:updateQuantityTarget", function(qty, id)
-	ITEMS[id].quantity = qty
-end)
-
 AddEventHandler("player:resetItem", function(item)
-	item = tonumber(item)
+	item = tostring(item)
 	delete({ item, ITEMS[item].quantity })
 end)
 
-function sell(itemId, price)
-	local item = ITEMS[itemId]
+function sell(itemName, price)
+	local item = ITEMS[itemName]
 	item.quantity = item.quantity - 1
-	NewItems[itemId] = item.quantity
-	TriggerServerEvent("item:sell", itemId, item.quantity, price)
+	NewItems[itemName] = item.quantity
+	TriggerServerEvent("item:sell", itemName, item.quantity, price)
   	InventaireRefreshMenu()
 end
 
 function delete(arg)
-	local itemId = tonumber(arg[1])
+	local itemName = tostring(arg[1])
 	local qty = arg[2]
-	local item = ITEMS[itemId]
+	local item = ITEMS[itemName]
 	item.quantity = item.quantity - qty
-	NewItems[itemId] = item.quantity
-	TriggerServerEvent("item:updateQuantity", item.quantity, itemId)
-	TriggerEvent("farm:updateQuantity", item.quantity, itemId)
-  	InventaireRefreshMenu()
-end
-
-function deleteTargetItem(target, arg)
-	local itemId = tonumber(arg[1])
-	local qty = arg[2]
-	local item = ITEMS[itemId]
-	item.quantity = item.quantity - qty
-	NewItems[itemId] = item.quantity
-	TriggerServerEvent("item:updateQuantityTarget",target, item.quantity, itemId)
-	TriggerEvent("farm:updateQuantityTarget", item.quantity, itemId)
+	NewItems[itemName] = item.quantity
+	TriggerServerEvent("item:updateQuantity", item.quantity, itemName)
+	TriggerEvent("farm:updateQuantity", item.quantity, itemName)
   	InventaireRefreshMenu()
 end
 
 function add(arg)
-	local itemId = tonumber(arg[1])
+	local itemName = tostring(arg[1])
 	local qty = arg[2]
-	local item = ITEMS[itemId]
+	local item = ITEMS[itemName]
 	item.quantity = item.quantity + qty
-	NewItems[itemId] = item.quantity
-	TriggerServerEvent("item:updateQuantity", item.quantity, itemId)
-	TriggerEvent("farm:updateQuantity", item.quantity, itemId)
+	NewItems[itemName] = item.quantity
+	TriggerServerEvent("item:updateQuantity", item.quantity, itemName)
+	TriggerEvent("farm:updateQuantity", item.quantity, itemName)
   	InventaireRefreshMenu()
 end
 
-function new(item, quantity)
-	TriggerServerEvent("item:setItem", item, quantity)
+function new(item_name, quantity)
+	TriggerServerEvent("item:setItem", item_name, quantity)
 	TriggerServerEvent("item:getItems")
 end
 
@@ -130,9 +125,9 @@ function updateQuantities()
     end
 end
 
-function getQuantity(itemId)
-    if ITEMS[tonumber(itemId)] ~= nil then
-        return ITEMS[tonumber(itemId)].quantity
+function getQuantity(itemName)
+    if ITEMS[tostring(itemName)] ~= nil then
+        return ITEMS[tostring(itemName)].quantity
     end
     return 0
 end
@@ -142,12 +137,12 @@ AddEventHandler("player:getQuantity", function(item, call)
 	 call({count=getQuantity(item)})
 end)
 
-function use(itemId, quantity)
-	if ITEMS[tonumber(itemId)].type == 1 then
+function use(itemName, quantity)
+	if ITEMS[tostring(itemName)].type == 1 then
 	  	TriggerEvent("nAddSoif", 25) --> Nombre d'ajout au moment ou il boit
-	elseif ITEMS[tonumber(itemId)].type == 2 then
+	elseif ITEMS[tostring(itemName)].type == 2 then
 		TriggerEvent("nAddFaim", 25)  --> Nombre d'ajout au moment ou il mange
-	elseif ITEMS[tonumber(itemId)].type == 4 then --> Seringue d'adrenaline.
+	elseif ITEMS[tostring(itemName)].type == 4 then --> Seringue d'adrenaline.
 		local target = GetPlayerServerId(GetClosestPlayer())
 		if target ~= 0 then
 			TaskStartScenarioInPlace(GetPlayerPed(-1), 'CODE_HUMAN_MEDIC_KNEEL', 0, true)
@@ -159,7 +154,7 @@ function use(itemId, quantity)
 				type = 'basGauche',
 				nTimeNotif = 6000,
 			})
-			TriggerEvent('player:looseItem',itemId,1)
+			TriggerEvent('player:looseItem',itemName,1)
 		else
 			exports.nCoreGTA:nNotificationMain({
 				text = "~y~ Aucune personne devant vous !",
@@ -168,7 +163,7 @@ function use(itemId, quantity)
 			})
 		end
 	end
-	TriggerEvent('player:looseItem', itemId, quantity)
+	TriggerEvent('player:looseItem', itemName, quantity)
 end
 
 function round(n)

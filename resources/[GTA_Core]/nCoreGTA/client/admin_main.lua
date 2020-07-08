@@ -222,21 +222,11 @@ RegisterCommand("givepistol", function(source, args, rawCommand)
     if (isPlayerAdmin == true) then
         if tonumber(qtyAmmo) == nil then
             qtyAmmo = 1
-            exports.nCoreGTA:nNotificationMain({
-                text = "Vous avez reçu un ~g~pistolet~w~ avec : ~b~" ..tonumber(qtyAmmo) .. "~w~ munitions.",
-                type = 'basGauche',
-                nTimeNotif = 6000,
-            })
-            TriggerEvent("player:receiveItem", 1, 1)
-            TriggerEvent("player:receiveItem", 2, tonumber(qtyAmmo))
+            TriggerEvent("player:receiveItem", "Pistolet", 1)
+            TriggerEvent("player:receiveItem", "Munition 9mm", tonumber(qtyAmmo))
         else
-            TriggerEvent("player:receiveItem", 1, 1)
-            TriggerEvent("player:receiveItem", 2, tonumber(qtyAmmo))
-            exports.nCoreGTA:nNotificationMain({
-                text = "Vous avez reçu un ~g~pistolet~w~ avec : ~b~" ..tonumber(qtyAmmo) .. "~w~ munitions.",
-                type = 'basGauche',
-                nTimeNotif = 6000,
-            })
+            TriggerEvent("player:receiveItem", "Pistolet", 1)
+            TriggerEvent("player:receiveItem", "Munition 9mm", tonumber(qtyAmmo))
         end
     end
 end, false)
@@ -252,19 +242,9 @@ RegisterCommand("givemenotte", function(source, args, rawCommand)
     if (isPlayerAdmin == true) then
         if tonumber(qty) == nil then
             qty = 1
-            exports.nCoreGTA:nNotificationMain({
-                text = "Vous avez reçu une pair de ~g~menotte",
-                type = 'basGauche',
-                nTimeNotif = 6000,
-            })
-            TriggerEvent("player:receiveItem", 7, tonumber(qty))
+            TriggerEvent("player:receiveItem", "Menotte", tonumber(qty))
         else
-            TriggerEvent("player:receiveItem", 7, tonumber(qty))
-            exports.nCoreGTA:nNotificationMain({
-                text = "Vous avez reçu " ..tonumber(qty) .. "~w~ pair de menotte.",
-                type = 'basGauche',
-                nTimeNotif = 6000,
-            })
+            TriggerEvent("player:receiveItem", "Menotte", tonumber(qty))
         end
     end
 end, false)

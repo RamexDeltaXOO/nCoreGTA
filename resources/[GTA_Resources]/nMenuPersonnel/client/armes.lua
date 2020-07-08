@@ -20,10 +20,10 @@ local function RemoveUsedAmmo()
   local AmmoAfter = GetAmmoInPedWeapon(playerPed, CurrentWeapon)
   local ammoType = AmmoTypes[GetPedAmmoTypeFromWeapon(playerPed, CurrentWeapon)]
   
-  if ammoType and ammoType.idMunition then
+  if ammoType and ammoType.libelleMunition then
     local ammoDiff = AmmoBefore - AmmoAfter
     if ammoDiff > 0 then
-      TriggerEvent('player:looseItem', ammoType.idMunition, ammoDiff)
+      TriggerEvent('player:looseItem', ammoType.libelleMunition, ammoDiff)
     end
   end
   return AmmoAfter
@@ -52,14 +52,14 @@ AddEventHandler("GTA:LoadWeaponPlayer", function()
   local playerPed = GetPlayerPed(-1)
   for _,i in pairs(Weapons) do
       for _,j in pairs(AmmoTypes) do
-        local item = GetItemArmes(i.idArme)
+        local item = GetItemArmes(i.libelleArme)
         if item and item.quantity > 0 then
           
           local ammo = 0
           local ammoType = GetPedAmmoTypeFromWeapon(playerPed, i.nomHash)
 
           if ammoType and AmmoTypes[ammoType] then
-            local ammoItem = GetMunitionItem(AmmoTypes[ammoType].idMunition)
+            local ammoItem = GetMunitionItem(AmmoTypes[ammoType].libelleMunition)
             if ammoItem then
               ammo = ammoItem.quantity
             end

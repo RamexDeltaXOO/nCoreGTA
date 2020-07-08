@@ -156,7 +156,7 @@ AddEventHandler("GTA_Police:OuvrirInventaireSuspect", function()
   
 	for k, v in pairs(ITEMS) do
 		if (v.quantity > 0) then
-			table.insert(inventory_suspect, {name = tostring(v.libelle).. " "..tonumber(round(v.quantity)), itemType = tostring(v.type), itemName = tostring(v.libelle), iteamID = tostring(k), itemqty = tonumber(round(v.quantity))})
+			table.insert(inventory_suspect, {name = tostring(v.libelle).. " "..tonumber(round(v.quantity)), itemType = tostring(v.type), itemName = tostring(v.libelle), iteamNameSelected = tostring(k), itemqty = tonumber(round(v.quantity))})
 		end
     end
 end)
@@ -386,7 +386,7 @@ end)
 
 
 local itemSelected = 0
-local itemIDSelected = 0
+local itemsSelected = ""
 local itemQty = 0
 local itemName = ""
 local targetPerso = nil
@@ -496,7 +496,7 @@ function gestionPoliceAction(button)
             OpenMenu('InventaireSuspectChoix')
             itemSelected = button.itemType
 			itemName = button.itemName
-			itemIDSelected = button.iteamID
+			itemsSelected = button.iteamNameSelected
 			itemQty = button.itemqty
         end
     elseif this == "InventaireSuspectChoix" then 
@@ -513,7 +513,7 @@ function gestionPoliceAction(button)
             end
             
             if tonumber(itemQty) >= tonumber(result) and tonumber(result) > 0 then
-                TriggerServerEvent('item:supprimerItemTarget',targetPerso, itemIDSelected,tonumber(result), itemName)
+                TriggerServerEvent('item:supprimerItemTarget',targetPerso, itemsSelected,tonumber(result), itemName)
                 CloseAndRefreshMenu("InventaireSuspect")
 			else
 				exports.nCoreGTA:nNotificationMain({

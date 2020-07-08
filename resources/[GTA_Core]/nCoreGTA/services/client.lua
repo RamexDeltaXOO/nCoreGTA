@@ -4,6 +4,13 @@ local isCall = false
 local work = {}
 local target = {}
 
+local square = math.sqrt
+local function getDistance(a, b) 
+    local x, y, z = a.x-b.x, a.y-b.y, a.z-b.z
+    return square(x*x+y*y+z*z)
+end
+
+
 local function Ninja_Core__GetPedMugshot(ped) 
 	local mugshot = RegisterPedheadshot(ped)
 	while not IsPedheadshotReady(mugshot) do
@@ -46,9 +53,9 @@ Citizen.CreateThread(function()
             callActive = false
         end
         if haveTarget then
-            DrawMarker(1, target.pos.x, target.pos.y, target.pos.z-1, 0, 0, 0, 0, 0, 0, 2.001, 2.0001, 0.5001, 255, 255, 0, 200, 0, 0, 0, 0)
+            DrawMarker(25, target.pos.x, target.pos.y, target.pos.z-1, 0, 0, 0, 0, 0, 0, 2.001, 2.0001, 0.5001, 255, 255, 0, 200, 0, 0, 0, 0)
             local playerPos = GetEntityCoords(GetPlayerPed(-1), true)
-            if Vdist(target.pos.x, target.pos.y, target.pos.z, playerPos.x, playerPos.y, playerPos.z) < 2.0 then
+            if getDistance(target.pos, playerPos) < 5.0 then
                 RemoveBlip(target.blip)
                 haveTarget = false
 				isCall = false
@@ -72,17 +79,15 @@ AddEventHandler("call:callIncoming", function(job, pos, msg)
     work = job
     target.pos = pos
     PlaySound(-1, "Out_Of_Bounds_Timer", "DLC_HEISTS_GENERAL_FRONTEND_SOUNDS", 0, 0, 1)
-    Ninja_Core__ShowNinjaNotification("Notification Alert", "", "~y~ Y ~w~pour prendre l'appel, ~r~L ~w~ pour ignorer l'appel")
+    Ninja_Core__ShowNinjaNotification("Notification Alert", "", "~y~ Y ~w~pour prendre l'appel\n ~r~L ~w~ pour ignorer l'appel")
     Citizen.Wait(300)
     PlaySound(-1, "Out_Of_Bounds_Timer", "DLC_HEISTS_GENERAL_FRONTEND_SOUNDS", 0, 0, 1)
     Citizen.Wait(600)
     PlaySound(-1, "Out_Of_Bounds_Timer", "DLC_HEISTS_GENERAL_FRONTEND_SOUNDS", 0, 0, 1)
     Citizen.Wait(300)
     PlaySound(-1, "Out_Of_Bounds_Timer", "DLC_HEISTS_GENERAL_FRONTEND_SOUNDS", 0, 0, 1)
-	if work == "police" then
-        Ninja_Core__ShowNinjaNotification("Police : ","", "~h~ ~r~Urgence Situation~w~ :~h~ "..tostring(msg))
-    elseif work == "medic" then
-        Ninja_Core__ShowNinjaNotification("Ambulance : ", " ","~h~ ~r~Urgence Situation~w~ :~h~ "..tostring(msg))
+	if work == "police" or "medic" or "mecano" then
+        Ninja_Core__ShowNinjaNotification("Alert : ", " ","~h~ ~r~Situation~w~ :~h~ "..tostring(msg))
 	end
 end)
 
@@ -103,7 +108,6 @@ AddEventHandler("target:call:taken", function(taken)
     end
 end)
 
--- If player disconnect, remove him from the inService server table
 AddEventHandler('playerDropped', function()
 	TriggerServerEvent("player:serviceOff", nil)
 end)
@@ -111,8 +115,8 @@ end)
 
 
 --------------||SYSTEM DE CALL||------------------
-RegisterNetEvent('nAppelMobile:callPolice') -------> POLICE
-AddEventHandler('nAppelMobile:callPolice', function()
+RegisterNetEvent('nAppelMobile:callUrgence') -------> POLICE
+AddEventHandler('nAppelMobile:callUrgence', function(job)
     local plyPos = GetEntityCoords(GetPlayerPed(-1), true)
     DisplayOnscreenKeyboard(1, "FMMC_MPM_NA", "", "", "", "", "", 200)
     while (UpdateOnscreenKeyboard() == 0) do
@@ -123,22 +127,6 @@ AddEventHandler('nAppelMobile:callPolice', function()
       message =  GetOnscreenKeyboardResult()
     end
     if message ~= nil and message ~= "" then
-        TriggerServerEvent("call:makeCall", "police", {x=plyPos.x,y=plyPos.y,z=plyPos.z}, message)
-    end
-end)
-
-RegisterNetEvent('nAppelMobile:callMedic') -------> MEDIC
-AddEventHandler('nAppelMobile:callMedic', function()
-    local plyPos = GetEntityCoords(GetPlayerPed(-1), true)
-    DisplayOnscreenKeyboard(1, "FMMC_MPM_NA", "", "", "", "", "", 200)
-    while (UpdateOnscreenKeyboard() == 0) do
-      DisableAllControlActions(0);
-      Wait(0);
-    end
-    if (GetOnscreenKeyboardResult()) then
-      message =  GetOnscreenKeyboardResult()
-    end
-    if message ~= nil and message ~= "" then
-        TriggerServerEvent("call:makeCall", "medic", {x=plyPos.x,y=plyPos.y,z=plyPos.z}, message)
+        TriggerServerEvent("call:makeCall", job, {x=plyPos.x,y=plyPos.y,z=plyPos.z}, message)
     end
 end)

@@ -1,12 +1,16 @@
 fx_version 'adamant'
 game 'gta5'
 
+
+ui_page 'progressBar/progressbar.html'
+
 dependencies {'ghmattimysql'}
 
 export 'Ninja_Core_PedsText'
 export 'Ninja_Core_StartAnim'
 export 'Ninja_Core_nRequestAnimSet'
 export 'nNotificationMain'
+export 'progression'
 
 server_scripts {
     'config/config.lua',
@@ -29,15 +33,14 @@ client_scripts {
     'services/client.lua'
 }
 
-
 files {
     'loadingscreen/index.html',
     'loadingscreen/style.css',
     'loadingscreen/background.png',
-    'loadingscreen/loading.gif'
+    'loadingscreen/loading.gif',
+    'progressBar/progressbar.html'
 }
 
 loadscreen 'loadingscreen/index.html'
-
 
 --@Super.Cool.Ninja

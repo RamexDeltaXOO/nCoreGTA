@@ -36,10 +36,10 @@ local menuPoliceArmu = {
             title = "Armurerie Police",
             name = "subArmes",
             buttons = {
-                {name = "Tazer", action = "donnerTazer", item_arme = 15},
-                {name = "Pistolet", action = "donnerPistolet", item_arme = 1},
-                {name = "Matraque", action = "donnerMatraque", item_arme = 16},
-                {name = "Menotte", action = "donnerMenotte", item_arme = 7},
+                {name = "Tazer", action = "donnerTazer", item_arme = "Tazer"},
+                {name = "Pistolet", action = "donnerPistolet", item_arme = "Pistolet"},
+                {name = "Matraque", action = "donnerMatraque", item_arme = "Matraque"},
+                {name = "Menotte", action = "donnerMenotte", item_arme = "Menotte"},
             }
         },
 
@@ -47,7 +47,7 @@ local menuPoliceArmu = {
             title = "Armurerie Police",
             name = "subMunition",
             buttons = {
-                {name = "Munition 9mm", action = "donner9mm", item_arme = 2},
+                {name = "Munition 9mm", action = "donner9mm", item_arme = "Munition 9mm"},
             }
         },
   	}

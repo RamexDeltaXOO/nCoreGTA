@@ -55,11 +55,11 @@ AddEventHandler("item:getItemsTarget", function(target)
     local source = source
     if target ~= nil then
         local player = GetPlayerIdentifiers(target)[1]
-        exports.ghmattimysql:execute("SELECT * FROM user_inventory JOIN items ON `user_inventory`.`item_id` = `items`.`id` WHERE license=@username", { ['@username'] = player}, function(result)
+        exports.ghmattimysql:execute("SELECT * FROM user_inventory JOIN items ON `user_inventory`.`item_name` = `items`.`libelle` WHERE license=@username", { ['@username'] = player}, function(result)
             if (result) then
-                for _,v in ipairs(result) do
+                for k,v in ipairs(result) do
                     t = { ["quantity"] = v.quantity, ["libelle"] = v.libelle, ["isUsable"] = v.isUsable, ["type"] = v.type }
-                    items[v.item_id] = t
+                    items[v.item_name] = t
                 end
             end
             TriggerClientEvent("gui:getItemsTarget", source, items)
@@ -69,11 +69,11 @@ AddEventHandler("item:getItemsTarget", function(target)
 end)
 
 RegisterServerEvent("item:supprimerItemTarget")
-AddEventHandler("item:supprimerItemTarget", function(target, itemIDSelected, res, itemName)
+AddEventHandler("item:supprimerItemTarget", function(target, itemNameSelected, res, itemName)
     local source = source
     local quantity = math.floor(tonumber(res))
     if target ~= nil then
-        TriggerClientEvent("player:looseItem", target, itemIDSelected, quantity)
+        TriggerClientEvent("player:looseItem", target, itemNameSelected, quantity)
         TriggerClientEvent('nMenuNotif:showNotification', source, "~w~Vous avez confisqué ~g~x"..quantity.. " ~b~" ..itemName)
         TriggerClientEvent('nMenuNotif:showNotification', target, "~w~La police vous a ~r~confisqué ~g~x" ..quantity.. " ~b~"..itemName)
     end

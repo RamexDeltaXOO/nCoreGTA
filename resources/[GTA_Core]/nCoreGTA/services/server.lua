@@ -2,12 +2,14 @@
 local inService = {
     ["police"] = {},
     ["medic"] = {},
+    ["mecano"] = {},
 }
+
 local callActive = {
     ["police"] = {taken = false},
     ["medic"] = {taken = false},
+    ["mecano"] = {taken = false},
 }
-local timing = 60000
 
 RegisterServerEvent("player:serviceOn")
 AddEventHandler("player:serviceOn", function(job)
@@ -44,7 +46,7 @@ local source = source
     end
 
 
-    SetTimeout(timing, function()
+    SetTimeout(60000, function()
         if callActive[job].taken then
             TriggerClientEvent("target:call:taken", callActive[job].target, 0)
         end
