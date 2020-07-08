@@ -152,8 +152,6 @@ INSERT INTO `items` (`libelle`, `isUsable`, `type`) VALUES
 	('Hache', 1, 3),
 	('Machette', 1, 3),
 	('Poing américain', 1, 3),
-	('Pain', 1, 2),
-	('Eau', 1, 1),
 	('Tazer', 1, 3),
 	('Matraque', 1, 3),
 	('Seringue d\'adrenaline', 1, 4),
