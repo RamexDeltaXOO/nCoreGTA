@@ -8,13 +8,11 @@ files {
     'json/**/*'
 }
 
+server_script 'server/main.lua'
+
 client_scripts {
     'config/config.lua',
     'client/blips.lua',
 	"client/client.lua",
     'client/menu.lua'
-}
-
-server_scripts {
-    'server/main.lua'
 }

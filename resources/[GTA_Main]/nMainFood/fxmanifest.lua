@@ -5,7 +5,4 @@ dependencies {'ghmattimysql'}
 
 
 client_script 'client.lua'
-
-server_scripts {
-	'server.lua'
-}
+server_script 'server.lua'
