@@ -319,11 +319,13 @@ conf = {
 
 noclipActive = false
 index = 1 -- [[Used to determine the index of the speeds table.]]
+
+local waitNoclip = 1000
 Citizen.CreateThread(function()
     buttons = setupScaleform("instructional_buttons")
     currentSpeed = conf.speeds[index].speed
     while true do
-        Citizen.Wait(1)
+        Citizen.Wait(waitNoclip)
 
         if IsPedInAnyVehicle(PlayerPedId(), false) then
             noclipEntity = GetVehiclePedIsIn(PlayerPedId(), false)
@@ -334,6 +336,7 @@ Citizen.CreateThread(function()
 
 
         if noclipActive then
+		    waitNoclip = 1
             DrawScaleformMovieFullscreen(buttons)
 
             local yoff = 0.0
@@ -380,15 +383,19 @@ Citizen.CreateThread(function()
             SetEntityRotation(noclipEntity, 0.0, 0.0, 0.0, 0, false)
             SetEntityHeading(noclipEntity, heading)
             SetEntityCoordsNoOffset(noclipEntity, newPos.x, newPos.y, newPos.z, noclipActive, noclipActive, noclipActive)
+		else
+		    waitNoclip = 1000
         end
     end
 end)
 
+local waitEnablePostition = 1000
 
 Citizen.CreateThread(function () 
     while true do 
-        Citizen.Wait(0)
+        Citizen.Wait(waitEnablePostition)
         if isEnablePosition then
+		    waitEnablePostition = 0
             local playerPed = GetPlayerPed(-1)
             local pos = GetEntityCoords(playerPed)
             local posH = GetEntityHeading(playerPed)
@@ -405,6 +412,8 @@ Citizen.CreateThread(function ()
             end
 
             DrawMissionText("~r~x~w~ = ~r~"..posX.." ~g~y~w~ = ~g~"..posY.." ~b~z~w~ = ~b~"..posZ.." ~w~~h~h = "..posH)
+		else
+		    waitEnablePostition = 1000
         end
     end 
 end)

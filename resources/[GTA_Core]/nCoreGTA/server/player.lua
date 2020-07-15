@@ -4,7 +4,13 @@ Player.__index = Player
 RegisterServerEvent("GTA_Notif:OnPlayerJoin")
 AddEventHandler('GTA_Notif:OnPlayerJoin', function()
 	local source = source
-	local license = GetPlayerIdentifiers(source)[1]
+	local license = ""
+    local Identifiers = GetPlayerIdentifiers(source)
+    for i,identifier in ipairs(Identifiers) do
+        if string.find(identifier, "license:") then
+            license = identifier
+        end
+    end
 	exports.ghmattimysql:execute("SELECT * FROM gta_joueurs WHERE license = @username", {['@username'] = license}, function(res)
 		if(res[1].nom == "Sans Nom" and res[1].prenom == "Sans Prenom") then
 			TriggerClientEvent('nMenuNotif:showNotification', -1,"~y~Un nouveau citoyen~g~ vient de rejoindre la ville.")
@@ -16,7 +22,13 @@ end)
 
 AddEventHandler('playerDropped', function()
 	local source = source
-	local license = GetPlayerIdentifiers(source)[1]
+	local license = ""
+    local Identifiers = GetPlayerIdentifiers(source)
+    for i,identifier in ipairs(Identifiers) do
+        if string.find(identifier, "license:") then
+            license = identifier
+        end
+    end
 	exports.ghmattimysql:execute("SELECT * FROM gta_joueurs WHERE license = @username", {['@username'] = license}, function(res)
 		if(res[1].nom == "Sans Nom" and res[1].prenom == "Sans Prenom") then
 			TriggerClientEvent('nMenuNotif:showNotification', -1,"~y~Un nouveau citoyen ~r~ vient de quitté la ville.")
@@ -107,7 +119,13 @@ AddEventHandler('GTA:CreationJoueur', function(source)
 
     local Parameters = {['license'] = pLicense}
 
-    local license = GetPlayerIdentifiers(source)[1]
+    local license = ""
+    local Identifiers = GetPlayerIdentifiers(source)
+    for i,identifier in ipairs(Identifiers) do
+        if string.find(identifier, "license:") then
+            license = identifier
+        end
+    end
 
     exports.ghmattimysql:scalar("SELECT license FROM gta_joueurs WHERE license = @license", Parameters, function(result)
         if not result then
@@ -123,7 +141,13 @@ end)
 RegisterServerEvent('GTA:salaire')
 AddEventHandler('GTA:salaire', function()
 	local src = source
-	local license = GetPlayerIdentifiers(src)[1]
+	local license = ""
+    local Identifiers = GetPlayerIdentifiers(src)
+    for i,identifier in ipairs(Identifiers) do
+        if string.find(identifier, "license:") then
+            license = identifier
+        end
+    end
 	Player:Find(src, function(data)
 		if data then
 			exports.ghmattimysql:execute("SELECT salaire FROM gta_joueurs INNER JOIN gta_metiers ON gta_joueurs.job = gta_metiers.metiers WHERE license = @license",{['@license'] = license}, function (res)

@@ -4,7 +4,13 @@
 RegisterServerEvent("GTA:SAVEPOS")
 AddEventHandler("GTA:SAVEPOS", function( LastPosX , LastPosY , LastPosZ )
 	local source = source
-	local license = GetPlayerIdentifiers(source)[1]
+	local license = ""
+    local Identifiers = GetPlayerIdentifiers(source)
+    for i,identifier in ipairs(Identifiers) do
+        if string.find(identifier, "license:") then
+            license = identifier
+        end
+    end
 	local lastPosition = "{" .. LastPosX .. ", " .. LastPosY .. ",  " .. LastPosZ.. "}"
 	exports.ghmattimysql:execute("UPDATE gta_joueurs SET ? WHERE ?", { {['lastpos'] = lastPosition}, {['license'] = license} })
 end)
@@ -13,7 +19,13 @@ end)
 RegisterServerEvent("GTA:SPAWNPLAYER")
 AddEventHandler("GTA:SPAWNPLAYER", function()
 	local source = source
-	local license = GetPlayerIdentifiers(source)[1]
+	local license = ""
+    local Identifiers = GetPlayerIdentifiers(source)
+    for i,identifier in ipairs(Identifiers) do
+        if string.find(identifier, "license:") then
+            license = identifier
+        end
+    end
 	exports.ghmattimysql:scalar("SELECT lastpos FROM gta_joueurs WHERE ?", {{['license'] = license}}, function(lastpos)
 		local ToSpawnPos = json.decode(lastpos)
 		local PosX = ToSpawnPos[1]

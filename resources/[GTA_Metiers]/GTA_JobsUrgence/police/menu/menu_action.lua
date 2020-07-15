@@ -411,7 +411,7 @@ function gestionPoliceAction(button)
         if btnAction == "mdCivil" then 
             local target = GetPlayerServerId(GetClosestPlayer())
             if target ~= 0 then
-                if (exports.nMenuPersonnel:getQuantity(7) > 0) then
+                if (exports.nMenuPersonnel:getQuantity("Menotte") > 0) then
                     TriggerServerEvent('GTA_Police:Menotter_DemenotterServer', target)
                 else
                     exports.nCoreGTA:nNotificationMain({

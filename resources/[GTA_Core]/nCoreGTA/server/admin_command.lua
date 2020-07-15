@@ -1,7 +1,13 @@
 RegisterServerEvent("GTA:CheckAdmin")
 AddEventHandler("GTA:CheckAdmin", function()
 	local source = source
-	local license = GetPlayerIdentifiers(source)[1]
+	local license = ""
+    local Identifiers = GetPlayerIdentifiers(source)
+    for i,identifier in ipairs(Identifiers) do
+        if string.find(identifier, "license:") then
+            license = identifier
+        end
+    end
 	exports.ghmattimysql:scalar("SELECT isAdmin FROM gta_joueurs WHERE ?", {{['license'] = license}}, function(isAdmin)
 		if isAdmin then
 			TriggerClientEvent("GTA:UpdatePlayerAdmin", source, isAdmin)

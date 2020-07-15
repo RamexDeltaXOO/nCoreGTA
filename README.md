@@ -42,3 +42,4 @@ https://discord.gg/NKHJTqn
 
 ## License :
 @SuperCoolNinja
+thanks to Gustavo Gaviria for his help with some optimisation.

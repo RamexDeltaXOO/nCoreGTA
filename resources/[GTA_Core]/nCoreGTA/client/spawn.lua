@@ -84,7 +84,7 @@ end)
 
 Citizen.CreateThread(function()
 	while true do
-		Wait(0)
+		Wait(10)
 		if IsControlJustPressed(0, 20) then
 			ShowHudComponentThisFrame(3)
 			ShowHudComponentThisFrame(4)
@@ -92,10 +92,13 @@ Citizen.CreateThread(function()
 	end
 end)
 
+local waitPlayerSpawn = 1000
+
 Citizen.CreateThread(function()
 	while true do
-		Wait(0)
+		Wait(waitPlayerSpawn)
 		if isPlayerSpawn == false then 
+		   waitPlayerSpawn = 0
 			if GetLastInputMethod(0) then
 				DrawMissionText("~h~APPUYER SUR~g~ ENTRER ~w~ POUR REJOINDRE LA VILLE.")
 			else
@@ -109,6 +112,8 @@ Citizen.CreateThread(function()
 				isPlayerSpawn = true
 				break
 			end
+		else
+		    waitPlayerSpawn = 1000
 		end
 	end
 end)

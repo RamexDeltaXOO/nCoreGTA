@@ -86,7 +86,7 @@ AddEventHandler("call:callIncoming", function(job, pos, msg)
     PlaySound(-1, "Out_Of_Bounds_Timer", "DLC_HEISTS_GENERAL_FRONTEND_SOUNDS", 0, 0, 1)
     Citizen.Wait(300)
     PlaySound(-1, "Out_Of_Bounds_Timer", "DLC_HEISTS_GENERAL_FRONTEND_SOUNDS", 0, 0, 1)
-	if work == "police" or "medic" or "mecano" then
+	if work == "police" or "medic" then
         Ninja_Core__ShowNinjaNotification("Alert : ", " ","~h~ ~r~Situation~w~ :~h~ "..tostring(msg))
 	end
 end)

@@ -85,7 +85,6 @@ local menuPerso = {
 			buttons = {
 				{name = "Police", job = "police"},
 				{name = "Medics", job = "medic"},
-				{name = "Mecano", job = "mecano"},
 			}
 		},
 

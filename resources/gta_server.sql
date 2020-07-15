@@ -42,10 +42,8 @@ CREATE TABLE IF NOT EXISTS `gta_joueurs` (
   KEY `faim_soif` (`faim`,`soif`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
--- Listage des données de la table gta_serveur.gta_joueurs : ~1 rows (environ)
+-- Listage des données de la table gta_serveur.gta_joueurs : ~0 rows (environ)
 /*!40000 ALTER TABLE `gta_joueurs` DISABLE KEYS */;
-INSERT INTO `gta_joueurs` (`license`, `argent_propre`, `argent_sale`, `banque`, `job`, `isFirstConnection`, `nom`, `prenom`, `taille`, `age`, `origine`, `faim`, `soif`, `serverid`, `isAdmin`, `enService`, `lastpos`, `grade`) VALUES
-	('license:40423b6fc9a87b1c16c005a43d3a74863fdd96db', 500, 150, 12000, 'Mecano', 0, 'Ninja', 'Cool', 180, 21, 'France', 87.99999999999997, 87.99999999999997, 1, 1, 0, '{-1132.3526611328, -1983.1262207031,  13.165263175964}', 'Cadet');
 /*!40000 ALTER TABLE `gta_joueurs` ENABLE KEYS */;
 
 -- Listage de la structure de la table gta_serveur. gta_joueurs_banni
@@ -77,8 +75,6 @@ CREATE TABLE IF NOT EXISTS `gta_joueurs_humain` (
 
 -- Listage des données de la table gta_serveur.gta_joueurs_humain : ~0 rows (environ)
 /*!40000 ALTER TABLE `gta_joueurs_humain` DISABLE KEYS */;
-INSERT INTO `gta_joueurs_humain` (`license`, `sex`, `visage`, `couleurPeau`, `cheveux`, `couleurCheveux`) VALUES
-	('license:40423b6fc9a87b1c16c005a43d3a74863fdd96db', 'mp_m_freemode_01', 1, 0, 1, 2);
 /*!40000 ALTER TABLE `gta_joueurs_humain` ENABLE KEYS */;
 
 -- Listage de la structure de la table gta_serveur. gta_joueurs_vetement
@@ -110,8 +106,6 @@ CREATE TABLE IF NOT EXISTS `gta_joueurs_vetement` (
 
 -- Listage des données de la table gta_serveur.gta_joueurs_vetement : ~0 rows (environ)
 /*!40000 ALTER TABLE `gta_joueurs_vetement` DISABLE KEYS */;
-INSERT INTO `gta_joueurs_vetement` (`license`, `topsID`, `topsDraw`, `topsCouleur`, `undershirtsID`, `undershirtsDraw`, `undershirtsCouleur`, `shoesID`, `shoesDraw`, `shoesCouleur`, `legsID`, `legsDraw`, `legsCouleur`, `torsosID`, `torsosDraw`, `AccessoiresID`, `AccessoiresDraw`, `AccessoiresCouleur`, `HatsID`, `HatsDraw`, `HatsCouleurs`) VALUES
-	('license:40423b6fc9a87b1c16c005a43d3a74863fdd96db', 11, 126, 10, 8, 15, 0, 6, 12, 0, 4, 82, 0, 3, 1, 7, 0, 0, 0, 8, 0);
 /*!40000 ALTER TABLE `gta_joueurs_vetement` ENABLE KEYS */;
 
 -- Listage de la structure de la table gta_serveur. gta_metiers
@@ -127,8 +121,7 @@ CREATE TABLE IF NOT EXISTS `gta_metiers` (
 INSERT INTO `gta_metiers` (`metiers`, `salaire`, `emploi`) VALUES
 	('Chomeur', 150, 'public'),
 	('Police', 500, 'priver'),
-	('Medic', 500, 'priver'),
-	('Mecano', 500, 'priver');
+	('Medic', 500, 'priver');
 /*!40000 ALTER TABLE `gta_metiers` ENABLE KEYS */;
 
 -- Listage de la structure de la table gta_serveur. items
@@ -139,7 +132,7 @@ CREATE TABLE IF NOT EXISTS `items` (
   `type` tinyint(3) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Listage des données de la table gta_serveur.items : ~16 rows (environ)
+-- Listage des données de la table gta_serveur.items : ~14 rows (environ)
 /*!40000 ALTER TABLE `items` DISABLE KEYS */;
 INSERT INTO `items` (`libelle`, `isUsable`, `type`) VALUES
 	('Pistolet', 1, 3),
@@ -167,13 +160,10 @@ CREATE TABLE IF NOT EXISTS `user_inventory` (
   `license` varchar(50) NOT NULL DEFAULT '0',
   UNIQUE KEY `item_id_license` (`item_name`,`license`) USING BTREE,
   KEY `id` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Listage des données de la table gta_serveur.user_inventory : ~0 rows (environ)
 /*!40000 ALTER TABLE `user_inventory` DISABLE KEYS */;
-INSERT INTO `user_inventory` (`id`, `item_name`, `quantity`, `license`) VALUES
-	(11, 'Pistolet', 0, 'license:40423b6fc9a87b1c16c005a43d3a74863fdd96db'),
-	(12, 'Munition 9mm', 0, 'license:40423b6fc9a87b1c16c005a43d3a74863fdd96db');
 /*!40000 ALTER TABLE `user_inventory` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

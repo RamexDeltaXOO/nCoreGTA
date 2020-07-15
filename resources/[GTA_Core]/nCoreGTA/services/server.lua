@@ -2,13 +2,11 @@
 local inService = {
     ["police"] = {},
     ["medic"] = {},
-    ["mecano"] = {},
 }
 
 local callActive = {
     ["police"] = {taken = false},
     ["medic"] = {taken = false},
-    ["mecano"] = {taken = false},
 }
 
 RegisterServerEvent("player:serviceOn")
