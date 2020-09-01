@@ -1,6 +1,6 @@
 -- --------------------------------------------------------
 -- Hôte :                        127.0.0.1
--- Version du serveur:           10.4.13-MariaDB - mariadb.org binary distribution
+-- Version du serveur:           10.5.5-MariaDB - mariadb.org binary distribution
 -- SE du serveur:                Win64
 -- HeidiSQL Version:             11.0.0.5919
 -- --------------------------------------------------------
@@ -38,6 +38,7 @@ CREATE TABLE IF NOT EXISTS `gta_joueurs` (
   `enService` tinyint(1) NOT NULL DEFAULT 0,
   `lastpos` varchar(255) COLLATE utf8mb4_bin DEFAULT '{-887.48388671875, -2311.68872070313,  -3.50776553153992}',
   `grade` varchar(255) COLLATE utf8mb4_bin DEFAULT 'Aucun',
+  `phone_number` varchar(10) COLLATE utf8mb4_bin DEFAULT NULL,
   PRIMARY KEY (`license`),
   KEY `faim_soif` (`faim`,`soif`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
@@ -150,6 +151,67 @@ INSERT INTO `items` (`libelle`, `isUsable`, `type`) VALUES
 	('Seringue d\'adrenaline', 1, 4),
 	('Soda', 1, 1);
 /*!40000 ALTER TABLE `items` ENABLE KEYS */;
+
+-- Listage de la structure de la table gta_serveur. phone_app_chat
+DROP TABLE IF EXISTS `phone_app_chat`;
+CREATE TABLE IF NOT EXISTS `phone_app_chat` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `channel` varchar(20) NOT NULL,
+  `message` varchar(255) NOT NULL,
+  `time` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
+
+-- Listage des données de la table gta_serveur.phone_app_chat : ~0 rows (environ)
+/*!40000 ALTER TABLE `phone_app_chat` DISABLE KEYS */;
+/*!40000 ALTER TABLE `phone_app_chat` ENABLE KEYS */;
+
+-- Listage de la structure de la table gta_serveur. phone_calls
+DROP TABLE IF EXISTS `phone_calls`;
+CREATE TABLE IF NOT EXISTS `phone_calls` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `owner` varchar(10) NOT NULL COMMENT 'Num tel proprio',
+  `num` varchar(10) NOT NULL COMMENT 'Num reférence du contact',
+  `incoming` int(11) NOT NULL COMMENT 'Défini si on est à l''origine de l''appels',
+  `time` timestamp NOT NULL DEFAULT current_timestamp(),
+  `accepts` int(11) NOT NULL COMMENT 'Appels accepter ou pas',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- Listage des données de la table gta_serveur.phone_calls : ~0 rows (environ)
+/*!40000 ALTER TABLE `phone_calls` DISABLE KEYS */;
+/*!40000 ALTER TABLE `phone_calls` ENABLE KEYS */;
+
+-- Listage de la structure de la table gta_serveur. phone_messages
+DROP TABLE IF EXISTS `phone_messages`;
+CREATE TABLE IF NOT EXISTS `phone_messages` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `transmitter` varchar(10) NOT NULL,
+  `receiver` varchar(10) NOT NULL,
+  `message` varchar(255) NOT NULL DEFAULT '0',
+  `time` timestamp NOT NULL DEFAULT current_timestamp(),
+  `isRead` int(11) NOT NULL DEFAULT 0,
+  `owner` int(11) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- Listage des données de la table gta_serveur.phone_messages : 0 rows
+/*!40000 ALTER TABLE `phone_messages` DISABLE KEYS */;
+/*!40000 ALTER TABLE `phone_messages` ENABLE KEYS */;
+
+-- Listage de la structure de la table gta_serveur. phone_users_contacts
+DROP TABLE IF EXISTS `phone_users_contacts`;
+CREATE TABLE IF NOT EXISTS `phone_users_contacts` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `identifier` varchar(60) CHARACTER SET utf8mb4 DEFAULT NULL,
+  `number` varchar(10) CHARACTER SET utf8mb4 DEFAULT NULL,
+  `display` varchar(64) CHARACTER SET utf8mb4 NOT NULL DEFAULT '-1',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- Listage des données de la table gta_serveur.phone_users_contacts : 0 rows
+/*!40000 ALTER TABLE `phone_users_contacts` DISABLE KEYS */;
+/*!40000 ALTER TABLE `phone_users_contacts` ENABLE KEYS */;
 
 -- Listage de la structure de la table gta_serveur. user_inventory
 DROP TABLE IF EXISTS `user_inventory`;

@@ -71,6 +71,7 @@ function Player:New(license, argent_propre, argent_sale, banque)
 	return exports.ghmattimysql:execute("INSERT INTO gta_joueurs (`license`,`argent_propre`,`argent_sale`, `banque`) VALUES (@license, @argent_propre, @argent_sale, @banque)", Parameters, function() end)
 end
 
+
 RegisterServerEvent('GTA:LoadArgent')
 AddEventHandler('GTA:LoadArgent', function()
 	local src = source
@@ -107,6 +108,22 @@ AddEventHandler('GTA:GetInfoJoueurs', function(source, callback)
 	end)
 end)
 
+RegisterServerEvent('GTA:GetGlobaleJoueurs')  --> cette event sert uniquement renvoyé les donné de votre perso.
+AddEventHandler('GTA:GetGlobaleJoueurs', function(callback)
+	local src = source
+	for k,v in ipairs(GetPlayerIdentifiers(src)) do
+		if string.sub(v, 1, string.len("license")) == "license" then
+			pLicense = v
+		end
+	end
+
+	local Parameters = {['license'] = pLicense}
+	exports.ghmattimysql:scalar("SELECT license FROM gta_joueurs WHERE license = @license", Parameters, function(result)
+		exports.ghmattimysql:execute("SELECT * FROM gta_joueurs WHERE license = @license", Parameters, function(data)
+			callback(data)
+		end)
+	end)
+end)
 
 RegisterServerEvent('GTA:CreationJoueur')  --> cette event sert uniquement a créer votre perso.
 AddEventHandler('GTA:CreationJoueur', function(source)
@@ -287,4 +304,8 @@ AddEventHandler('GTA:DeposerAtmBanque', function(source, value)
 			end
 		end
 	end)
+end)
+
+AddEventHandler('GTA:GetJoueurs', function(cb)
+    cb(Player)
 end)

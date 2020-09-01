@@ -4,6 +4,9 @@ local waitWantedLevel = 5
 
 RegisterNetEvent("GTA:JoueurLoaded")
 AddEventHandler("GTA:JoueurLoaded", function()
+   
+    TriggerServerEvent("GTA:TelephoneLoaded")
+
     --> PVP :
     if config.activerPvp == true then
         for _, player in ipairs(GetActivePlayers()) do
