@@ -1,6 +1,6 @@
  --||@SuperCoolNinja.||--
  
- math.randomseed(os.time()) 
+ math.randomseed(os.time()) --> permet de generer un nombre aleatoire pour votre numero de phone.
 
  --- Pour les numero du style XXX-XXX
  local function getPhoneRandomNumber()
@@ -12,7 +12,7 @@
 end
 
 function getHistoriqueCall (num)
-    local result = exports.ghmattimysql:execute("SELECT * FROM phone_calls WHERE phone_calls.owner = @num ORDER BY time DESC LIMIT 120", {
+    local result = exports.ghmattimysql:execute("SELECT * FROM phone_calls WHERE owner = @num ORDER BY time DESC LIMIT 120", {
         ['@num'] = num
     })
     return result
@@ -39,7 +39,6 @@ AddEventHandler("GTA:CreationPersonnage", function()
 			exports.ghmattimysql:execute("UPDATE gta_joueurs SET ? WHERE ?", { {['phone_number'] = randomPhoneNumber}, {['license'] = license} })
 			print("RANDOM NUMBER CREATED !")
 			
-			exports.ghmattimysql:execute("UPDATE gta_joueurs SET ? WHERE ?", { {['serverid'] = source}, {['license'] = license} })
 			exports.ghmattimysql:execute("UPDATE gta_joueurs SET ? WHERE ?", { {['isFirstConnection'] = 0}, {['license'] = license} })
 			TriggerClientEvent("GTA:OpenMenuCreation", source)
 		else
@@ -71,6 +70,9 @@ AddEventHandler("GTA:CreationPersonnage", function()
 			print("NUMBER LOADED !")
 		end
 	end)
+
+	print("Joueur : [ "..GetPlayerName(source).. " ] vient de rejoindre. SERVER ID : ", source)
+	exports.ghmattimysql:execute("UPDATE gta_joueurs SET ? WHERE ?", { {['serverid'] = source}, {['license'] = license} })
 	TriggerClientEvent("GTA:JoueurLoaded", source) --> Load l'argent du joueur.
 end)
 

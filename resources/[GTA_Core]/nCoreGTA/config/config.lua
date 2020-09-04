@@ -21,7 +21,7 @@ config.argentSale = 150
 config.banque = 5000
 
 --> Traffic PNJ :
-config.vehiculeDensiter = 0.6
+config.vehiculeDensiter = 1.0
 config.pedDensiter = 1.0
 
 --> Whitelist :

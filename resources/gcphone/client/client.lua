@@ -236,7 +236,6 @@ RegisterNetEvent("gcPhone:contactList")
 AddEventHandler("gcPhone:contactList", function(_contacts)
   SendNUIMessage({event = 'updateContacts', contacts = _contacts})
   contacts = _contacts
-  print("CONTACT : ", contacts)
 end)
 
 RegisterNetEvent("gcPhone:allMessage")
@@ -559,7 +558,7 @@ RegisterNUICallback('callEvent', function(data, cb)
       TriggerEvent(data.eventName) 
     end 
   cb() 
-end) 
+end)
 
 RegisterNUICallback('useMouse', function(um, cb)
   useMouse = um
@@ -626,7 +625,6 @@ RegisterNUICallback('takePhoto', function(data, cb)
 
 while takePhoto do
     Citizen.Wait(0)
-
     if IsControlJustPressed(1, 27) then -- Toogle Mode
 	frontCam = not frontCam
 	CellFrontCamActivate(frontCam)

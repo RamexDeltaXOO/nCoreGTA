@@ -1,5 +1,6 @@
 Player = {}
 Player.__index = Player
+PlayersSource = {}
 
 RegisterServerEvent("GTA_Notif:OnPlayerJoin")
 AddEventHandler('GTA_Notif:OnPlayerJoin', function()
@@ -18,6 +19,8 @@ AddEventHandler('GTA_Notif:OnPlayerJoin', function()
 			TriggerClientEvent('nMenuNotif:showNotification', -1,"~b~"..res[1].nom.. " "..res[1].prenom.."~g~ vient de rejoindre la ville.")
 		end
 	end)
+
+	PlayersSource[source] = license
 end)
 
 AddEventHandler('playerDropped', function()
@@ -36,6 +39,8 @@ AddEventHandler('playerDropped', function()
 			TriggerClientEvent('nMenuNotif:showNotification', -1,"~b~"..res[1].nom.. " "..res[1].prenom.."~r~ vient de quitté la ville.")
 		end
 	end)
+
+	PlayersSource[source] = nil
 end)
 
 function Player:GetLicense(source)
@@ -104,23 +109,6 @@ AddEventHandler('GTA:GetInfoJoueurs', function(source, callback)
 					callback(v)
 				end
 			end
-		end)
-	end)
-end)
-
-RegisterServerEvent('GTA:GetGlobaleJoueurs')  --> cette event sert uniquement renvoyé les donné de votre perso.
-AddEventHandler('GTA:GetGlobaleJoueurs', function(callback)
-	local src = source
-	for k,v in ipairs(GetPlayerIdentifiers(src)) do
-		if string.sub(v, 1, string.len("license")) == "license" then
-			pLicense = v
-		end
-	end
-
-	local Parameters = {['license'] = pLicense}
-	exports.ghmattimysql:scalar("SELECT license FROM gta_joueurs WHERE license = @license", Parameters, function(result)
-		exports.ghmattimysql:execute("SELECT * FROM gta_joueurs WHERE license = @license", Parameters, function(data)
-			callback(data)
 		end)
 	end)
 end)
@@ -307,5 +295,5 @@ AddEventHandler('GTA:DeposerAtmBanque', function(source, value)
 end)
 
 AddEventHandler('GTA:GetJoueurs', function(cb)
-    cb(Player)
+    cb(PlayersSource)
 end)
