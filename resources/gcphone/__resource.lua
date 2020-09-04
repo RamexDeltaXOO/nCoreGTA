@@ -1,11 +1,7 @@
-fx_version 'adamant'
-game 'gta5'
-
-
-dependencies {'ghmattimysql'}
-
+dependency 'nMenuPersonnel'
 
 ui_page 'html/index.html'
+
 
 files {
 	'html/index.html',
@@ -50,8 +46,7 @@ client_script {
 	'config.lua',
 	'client/animation.lua',
 	'client/client.lua',
-	'client/photo.lua',
-	'client/bank.lua'
+	'client/photo.lua'
 }
 
 server_script {

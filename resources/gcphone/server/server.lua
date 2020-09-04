@@ -16,14 +16,6 @@ function getSourceFromIdentifier(identifier, cb)
     cb(nil)
 end
 
-function getIdentifierByPhoneNumber(phone_number) 
-    exports.ghmattimysql:scalar("SELECT license FROM gta_joueurs WHERE ?", {{['phone_number'] = phone_number}}, function(res)
-       if res ~= nil then
-        return res
-       end
-    end)
-end
-
 function addContact(source, identifier, number, display)
     exports.ghmattimysql:execute("INSERT INTO phone_users_contacts (`identifier`, `number`,`display`) VALUES(@identifier, @number, @display)", {
         ['@identifier'] = identifier,

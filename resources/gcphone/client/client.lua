@@ -1,9 +1,10 @@
 --====================================================================================
 -- #Author: Jonathan D @ Gannon
+-- Rework by Super.Cool.Ninja for the nCoreGTA.
 --====================================================================================
 local KeyOpenClose = 288 -- F1
 local KeyTakeCall = 38 -- E
-local isDead, USE_RTC, useMouse, hasFocus, takePhoto = false, false, false, false, false
+local USE_RTC, useMouse, hasFocus, takePhoto = false, false, false, false
 local menuIsOpen, ignoreFocus, currentPlaySound = false, false ,false
 local contacts, messages, PhoneInCall = {}, {}, {}
 local myPhoneNumber = ''
@@ -11,7 +12,7 @@ local soundDistanceMax = 8.0
 
 -- Configuration
 local KeyToucheCloseEvent = {
-  { code = 172, event = 'ArrowUp' },
+  { code = 27, event = 'ArrowUp' },
   { code = 173, event = 'ArrowDown' },
   { code = 174, event = 'ArrowLeft' },
   { code = 175, event = 'ArrowRight' },
@@ -20,61 +21,39 @@ local KeyToucheCloseEvent = {
 }
 
 --====================================================================================
---  Check si le joueurs poséde un téléphone
+--  Check si le joueurs posséde un téléphone
 --  Callback true or false
 --====================================================================================
-function hasPhone (cb)
-  cb(true)
+function hasPhone(cb)
+  if (exports.nMenuPersonnel:getQuantity("Téléphone") > 0) then return cb(true) else cb(false) end
 end
 --====================================================================================
 --  Que faire si le joueurs veut ouvrir sont téléphone n'est qu'il en a pas ?
 --====================================================================================
-function ShowNoPhoneWarning ()
+function NoPhoneFound()
+  exports.nCoreGTA:nNotificationMain({
+    text = "~r~Intéraction impossible, vous devez vous fournir d'un phone.",
+    type = 'basGauche',
+    nTimeNotif = 3000,
+  })
 end
 
---[[
-  Ouverture du téphone lié a un item
-  Un solution ESC basé sur la solution donnée par HalCroves
-  https://forum.fivem.net/t/tutorial-for-gcphone-with-call-and-job-message-other/177904
---]]
---[[
-ESX = nil
-Citizen.CreateThread(function()
-	while ESX == nil do
-		TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
-		Citizen.Wait(0)
-  end
-end)
-
-function hasPhone (cb)
-  if (ESX == nil) then return cb(0) end
-  ESX.TriggerServerCallback('gcphone:getItemAmount', function(qtty)
-    cb(qtty > 0)
-  end, 'phone')
-end
-function ShowNoPhoneWarning () 
-  if (ESX == nil) then return end
-  ESX.ShowNotification("Vous n'avez pas de ~r~téléphone~s~")
-end
---]]
-
---====================================================================================
---  
---====================================================================================
 Citizen.CreateThread(function()
   while true do
     Citizen.Wait(0)
     if takePhoto ~= true then
-      if IsControlJustPressed(1, KeyOpenClose) then
+      if IsControlJustPressed(1, 172) then --> Touche du HAUT.
         hasPhone(function (hasPhone)
           if hasPhone == true then
             TooglePhone()
           else
-            ShowNoPhoneWarning()
+            NoPhoneFound()
           end
         end)
       end
       if menuIsOpen == true then
+        DisableControlAction(0, 140,true) --DESACTIVE CONTROLL B
+        DisableControlAction(0, 172,true) --DESACTIVE CONTROLL HAUT
         for _, value in ipairs(KeyToucheCloseEvent) do
           if IsControlJustPressed(1, value.code) then
             SendNUIMessage({keyUp = value.event})

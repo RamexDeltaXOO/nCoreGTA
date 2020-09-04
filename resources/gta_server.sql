@@ -33,7 +33,6 @@ CREATE TABLE IF NOT EXISTS `gta_joueurs` (
   `origine` varchar(50) COLLATE utf8mb4_bin DEFAULT '',
   `faim` double DEFAULT 100,
   `soif` double DEFAULT 100,
-  `serverid` int(11) NOT NULL DEFAULT 0,
   `isAdmin` tinyint(1) DEFAULT 0,
   `enService` tinyint(1) NOT NULL DEFAULT 0,
   `lastpos` varchar(255) COLLATE utf8mb4_bin DEFAULT '{-887.48388671875, -2311.68872070313,  -3.50776553153992}',
@@ -133,7 +132,7 @@ CREATE TABLE IF NOT EXISTS `items` (
   `type` tinyint(3) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Listage des données de la table gta_serveur.items : ~14 rows (environ)
+-- Listage des données de la table gta_serveur.items : ~15 rows (environ)
 /*!40000 ALTER TABLE `items` DISABLE KEYS */;
 INSERT INTO `items` (`libelle`, `isUsable`, `type`) VALUES
 	('Pistolet', 1, 3),
@@ -149,7 +148,8 @@ INSERT INTO `items` (`libelle`, `isUsable`, `type`) VALUES
 	('Tazer', 1, 3),
 	('Matraque', 1, 3),
 	('Seringue d\'adrenaline', 1, 4),
-	('Soda', 1, 1);
+	('Soda', 1, 1),
+	('Téléphone', 1, 0);
 /*!40000 ALTER TABLE `items` ENABLE KEYS */;
 
 -- Listage de la structure de la table gta_serveur. phone_app_chat
@@ -176,7 +176,7 @@ CREATE TABLE IF NOT EXISTS `phone_calls` (
   `time` timestamp NOT NULL DEFAULT current_timestamp(),
   `accepts` int(11) NOT NULL COMMENT 'Appels accepter ou pas',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- Listage des données de la table gta_serveur.phone_calls : ~0 rows (environ)
 /*!40000 ALTER TABLE `phone_calls` DISABLE KEYS */;

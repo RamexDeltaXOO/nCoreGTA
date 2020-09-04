@@ -1,7 +1,7 @@
 --@Super.Cool.Ninja
 config = {}
 
-config.versionCore = "Version 1.2"
+config.versionCore = "Version 1.3"
 
 --> Desactiver le system d'indice de recherche.
 config.activerPoliceWanted = false

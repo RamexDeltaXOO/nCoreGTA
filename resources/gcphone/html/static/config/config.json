@@ -45,16 +45,14 @@
     "Custom URL": "URL"
   },
   "background_default": {
-    "label": "Calvin & Hobbes",
-    "value": "back001.jpg"
+    "label": "Stormtrooper",
+    "value": "back003.jpg"
   },
 
 
   "coque": {
     "Sansumg S8": "s8.png",
-    "Iphone X": "iphonex.png",
-    "Brick Base": "base.png",
-    "Transparent": "transparent.png"
+    "Iphone X": "iphonex.png"
   },
   "coque_default": {
     "label": "Sansumg S8",
@@ -186,7 +184,7 @@
       "APP_MESSAGE_MESS_CALL": "Appeler",
       "APP_MESSAGE_MESS_COPY": "Copier",
       "APP_MESSAGE_CONTACT_TITLE": "Contacts",
-      "APP_MESSAGE_CONTRACT_ENTER_NUMBER": "Enter un numero",
+      "APP_MESSAGE_CONTRACT_ENTER_NUMBER": "Saisir un numero",
       "APP_MESSAGE_PLACEHOLDER_ENTER_MESSAGE": "Envoyer un message",
 
       "TIMEAGO": [
@@ -225,7 +223,6 @@
       "APP_PHONE_MENU_RECENTS": "Newest",
       "APP_PHONE_MENU_CONTACTS": "contacts",
       "APP_PHONE_ENTER_NUMBER": "Enter a number",
-      "APP_BANK_TITLE": "bench",
       "APP_CONTACT_TITLE": "contact details",
       "APP_CONTACT_NEW": "New contact",
       "APP_CONTACT_EDIT": "Change the contact",

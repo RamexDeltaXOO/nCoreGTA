@@ -18,9 +18,10 @@ function getHistoriqueCall (num)
     return result
 end
 
-function sendHistoriqueCall (src, num) 
-    local histo = getHistoriqueCall(num)
-    TriggerClientEvent('gcPhone:historiqueCall', src, histo)
+function sendHistoriqueCall(src, num) 
+    exports.ghmattimysql:execute("SELECT * FROM phone_calls WHERE owner = @num ORDER BY time DESC LIMIT 120", { ['@num'] = num}, function(res2)
+        TriggerClientEvent('gcPhone:historiqueCall', src, res2)
+    end)
 end
 
 RegisterServerEvent("GTA:CreationPersonnage") --> Check a chaque spawn, si vous avez un personnage ou non.
@@ -34,10 +35,9 @@ AddEventHandler("GTA:CreationPersonnage", function()
 			exports.ghmattimysql:execute('INSERT INTO gta_joueurs_humain (`license`) VALUES ?', { { licenseValeur } })
 			exports.ghmattimysql:execute('INSERT INTO gta_joueurs_vetement (`license`) VALUES ?', { { licenseValeur } })
 			
-			--GCPHONE : 
+			--GCPHONE Création d'un numéro aleatoire  : 
 			local randomPhoneNumber = getPhoneRandomNumber() 
 			exports.ghmattimysql:execute("UPDATE gta_joueurs SET ? WHERE ?", { {['phone_number'] = randomPhoneNumber}, {['license'] = license} })
-			print("RANDOM NUMBER CREATED !")
 			
 			exports.ghmattimysql:execute("UPDATE gta_joueurs SET ? WHERE ?", { {['isFirstConnection'] = 0}, {['license'] = license} })
 			TriggerClientEvent("GTA:OpenMenuCreation", source)
@@ -50,7 +50,7 @@ AddEventHandler("GTA:CreationPersonnage", function()
 
 	Wait(1000)
 	
-	--GCPHONE : 
+	--GCPHONE Chargement du numéro : 
 	exports.ghmattimysql:scalar("SELECT phone_number FROM gta_joueurs WHERE ?", {{['license'] = license}}, function(Myphone_number)
 		if Myphone_number then
 			TriggerClientEvent("gcPhone:myPhoneNumber", source, Myphone_number)
@@ -66,13 +66,9 @@ AddEventHandler("GTA:CreationPersonnage", function()
 			end)
 			
 			sendHistoriqueCall(source, Myphone_number)
-
-			print("NUMBER LOADED !")
 		end
 	end)
 
-	print("Joueur : [ "..GetPlayerName(source).. " ] vient de rejoindre. SERVER ID : ", source)
-	exports.ghmattimysql:execute("UPDATE gta_joueurs SET ? WHERE ?", { {['serverid'] = source}, {['license'] = license} })
 	TriggerClientEvent("GTA:JoueurLoaded", source) --> Load l'argent du joueur.
 end)
 
