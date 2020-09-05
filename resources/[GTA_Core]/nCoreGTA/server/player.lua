@@ -1,5 +1,6 @@
 Player = {}
 Player.__index = Player
+PlayersSource = {}
 
 RegisterServerEvent("GTA_Notif:OnPlayerJoin")
 AddEventHandler('GTA_Notif:OnPlayerJoin', function()
@@ -18,6 +19,8 @@ AddEventHandler('GTA_Notif:OnPlayerJoin', function()
 			TriggerClientEvent('nMenuNotif:showNotification', -1,"~b~"..res[1].nom.. " "..res[1].prenom.."~g~ vient de rejoindre la ville.")
 		end
 	end)
+
+	PlayersSource[source] = license
 end)
 
 AddEventHandler('playerDropped', function()
@@ -36,6 +39,8 @@ AddEventHandler('playerDropped', function()
 			TriggerClientEvent('nMenuNotif:showNotification', -1,"~b~"..res[1].nom.. " "..res[1].prenom.."~r~ vient de quitté la ville.")
 		end
 	end)
+
+	PlayersSource[source] = nil
 end)
 
 function Player:GetLicense(source)
@@ -70,6 +75,7 @@ function Player:New(license, argent_propre, argent_sale, banque)
 
 	return exports.ghmattimysql:execute("INSERT INTO gta_joueurs (`license`,`argent_propre`,`argent_sale`, `banque`) VALUES (@license, @argent_propre, @argent_sale, @banque)", Parameters, function() end)
 end
+
 
 RegisterServerEvent('GTA:LoadArgent')
 AddEventHandler('GTA:LoadArgent', function()
@@ -106,7 +112,6 @@ AddEventHandler('GTA:GetInfoJoueurs', function(source, callback)
 		end)
 	end)
 end)
-
 
 RegisterServerEvent('GTA:CreationJoueur')  --> cette event sert uniquement a créer votre perso.
 AddEventHandler('GTA:CreationJoueur', function(source)
@@ -287,4 +292,8 @@ AddEventHandler('GTA:DeposerAtmBanque', function(source, value)
 			end
 		end
 	end)
+end)
+
+AddEventHandler('GTA:GetJoueurs', function(cb)
+    cb(PlayersSource)
 end)

@@ -100,9 +100,9 @@ Citizen.CreateThread(function()
 		if isPlayerSpawn == false then 
 		   waitPlayerSpawn = 0
 			if GetLastInputMethod(0) then
-				DrawMissionText("~h~APPUYER SUR~g~ ENTRER ~w~ POUR REJOINDRE LA VILLE.")
+				DrawMissionText("~h~APPUYER SUR ~b~ ENTRER ~w~ POUR REJOINDRE LA VILLE.")
 			else
-				DrawMissionText("~h~APPUYER SUR~r~ A ~w~ POUR REJOINDRE LA VILLE.")
+				DrawMissionText("~h~APPUYER SUR ~g~ A ~w~ POUR REJOINDRE LA VILLE.")
 			end
 
 			if IsControlJustPressed(0, 18) then

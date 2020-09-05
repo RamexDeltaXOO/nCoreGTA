@@ -83,8 +83,8 @@ local menuPerso = {
 			title = "Appels d'urgence" ,
 			name = "urgence",
 			buttons = {
-				{name = "Police", job = "police"},
-				{name = "Medics", job = "medic"},
+				{name = "Police"},
+				{name = "Medics"},
 			}
 		},
 
@@ -404,10 +404,17 @@ function ButtonSelected(button)
 			itemQty = button.itemqty
 		end
 	elseif this == "urgence" then --> Appels d'urgence
-		if btnAction == "appelUrgence" then
-		else
+		if btn == "Police" then
 			local plyPos = GetEntityCoords(GetPlayerPed(-1), true)
-			TriggerEvent("nAppelMobile:callUrgence", button.job)
+			TriggerEvent("nAppelMobile:callPolice")
+			exports.nCoreGTA:nNotificationMain({
+				text = "~g~ Message d'urgence envoyé !",
+				type = 'basGauche',
+				nTimeNotif = 3000,
+			})
+		elseif btn == "Medics" then
+			local plyPos = GetEntityCoords(GetPlayerPed(-1), true)
+			TriggerEvent("nAppelMobile:callMedic")
 			exports.nCoreGTA:nNotificationMain({
 				text = "~g~ Message d'urgence envoyé !",
 				type = 'basGauche',

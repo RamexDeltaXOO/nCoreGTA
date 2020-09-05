@@ -3,8 +3,6 @@ game 'gta5'
 
 ui_page 'progressBar/progressbar.html'
 
-dependencies {'ghmattimysql'}
-
 export 'Ninja_Core_PedsText'
 export 'Ninja_Core_StartAnim'
 export 'Ninja_Core_nRequestAnimSet'

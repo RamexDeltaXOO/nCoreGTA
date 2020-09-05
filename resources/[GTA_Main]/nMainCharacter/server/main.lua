@@ -1,16 +1,44 @@
---||@SuperCoolNinja.||--
+ --||@SuperCoolNinja.||--
+ 
+ math.randomseed(os.time()) --> permet de generer un nombre aleatoire pour votre numero de phone.
+
+ --- Pour les numero du style XXX-XXX
+ local function getPhoneRandomNumber()
+    local numBase0 = math.random(100,999)
+    local numBase1 = math.random(0,999)
+    local num = string.format("%03d-%03d", numBase0, numBase1)
+
+	return num
+end
+
+function getHistoriqueCall (num)
+    local result = exports.ghmattimysql:execute("SELECT * FROM phone_calls WHERE owner = @num ORDER BY time DESC LIMIT 120", {
+        ['@num'] = num
+    })
+    return result
+end
+
+function sendHistoriqueCall(src, num) 
+    exports.ghmattimysql:execute("SELECT * FROM phone_calls WHERE owner = @num ORDER BY time DESC LIMIT 120", { ['@num'] = num}, function(res2)
+        TriggerClientEvent('gcPhone:historiqueCall', src, res2)
+    end)
+end
 
 RegisterServerEvent("GTA:CreationPersonnage") --> Check a chaque spawn, si vous avez un personnage ou non.
 AddEventHandler("GTA:CreationPersonnage", function()
 	local source = source
 	local license = GetPlayerIdentifiers(source)[1]
 	local licenseValeur = {license}
-	
+
 	exports.ghmattimysql:scalar("SELECT isFirstConnection FROM gta_joueurs WHERE ?", {{['license'] = license}}, function(isFirstConnection)
 		if isFirstConnection then
 			exports.ghmattimysql:execute('INSERT INTO gta_joueurs_humain (`license`) VALUES ?', { { licenseValeur } })
 			exports.ghmattimysql:execute('INSERT INTO gta_joueurs_vetement (`license`) VALUES ?', { { licenseValeur } })
-			exports.ghmattimysql:execute("UPDATE gta_joueurs SET ? WHERE ?", { {['serverid'] = source}, {['license'] = license} })
+			
+			--GCPHONE Création d'un numéro aleatoire  : 
+			local randomPhoneNumber = getPhoneRandomNumber() 
+			exports.ghmattimysql:execute("UPDATE gta_joueurs SET ? WHERE ?", { {['phone_number'] = randomPhoneNumber}, {['license'] = license} })
+			
 			exports.ghmattimysql:execute("UPDATE gta_joueurs SET ? WHERE ?", { {['isFirstConnection'] = 0}, {['license'] = license} })
 			TriggerClientEvent("GTA:OpenMenuCreation", source)
 		else
@@ -19,6 +47,28 @@ AddEventHandler("GTA:CreationPersonnage", function()
 			end)
 		end
 	end)
+
+	Wait(1000)
+	
+	--GCPHONE Chargement du numéro : 
+	exports.ghmattimysql:scalar("SELECT phone_number FROM gta_joueurs WHERE ?", {{['license'] = license}}, function(Myphone_number)
+		if Myphone_number then
+			TriggerClientEvent("gcPhone:myPhoneNumber", source, Myphone_number)
+			
+			exports.ghmattimysql:execute("SELECT * FROM phone_users_contacts WHERE identifier = @identifier", { ['@identifier'] = license}, function(res2)
+				TriggerClientEvent("gcPhone:contactList", source, res2)
+			end)
+
+			exports.ghmattimysql:execute("SELECT phone_messages.* FROM phone_messages LEFT JOIN gta_joueurs ON gta_joueurs.license = @identifier WHERE phone_messages.receiver = gta_joueurs.phone_number", { ['@identifier'] = license}, function(result)
+				if (result) then
+					TriggerClientEvent("gcPhone:allMessage", source, result)
+				end
+			end)
+			
+			sendHistoriqueCall(source, Myphone_number)
+		end
+	end)
+
 	TriggerClientEvent("GTA:JoueurLoaded", source) --> Load l'argent du joueur.
 end)
 

@@ -108,6 +108,11 @@ AddEventHandler("target:call:taken", function(taken)
     end
 end)
 
+RegisterNetEvent("target:call:Notaken")
+AddEventHandler("target:call:Notaken", function()
+    Ninja_Core__ShowNinjaNotification("~h~ ~r~Alert ~w~:", "", "Désoler aucune patrouille en service.")
+end)
+
 AddEventHandler('playerDropped', function()
 	TriggerServerEvent("player:serviceOff", nil)
 end)
@@ -115,8 +120,8 @@ end)
 
 
 --------------||SYSTEM DE CALL||------------------
-RegisterNetEvent('nAppelMobile:callUrgence') -------> POLICE
-AddEventHandler('nAppelMobile:callUrgence', function(job)
+RegisterNetEvent('nAppelMobile:callPolice') -------> POLICE
+AddEventHandler('nAppelMobile:callPolice', function()
     local plyPos = GetEntityCoords(GetPlayerPed(-1), true)
     DisplayOnscreenKeyboard(1, "FMMC_MPM_NA", "", "", "", "", "", 200)
     while (UpdateOnscreenKeyboard() == 0) do
@@ -127,6 +132,22 @@ AddEventHandler('nAppelMobile:callUrgence', function(job)
       message =  GetOnscreenKeyboardResult()
     end
     if message ~= nil and message ~= "" then
-        TriggerServerEvent("call:makeCall", job, {x=plyPos.x,y=plyPos.y,z=plyPos.z}, message)
+        TriggerServerEvent("call:makeCall", "police", {x=plyPos.x,y=plyPos.y,z=plyPos.z}, message)
+    end
+end)
+
+RegisterNetEvent('nAppelMobile:callMedic') -------> MEDIC
+AddEventHandler('nAppelMobile:callMedic', function()
+    local plyPos = GetEntityCoords(GetPlayerPed(-1), true)
+    DisplayOnscreenKeyboard(1, "FMMC_MPM_NA", "", "", "", "", "", 200)
+    while (UpdateOnscreenKeyboard() == 0) do
+      DisableAllControlActions(0);
+      Wait(0);
+    end
+    if (GetOnscreenKeyboardResult()) then
+      message =  GetOnscreenKeyboardResult()
+    end
+    if message ~= nil and message ~= "" then
+        TriggerServerEvent("call:makeCall", "medic", {x=plyPos.x,y=plyPos.y,z=plyPos.z}, message)
     end
 end)

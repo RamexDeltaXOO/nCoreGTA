@@ -205,16 +205,12 @@ function BeginEditeur()
 		FreezeEntityPosition(PlayerPedId(), true)
 	end
 
-	AddTextEntry("text", "Chargement de la création de votre personnage..")
-	BeginTextCommandBusyspinnerOn("text")
-	EndTextCommandBusyspinnerOn(4)
-
-	Visible()
-	Wait(1000)
-	BusyspinnerOff()
 	OpenMainMenu()
 	config.MenuOpen = true
+	Visible()
 end
+
+
 
 RegisterNetEvent("GTA:OpenMenuCreation")
 AddEventHandler("GTA:OpenMenuCreation", function()
