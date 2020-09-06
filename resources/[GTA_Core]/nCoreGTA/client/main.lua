@@ -114,7 +114,7 @@ end)
 Citizen.CreateThread(function()
  	while true do
  		Citizen.Wait(0)
- 		if IsControlJustPressed(1, defaultkey) then
+ 		if IsControlJustPressed(1, defaultkey) and GetLastInputMethod(0) then --> Compatibilité Manette.
  			currentdistancevoice = (currentdistancevoice + 1) % 3
 			if currentdistancevoice == 0 then
 				NetworkSetTalkerProximity(distance_voix.Normal) -- 5 meters range

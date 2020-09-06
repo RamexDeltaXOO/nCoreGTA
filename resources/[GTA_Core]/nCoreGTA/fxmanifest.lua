@@ -22,7 +22,6 @@ server_scripts {
 client_scripts {
     'utils/functionsExported.lua',
     'config/config.lua',
-    'client/pedControl.lua',
     'client/admin_main.lua',
     'client/main.lua',
     'client/spawn.lua',

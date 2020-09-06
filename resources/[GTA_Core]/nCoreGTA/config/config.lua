@@ -20,10 +20,6 @@ config.argentPropre = 500
 config.argentSale = 150
 config.banque = 5000
 
---> Traffic PNJ :
-config.vehiculeDensiter = 1.0
-config.pedDensiter = 1.0
-
 --> Whitelist :
 --> Pour avoir la license du player, faite le connecter une fois au serveur sans qui puisse rejoindre, il sera afficher sur la console.
 config.activerWhitelist = false
