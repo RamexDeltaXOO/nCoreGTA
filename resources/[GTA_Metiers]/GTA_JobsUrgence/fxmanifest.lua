@@ -1,7 +1,11 @@
-fx_version 'adamant'
-game 'gta5'
+fx_version 'cerulean'
+games { 'gta5' }
+
+dependencies {'ghmattimysql'}
 
 dependency 'nMenuPersonnel'
+
+
 
 files {
     'configuration_jobs/json/**/*',

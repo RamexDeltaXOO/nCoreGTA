@@ -1,7 +1,7 @@
+dependencies {'ghmattimysql'}
 dependency 'nMenuPersonnel'
 
 ui_page 'html/index.html'
-
 
 files {
 	'html/index.html',

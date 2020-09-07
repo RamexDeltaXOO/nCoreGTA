@@ -42,4 +42,4 @@ https://discord.gg/NKHJTqn
 
 ## License :
 @SuperCoolNinja
-thanks to Gustavo Gaviria for his help with some optimisation.
+Un grand merci a @Gustavo Gaviria pour sa contribution au development de la source.
