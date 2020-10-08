@@ -282,8 +282,7 @@ function spawnPlayer(spawnIdx, cb)
 
         -- gamelogic-style cleanup stuff
         ClearPedTasksImmediately(ped)
-        --SetEntityHealth(ped, 300) -- TODO: allow configuration of this?
-        RemoveAllPedWeapons(ped) -- TODO: make configurable (V behavior?)
+        RemoveAllPedWeapons(ped)
         ClearPlayerWantedLevel(PlayerId())
 
         -- why is this even a flag?

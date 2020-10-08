@@ -3,8 +3,8 @@ Ceci est le core de la source, il charge tout votre personnage pour vous.
 
 ## Screen :
 
-![MenuPerso](https://cdn.discordapp.com/attachments/554479498721099787/724625331239125102/MenuPerso.jpg)
-![PersoCréation](https://cdn.discordapp.com/attachments/554479498721099787/724625328567484556/creation.jpg)
+![MenuPerso](https://cdn.discordapp.com/attachments/554479498721099787/763895178455941120/Capture_decran_2020-10-09_004635.png)
+![PersoCréation](https://cdn.discordapp.com/attachments/554479498721099787/763894028491292672/Capture_decran_2020-10-09_004158.png)
 
 --------------||by Super.Cool.Ninja||--------------
 
@@ -14,8 +14,7 @@ Avant de faire quoi que ce soit ! lisez bien.
 ## Features
 - Loading screen.
 - Création de personnage.
-- Gestion du spawn du personnage automatique avec synchro de position..
-- System de coma joueur.
+- Gestion du spawn du personnage automatique avec synchro de position.
 - Gestion d'argent "argent sale/argent propre/banque".
 - Synchro de la méteo.
 - Gestion des besoin "Faim/Soif".
@@ -25,7 +24,11 @@ Avant de faire quoi que ce soit ! lisez bien.
 - ghmattimysql pour ce qui est de requete sql.
 - connexion du joueur via license, plus besoin de steam.
 - system de service pour recevoir vos call d'urgence.
-- jobs urgence Police/Medic
+
+- System de coma joueur. --> EN PROGRESSION !
+- jobs urgence Police/Medic --> EN PROGRESSION !
+- Magasin de vêtement --> EN PROGRESSION !
+
 
 
 

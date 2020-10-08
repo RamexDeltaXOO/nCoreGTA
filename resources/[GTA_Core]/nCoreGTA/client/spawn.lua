@@ -5,119 +5,77 @@ local cam = nil
 local cam2 = nil
 local isPlayerSpawn = false
 
-
-local function showLoadingPromt(label, time)
-    Citizen.CreateThread(function()
-        BeginTextCommandBusyString(tostring(label))
-        EndTextCommandBusyString(3)
-        Citizen.Wait(time)
-        RemoveLoadingPrompt()
-    end)
-end
-
-function DrawMissionText(m_text, showtime)
-    ClearPrints()
-	SetTextScale(0.5, 0.5)
-	SetTextFont(0)
-	SetTextProportional(1)
-	SetTextColour(255, 255, 255, 255)
-	SetTextDropshadow(0, 0, 0, 0, 255)
-	SetTextEdge(2, 0, 0, 0, 150)
-	SetTextDropShadow()
-	SetTextOutline()
-	SetTextEntry("STRING")
-	SetTextCentre(1)
-	AddTextComponentString(m_text)
-	DrawText(0.5, 0.9)
-end
-
-function LocalPlayerPed()
-	return PlayerPedId()
-end
-
 RegisterNetEvent("GTA:LASTPOS")
 AddEventHandler("GTA:LASTPOS", function(PosX, PosY, PosZ)
+	--Definit la position du joueur : 
 	SetEntityCoords(GetPlayerPed(-1), tonumber(PosX), tonumber(PosY), tonumber(PosZ) + 0.0, 1, 0, 0, 1)
 	NetworkResurrectLocalPlayer(tonumber(PosX), tonumber(PosY), tonumber(PosZ) + 0.0, 0, true, true, false)
 	SetTimecycleModifier('default')
-	DoScreenFadeIn(500)
-	Citizen.Wait(500)
+end)
+
+RegisterNetEvent("GTA:NewPlayerPosition")
+AddEventHandler("GTA:NewPlayerPosition", function(PosX, PosY, PosZ)
+	--> On charge les donné du player : 
+	exports.rprogress:Custom({
+		Label = "Chargement de votre position",
+		Duration = 1000,
+		LabelPosition = "right",
+		Color = "rgba(255, 255, 255, 0.5)",
+		BGColor = "rgba(0, 0, 0, 0.8)"
+	})
+	
+	Citizen.Wait(1000)
+	
+	--Definit la position du joueur : 
+	SetEntityCoords(GetPlayerPed(-1), tonumber(PosX), tonumber(PosY), tonumber(PosZ) + 0.0, 1, 0, 0, 1)
+	NetworkResurrectLocalPlayer(tonumber(PosX), tonumber(PosY), tonumber(PosZ) + 0.0, 0, true, true, false)
+	SetTimecycleModifier('default')
+
+	--> On ajoute une cam de départ : 
 	cam2 = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", -1355.93,-1487.78,520.75, 300.00,0.00,0.00, 100.00, false, 0)
 	PointCamAtCoord(cam2, PosX,PosY,PosZ+200)
 	SetCamActiveWithInterp(cam2, cam, 900, true, true)
+	
 	Citizen.Wait(900)
 
+	--> On ajoute une cam de fin avec une interpolation sur le joueur :
 	cam = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", PosX,PosY,PosZ+200, 300.00,0.00,0.00, 100.00, false, 0)
 	PointCamAtCoord(cam, PosX,PosY,PosZ+2)
 	SetCamActiveWithInterp(cam, cam2, 3700, true, true)
+	
 	Citizen.Wait(3700)
+	
+
 	PlaySoundFrontend(-1, "Zoom_Out", "DLC_HEIST_PLANNING_BOARD_SOUNDS", 1)
 	RenderScriptCams(false, true, 500, true, true)
 	PlaySoundFrontend(-1, "CAR_BIKE_WHOOSH", "MP_LOBBY_SOUNDS", 1)
-	FreezeEntityPosition(GetPlayerPed(-1), false)
-	SetEntityVisible(PlayerPedId(), true, 0)
-	Citizen.Wait(500)
+
+	--> On charge les donné du player : 
+	exports.rprogress:Custom({
+		Label = "Chargement de votre personnage",
+		Duration = 1700,
+		LabelPosition = "right",
+		Color = "rgba(255, 255, 255, 0.5)",
+		BGColor = "rgba(0, 0, 0, 0.8)"
+	})
+
+	TriggerServerEvent("GTA_Notif:OnPlayerJoin")
+	TriggerServerEvent("GTA:CreationPersonnage")
+	TriggerServerEvent('GTA:LoadArgent')
+	TriggerEvent("GTA:LoadWeaponPlayer")
+	Citizen.Wait(1700)
+
+	--> on detruit la cam puis rend controlable notre player :
 	SetCamActive(cam, false)
 	DestroyCam(cam, true)
-	DisplayHud(true)
+	FreezeEntityPosition(GetPlayerPed(-1), false)
+	SetEntityVisible(PlayerPedId(), true, 0)
 	DisplayRadar(true)
-	TriggerServerEvent("GTA_Notif:OnPlayerJoin") --> Notif qui affiche le nom du player vient de rejoindre/quitter la ville.
-	TriggerServerEvent("GTA:CreationPersonnage")
-	TriggerEvent("GTA:LoadWeaponPlayer")
+	DisplayHud(true)
 	TriggerEvent('EnableDisableHUDFS', true)
 end)
 
-Citizen.CreateThread(function ()
-	while true do
-		Citizen.Wait(config.savePosTime)
-		if isPlayerSpawn == true then 
-			LastPosX, LastPosY, LastPosZ = table.unpack(GetEntityCoords(GetPlayerPed(-1), true))
-			TriggerServerEvent("GTA:SAVEPOS", LastPosX , LastPosY , LastPosZ)
-			exports.nCoreGTA:nNotificationMain({
-				text = "✅ ~g~Position synchronisée",
-				type = 'basGauche',
-				nTimeNotif = 6000,
-			})
-		end
-	end
-end)
-
-Citizen.CreateThread(function()
-	while true do
-		Wait(10)
-		if IsControlJustPressed(0, 20) then
-			ShowHudComponentThisFrame(3)
-			ShowHudComponentThisFrame(4)
-		end
-	end
-end)
-
-local waitPlayerSpawn = 1000
-
-Citizen.CreateThread(function()
-	while true do
-		Wait(waitPlayerSpawn)
-		if isPlayerSpawn == false then 
-		   waitPlayerSpawn = 0
-			if GetLastInputMethod(0) then
-				DrawMissionText("~h~APPUYER SUR ~b~ ENTRER ~w~ POUR REJOINDRE LA VILLE.")
-			else
-				DrawMissionText("~h~APPUYER SUR ~g~ A ~w~ POUR REJOINDRE LA VILLE.")
-			end
-
-			if IsControlJustPressed(0, 18) then
-				TriggerServerEvent("GTA:SPAWNPLAYER")
-				firstTick = true
-				exports.spawnmanager:setAutoSpawn(false)
-				isPlayerSpawn = true
-				break
-			end
-		else
-		    waitPlayerSpawn = 1000
-		end
-	end
-end)
-
+--> Executer une Une fois la ressource start : 
 AddEventHandler('onClientResourceStart', function (resourceName)
 	if(GetCurrentResourceName() ~= resourceName) then
 	  return
@@ -148,6 +106,7 @@ AddEventHandler('onClientResourceStart', function (resourceName)
 	end)
 end)
 
+--> Executer une fois la ressource restart : 
 AddEventHandler('onResourceStart', function(resourceName)
     if (GetCurrentResourceName() ~= resourceName) then
         return
@@ -155,4 +114,32 @@ AddEventHandler('onResourceStart', function(resourceName)
 	
 	isPlayerSpawn = false
     PlaySoundFrontend(-1, "Whistle", "DLC_TG_Running_Back_Sounds", 0)
+end)
+
+Citizen.CreateThread(function ()
+	while true do
+		Citizen.Wait(config.savePosTime)
+		if isPlayerSpawn == true then 
+			LastPosX, LastPosY, LastPosZ = table.unpack(GetEntityCoords(GetPlayerPed(-1), true))
+			TriggerServerEvent("GTA:SAVEPOS", LastPosX , LastPosY , LastPosZ)
+			exports.nCoreGTA:ShowNotification("✅ ~g~Position synchronisée")
+		end
+	end
+end)
+
+Citizen.CreateThread(function()
+	while true do
+		if isPlayerSpawn == false then 
+			PlaySoundFrontend(-1, "Apt_Style_Purchase", "DLC_APT_Apartment_SoundSet", 0)
+			TriggerServerEvent("GTA:SPAWNPLAYER")
+			firstTick = true
+			exports.spawnmanager:setAutoSpawn(false)
+			isPlayerSpawn = true
+			break
+		end
+	end
+end)
+
+AddEventHandler('playerSpawned', function()
+	TriggerServerEvent("GTA:SetPositionPlayer")
 end)

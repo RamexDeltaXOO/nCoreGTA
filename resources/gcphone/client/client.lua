@@ -31,11 +31,7 @@ end
 --  Que faire si le joueurs veut ouvrir sont téléphone n'est qu'il en a pas ?
 --====================================================================================
 function NoPhoneFound()
-  exports.nCoreGTA:nNotificationMain({
-    text = "~r~Intéraction impossible, vous devez vous fournir d'un phone.",
-    type = 'basGauche',
-    nTimeNotif = 3000,
-  })
+  exports.nCoreGTA:ShowNotification("~r~Intéraction impossible, vous devez vous fournir d'un phone.")
 end
 
 Citizen.CreateThread(function()

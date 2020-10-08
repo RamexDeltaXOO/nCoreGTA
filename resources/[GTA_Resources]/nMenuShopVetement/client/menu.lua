@@ -546,12 +546,12 @@ Citizen.CreateThread(function()
 		for _,v in ipairs(vetementConfig) do
 			if getDistance(myPos, v.TeeShirtPos) < 2 then
 				if GetLastInputMethod(0) then
-					Ninja_Core__DisplayHelpAlert("~INPUT_TALK~ pour ouvrir le catalogue des ~b~Tshirt")
+					Ninja_Core__DisplayHelpAlert("~INPUT_PICKUP~ pour ~b~intéragir")
 				else
-					Ninja_Core__DisplayHelpAlert("~INPUT_TALK~ pour ouvrir le catalogue des ~b~Tshirt")
+					Ninja_Core__DisplayHelpAlert("~INPUT_CELLPHONE_EXTRA_OPTION~ pour ~b~intéragir")
 				end
 				
-				if (IsControlJustReleased(0, 54) or IsControlJustReleased(0, 175)) then
+				 if (IsControlJustReleased(0, 38) or IsControlJustReleased(0, 193)) then 
 					TriggerEvent("GTA:GetSexPlayer")
 					if Sex == "mp_m_freemode_01" then
 						OpenMainPersonnage("mainTshirtsHomme")
@@ -561,12 +561,12 @@ Citizen.CreateThread(function()
 				end
 			elseif getDistance(myPos, v.PullPos) < 2 then 
 				if GetLastInputMethod(0) then
-					Ninja_Core__DisplayHelpAlert("~INPUT_TALK~ pour ouvrir le catalogue des ~b~Pulls")
+					Ninja_Core__DisplayHelpAlert("~INPUT_PICKUP~ pour ~b~intéragir")
 				else
-					Ninja_Core__DisplayHelpAlert("~INPUT_TALK~ pour ouvrir le catalogue des ~b~Pulls")
+					Ninja_Core__DisplayHelpAlert("~INPUT_CELLPHONE_EXTRA_OPTION~ pour ~b~intéragir")
 				end
 				
-				if (IsControlJustReleased(0, 54) or IsControlJustReleased(0, 175)) then
+				 if (IsControlJustReleased(0, 38) or IsControlJustReleased(0, 193)) then 
 					TriggerEvent("GTA:GetSexPlayer")
 					if Sex == "mp_m_freemode_01" then
 						OpenMainPersonnage("mainPullHomme")
@@ -576,12 +576,12 @@ Citizen.CreateThread(function()
 				end
 			elseif getDistance(myPos, v.VestePos) < 2 then 
 				if GetLastInputMethod(0) then
-					Ninja_Core__DisplayHelpAlert("~INPUT_TALK~ pour ouvrir le catalogue des ~b~Vestes")
+					Ninja_Core__DisplayHelpAlert("~INPUT_PICKUP~ pour ~b~intéragir")
 				else
-					Ninja_Core__DisplayHelpAlert("~INPUT_TALK~ pour ouvrir le catalogue des ~b~Vestes")
+					Ninja_Core__DisplayHelpAlert("~INPUT_CELLPHONE_EXTRA_OPTION~ pour ~b~intéragir")
 				end
 				
-				if (IsControlJustReleased(0, 54) or IsControlJustReleased(0, 175)) then
+				 if (IsControlJustReleased(0, 38) or IsControlJustReleased(0, 193)) then 
 					TriggerEvent("GTA:GetSexPlayer")
 
 					if Sex == "mp_m_freemode_01" then
@@ -592,12 +592,12 @@ Citizen.CreateThread(function()
 				end
 			elseif getDistance(myPos, v.PantalonPos) < 2 then
 				if GetLastInputMethod(0) then
-					Ninja_Core__DisplayHelpAlert("~INPUT_TALK~ pour ouvrir le catalogue des ~b~Pantalons")
+					Ninja_Core__DisplayHelpAlert("~INPUT_PICKUP~ pour ~b~intéragir")
 				else
-					Ninja_Core__DisplayHelpAlert("~INPUT_TALK~ pour ouvrir le catalogue des ~b~Pantalons")
+					Ninja_Core__DisplayHelpAlert("~INPUT_CELLPHONE_EXTRA_OPTION~ pour ~b~intéragir")
 				end
 				
-				if (IsControlJustReleased(0, 54) or IsControlJustReleased(0, 175)) then
+				 if (IsControlJustReleased(0, 38) or IsControlJustReleased(0, 193)) then 
 					TriggerEvent("GTA:GetSexPlayer")
 					TriggerEvent("GTA:SetCamPantalon")
 					if Sex == "mp_m_freemode_01" then
@@ -609,12 +609,12 @@ Citizen.CreateThread(function()
 				end
 			elseif getDistance(myPos, v.ChaussuresPos) < 2 then 
 				if GetLastInputMethod(0) then
-					Ninja_Core__DisplayHelpAlert("~INPUT_TALK~ pour ouvrir le catalogue des ~b~Chaussures")
+					Ninja_Core__DisplayHelpAlert("~INPUT_PICKUP~ pour ~b~intéragir")
 				else
-					Ninja_Core__DisplayHelpAlert("~INPUT_TALK~ pour ouvrir le catalogue des ~b~Chaussures")
+					Ninja_Core__DisplayHelpAlert("~INPUT_CELLPHONE_EXTRA_OPTION~ pour ~b~intéragir")
 				end
 				
-				if (IsControlJustReleased(0, 54) or IsControlJustReleased(0, 175)) then
+				 if (IsControlJustReleased(0, 38) or IsControlJustReleased(0, 193)) then 
 					TriggerEvent("GTA:GetSexPlayer")
 					TriggerEvent("GTA:SetCamShoes")
 					if Sex == "mp_m_freemode_01" then
@@ -625,12 +625,12 @@ Citizen.CreateThread(function()
 				end
 			elseif getDistance(myPos, v.AccessoiresPos) < 2 then 
 				if GetLastInputMethod(0) then
-					Ninja_Core__DisplayHelpAlert("~INPUT_TALK~ pour ouvrir le catalogue des ~b~Accessoires")
+					Ninja_Core__DisplayHelpAlert("~INPUT_PICKUP~ pour ~b~intéragir")
 				else
-					Ninja_Core__DisplayHelpAlert("~INPUT_TALK~ pour ouvrir le catalogue des ~b~Accessoires")
+					Ninja_Core__DisplayHelpAlert("~INPUT_CELLPHONE_EXTRA_OPTION~ pour ~b~intéragir")
 				end
 				
-				if (IsControlJustReleased(0, 54) or IsControlJustReleased(0, 175)) then
+				 if (IsControlJustReleased(0, 38) or IsControlJustReleased(0, 193)) then 
 					TriggerEvent("GTA:GetSexPlayer")
 
 					if Sex == "mp_m_freemode_01" then
@@ -641,12 +641,12 @@ Citizen.CreateThread(function()
 				end
 			elseif getDistance(myPos, v.ChapeauPos) < 2 then
 				if GetLastInputMethod(0) then
-					Ninja_Core__DisplayHelpAlert("~INPUT_TALK~ pour ouvrir le catalogue des ~b~Chapeau")
+					Ninja_Core__DisplayHelpAlert("~INPUT_PICKUP~ pour ~b~intéragir")
 				else
-					Ninja_Core__DisplayHelpAlert("~INPUT_TALK~ pour ouvrir le catalogue des ~b~Chapeau")
+					Ninja_Core__DisplayHelpAlert("~INPUT_CELLPHONE_EXTRA_OPTION~ pour ~b~intéragir")
 				end
 				
-				if (IsControlJustReleased(0, 54) or IsControlJustReleased(0, 175)) then
+				 if (IsControlJustReleased(0, 38) or IsControlJustReleased(0, 193)) then 
 					TriggerEvent("GTA:GetSexPlayer")
 
 					if Sex == "mp_m_freemode_01" then

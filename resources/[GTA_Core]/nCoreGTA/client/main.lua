@@ -118,25 +118,13 @@ Citizen.CreateThread(function()
  			currentdistancevoice = (currentdistancevoice + 1) % 3
 			if currentdistancevoice == 0 then
 				NetworkSetTalkerProximity(distance_voix.Normal) -- 5 meters range
-                exports.nCoreGTA:nNotificationMain({
-                    text = "~w~Niveau vocal : ~b~normal",
-                    type = 'basGauche',
-                    nTimeNotif = 6000,
-                })
+			    exports.nCoreGTA:ShowNotification("~w~Niveau vocal : ~b~normal")
 			elseif currentdistancevoice == 1 then
 				NetworkSetTalkerProximity(distance_voix.Grande) -- 12 meters range
-                exports.nCoreGTA:nNotificationMain({
-                    text = "~w~Niveau vocal : ~b~crier",
-                    type = 'basGauche',
-                    nTimeNotif = 6000,
-                })
+			    exports.nCoreGTA:ShowNotification("~w~Niveau vocal : ~b~crier")
 			elseif currentdistancevoice == 2 then
                 NetworkSetTalkerProximity(distance_voix.Faible) -- 1 meters range
-                exports.nCoreGTA:nNotificationMain({
-                    text = "~w~Niveau vocal : ~b~chuchoter",
-                    type = 'basGauche',
-                    nTimeNotif = 6000,
-                })
+			    exports.nCoreGTA:ShowNotification("~w~Niveau vocal : ~b~chuchoter")
 			end
  		end
  	end

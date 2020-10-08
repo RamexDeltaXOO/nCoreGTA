@@ -317,6 +317,39 @@ AddEventHandler('gcPhone:internal_startCall', function(source, phone_number, rtc
     end)
 end)
 
+function onCallFixePhone (source, phone_number, rtcOffer, extraData)
+    local indexCall = lastIndexCall
+    lastIndexCall = lastIndexCall + 1
+
+    local hidden = string.sub(phone_number, 1, 1) == '#'
+    if hidden == true then
+        phone_number = string.sub(phone_number, 2)
+    end
+    local sourcePlayer = tonumber(source)
+    local identifier = GetPlayerIdentifiers(source)[1]
+
+    exports.ghmattimysql:scalar("SELECT phone_number FROM gta_joueurs WHERE ?", {{['license'] = identifier}}, function(getNumberPhone)
+        AppelsEnCours[indexCall] = {
+            id = indexCall,
+            transmitter_src = sourcePlayer,
+            transmitter_num = getNumberPhone,
+            receiver_src = nil,
+            receiver_num = phone_number,
+            is_valid = false,
+            is_accepts = false,
+            hidden = hidden,
+            rtcOffer = rtcOffer,
+            extraData = extraData,
+            coords = FixePhone[phone_number].coords
+        }
+    end)
+    
+    PhoneFixeInfo[indexCall] = AppelsEnCours[indexCall]
+
+    TriggerClientEvent('gcPhone:notifyFixePhoneChange', -1, PhoneFixeInfo)
+    TriggerClientEvent('gcPhone:waitingCall', sourcePlayer, AppelsEnCours[indexCall], true)
+end
+
 RegisterServerEvent('gcPhone:startCall')
 AddEventHandler('gcPhone:startCall', function(phone_number, rtcOffer, extraData)
     local _source = source

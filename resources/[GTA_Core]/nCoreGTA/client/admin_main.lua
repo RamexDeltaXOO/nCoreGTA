@@ -261,17 +261,9 @@ RegisterCommand("pv", function(source, args, rawCommand)
         if IsPedInVehicle(playerPed, veh, false) then
             SetEntityAsMissionEntity(veh, true, true )
             Citizen.InvokeNative(0xEA386986E786A54F, Citizen.PointerValueIntInitialized(veh))
-            exports.nCoreGTA:nNotificationMain({
-                text = "~g~Véhicule supprimer.",
-                type = 'basGauche',
-                nTimeNotif = 6000,
-            })
+			exports.nCoreGTA:ShowNotification("~g~Véhicule supprimer.")
         else
-            exports.nCoreGTA:nNotificationMain({
-                text = "~r~Veuillez monter dans un véhicule.",
-                type = 'basGauche',
-                nTimeNotif = 6000,
-            })
+			exports.nCoreGTA:ShowNotification("~r~Veuillez monter dans un véhicule.")
         end
     end
 end, false)
@@ -286,6 +278,27 @@ RegisterCommand("pos", function(source, args, rawCommand)
         togglePosition()
     end
 end, false)
+
+RegisterCommand('v', function(source, args, rawCommand)
+    local x,y,z = table.unpack(GetOffsetFromEntityInWorldCoords(PlayerPedId(), 0.0, 8.0, 0.5))
+    local veh = args[1]
+    if veh == nil then exports.nCoreGTA:ShowNotification("~y~Veuillez saisir un nom d'un véhicule.") end
+    vehiclehash = GetHashKey(veh)
+    RequestModel(vehiclehash)
+    
+    Citizen.CreateThread(function() 
+        local waiting = 0
+        while not HasModelLoaded(vehiclehash) do
+            waiting = waiting + 100
+            Citizen.Wait(100)
+            if waiting > 3000 then
+                exports.nCoreGTA:ShowNotification("~r~Veuillez saisir un nom d'un véhicule correct !")
+                break
+            end
+        end
+        CreateVehicle(vehiclehash, x, y, z, GetEntityHeading(PlayerPedId())+90, 1, 0)
+    end)
+end)
 
 conf = {
     controls = {

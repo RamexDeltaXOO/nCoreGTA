@@ -1,6 +1,5 @@
 --||@SuperCoolNinja.||--
 
-
 RegisterServerEvent('nBanqueSolde:SRender')
 AddEventHandler('nBanqueSolde:SRender', function()
 	local source = source	
