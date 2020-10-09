@@ -1,4 +1,5 @@
-Sex = ""
+Config.Sex = ""
+indexii = {}
 
 Ninja_Core__DisplayHelpAlert = function(msg)
 	BeginTextCommandDisplayHelp("STRING");  
@@ -17,26 +18,62 @@ function LocalPed()
 	return GetPlayerPed(-1)
 end
 
-function stringstarts(String,Start)
-	return string.sub(String,1,string.len(Start))==Start
- end
- 
- 
- function table.HasValue( t, val )
-	 for k, v in pairs( t ) do
-		 if ( v == val ) then return true end
-	 end
-	 return false
- end
-
 RegisterNetEvent("GTA:GetSexPlayer")
 AddEventHandler("GTA:GetSexPlayer", function() 
 	if IsPedModel(LocalPed(), "mp_m_freemode_01") then
-		Sex = "mp_m_freemode_01"
+		Config.Sex = "mp_m_freemode_01"
 	else
-		Sex = "mp_f_freemode_01"
+		Config.Sex = "mp_f_freemode_01"
 	end
 end)
+
+function getSexVetement()
+	for i = 1, #Config.Locations do
+		if IsPedModel(LocalPed(), "mp_m_freemode_01") then
+			return Config.Locations[i]["Homme"]
+		else
+			return Config.Locations[i]["Femme"]
+		end
+	end
+end
+
+function IsNearOfZones()
+    for i = 1, #Config.Locations do
+		local tShirtPos = Config.Locations[i]["MagasinDeVetement"]["TShirtPos"]
+        local plyCoords = GetEntityCoords(GetPlayerPed(-1), false)
+        local distTShirt = getDistance(plyCoords, tShirtPos, true)
+
+        if (distTShirt <= 2.0) then
+            return true
+        else
+            return false 
+        end
+    end
+end
+
+function GetNearZone()
+    for i = 1, #Config.Locations do
+		local tShirtPos = Config.Locations[i]["MagasinDeVetement"]["TShirtPos"]
+        local plyCoords = GetEntityCoords(GetPlayerPed(-1), false)
+        local distTShirt = getDistance(plyCoords, tShirtPos, true)
+
+        if (distTShirt <= 2.0) then
+            return "TshirtMenu"
+        else
+            return nil 
+        end
+    end
+end
+
+getSexMenu = getSexVetement()
+
+-- Get le nom des tenues : 
+function GetLabelTenue()
+	for k in pairs(getSexMenu["Tshirt"]) do
+		print(k)
+		table.insert(indexii, k)
+	end
+end
 
 
 local firstspawn = 0
@@ -44,6 +81,13 @@ AddEventHandler('playerSpawned', function(spawn)
 	if firstspawn == 0 then
 		TriggerEvent("GTA:GetSexPlayer")
 		TriggerEvent("GTA:ShowVetementBlips",true)
+		Wait(150)
+	 	print(getSexVetement())
         firstspawn = 1
     end
+end)
+
+
+Citizen.CreateThread(function()
+	GetLabelTenue()
 end)
