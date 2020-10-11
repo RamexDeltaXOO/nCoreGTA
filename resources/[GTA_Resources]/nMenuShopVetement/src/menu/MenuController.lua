@@ -250,6 +250,7 @@ function RageUI.Controls()
                     for Index = 1, #Controls.Back.Keys do
                         if not Controls.Back.Pressed then
                             if IsDisabledControlJustPressed(Controls.Back.Keys[Index][1], Controls.Back.Keys[Index][2]) then
+                                TriggerServerEvent("GTA:LoadVetement")
                                 Controls.Back.Pressed = true
                                 Citizen.CreateThread(function()
                                     Citizen.Wait(175)

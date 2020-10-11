@@ -19,6 +19,4 @@ client_scripts {
     'client/menu.lua'
 }
 
-server_scripts {
-    'server/main.lua'
-}
+server_script 'server/main.lua'
