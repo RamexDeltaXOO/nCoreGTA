@@ -4,7 +4,8 @@ tPullLabel, tPullValue = {}, {}
 tVesteLabel, tVesteValue = {}, {}
 tPantalonLabel, tPantalonValue = {}, {}
 tChaussureLabel, tChaussureValue = {}, {}
-
+tChapeauLabel, tChapeauValue = {}, {}
+tAccessLabel, tAccessValue = {}, {}
 
 
 RegisterNetEvent("GTA:GetSexPlayer")
@@ -51,6 +52,8 @@ function IsNearOfZones()
 		local vestePos = Config.Locations[i]["MagasinDeVetement"]["VestePos"]
 		local pantalonPos = Config.Locations[i]["MagasinDeVetement"]["PantalonPos"]
 		local chaussurePos = Config.Locations[i]["MagasinDeVetement"]["ChaussurePos"]
+		local chapeauPos = Config.Locations[i]["MagasinDeVetement"]["ChapeauPos"]
+		local accessPos = Config.Locations[i]["MagasinDeVetement"]["AccessoirePos"]
         
 
         --> Distance des tenues : 
@@ -59,13 +62,13 @@ function IsNearOfZones()
         local dVeste = getDistance(plyCoords, vestePos, true)
         local dPantalon = getDistance(plyCoords, pantalonPos, true)
         local dChaussure = getDistance(plyCoords, chaussurePos, true)
+        local dChapeau = getDistance(plyCoords, chapeauPos, true)
+        local dAccess = getDistance(plyCoords, accessPos, true)
 
 
-
-        if (dTShirt <= 1.0) or (dPull <= 1.0) or (dPull <= 1.0) or (dVeste <= 1.0) or (dPantalon <= 1.0) or (dChaussure <= 1.0) then
+        if (dTShirt <= 1.0) or (dPull <= 1.0) or (dPull <= 1.0) or (dVeste <= 1.0) or (dPantalon <= 1.0) or (dChaussure <= 1.0) or (dChapeau <= 1.0) or (dAccess <= 1.0) then
             return true
         else
-            TriggerServerEvent("GTA:LoadVetement")
             return false 
         end
     end
@@ -83,6 +86,8 @@ function GetNearZone()
         local vestePos = Config.Locations[i]["MagasinDeVetement"]["VestePos"]
 		local pantalonPos = Config.Locations[i]["MagasinDeVetement"]["PantalonPos"]
 		local chaussurePos = Config.Locations[i]["MagasinDeVetement"]["ChaussurePos"]
+		local chapeauPos = Config.Locations[i]["MagasinDeVetement"]["ChapeauPos"]
+		local accesPos = Config.Locations[i]["MagasinDeVetement"]["AccessoirePos"]
         
         
         
@@ -92,7 +97,8 @@ function GetNearZone()
         local distVeste = getDistance(plyCoords, vestePos, true)
         local distPantalon = getDistance(plyCoords, pantalonPos, true)
         local distChaussure = getDistance(plyCoords, chaussurePos, true)
-
+        local distChapeau = getDistance(plyCoords, chapeauPos, true)
+        local distAccess = getDistance(plyCoords, accesPos, true)
 
 
         if (distTShirt <= 2.0) then
@@ -105,6 +111,10 @@ function GetNearZone()
             return "PantalonMenu"
         elseif (distChaussure <= 2.0) then 
             return "ChaussureMenu"
+        elseif (distChapeau <= 2.0) then 
+            return "chapeauMenu"
+        elseif (distAccess <= 2.0) then 
+            return "accessMenu"
         else
             return nil 
         end
@@ -152,6 +162,22 @@ function GetLabelChaussures()
 	end
 end
 
+-- Get le nom des Chapeau : 
+function GetLabelChapeau()
+	for k, v in pairs(getSexMenu["Chapeau"]) do
+        table.insert(tChapeauLabel, k)
+        table.insert(tChapeauValue, v)
+	end
+end
+
+-- Get le nom des Accessoires : 
+function GetLabelAccessoire()
+	for k, v in pairs(getSexMenu["Accessoire"]) do
+        table.insert(tAccessLabel, k)
+        table.insert(tAccessValue, v)
+	end
+end
+
 --> Blips Magasin de vêtement : 
 Citizen.CreateThread(function()
     for i = 1, #Config.Locations do
@@ -182,6 +208,8 @@ AddEventHandler('playerSpawned', function(spawn)
         GetLabelVeste()
         GetLabelPantalons()
         GetLabelChaussures()
+        GetLabelChapeau()
+        GetLabelAccessoire()
         firstspawn = 1
     end
 end)
@@ -200,4 +228,6 @@ AddEventHandler('onResourceStart', function(resourceName)
     GetLabelVeste()
     GetLabelPantalons()
     GetLabelChaussures()
+    GetLabelChapeau()
+    GetLabelAccessoire()
 end)

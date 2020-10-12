@@ -3,14 +3,15 @@ pullMenu = RageUI.CreateMenu("Pull",  "Magasin de vetement.")
 vesteMenu = RageUI.CreateMenu("Veste",  "Magasin de vetement.")
 pantalonMenu = RageUI.CreateMenu("Pantalon",  "Magasin de vetement.")
 chaussureMenu = RageUI.CreateMenu("Chaussure",  "Magasin de vetement.")
-
+bonnetMenu = RageUI.CreateMenu("Chapeau",  "Magasin de vetement.")
+accessMenu = RageUI.CreateMenu("Accessoire",  "Magasin de vetement.")
 
 
 
 local prix = 0
 local itemName = " "
 local Duree = 0
-local index_tShirt, index_pull, indexVeste, indexPantalon, indexChaussure = 1, 1, 1, 1, 1
+local index_tShirt, index_pull, indexVeste, indexPantalon, indexChaussure, indexChapeau, indexAccess = 1, 1, 1, 1, 1, 1, 1
 
 
 --> TShirt Menu : 
@@ -104,7 +105,6 @@ Citizen.CreateThread(function()
     end
 end)
 
-
 --> Pantalon Menu : 
 Citizen.CreateThread(function()
     while (true) do
@@ -144,13 +144,70 @@ Citizen.CreateThread(function()
 
                 if dist <= 5.0 then
                     Duree = 0
-                    RageUI.List('Pantalon', tChaussureLabel, indexChaussure, "", {}, true, {
+                    RageUI.List('Chaussure', tChaussureLabel, indexChaussure, "", {}, true, {
                         onListChange = function(Index, Item)
                             indexChaussure = Index;
                             SetPedComponentVariation(GetPlayerPed(-1), 6, tChaussureValue[indexChaussure][1], tChaussureValue[indexChaussure][2], 0)
                         end,
                         onSelected = function(Index, Item)
                             TriggerServerEvent("GTA_Vetement:NouvelChaussure", tChaussureValue[indexChaussure][1], tChaussureValue[indexChaussure][2], tChaussureValue[indexChaussure][3])
+                            RageUI.CloseAll(true)
+                        end
+                    })
+                end
+            end
+		end, function()end)
+    Citizen.Wait(Duree)
+    end
+end)
+
+
+--> Bonnet Menu : 
+Citizen.CreateThread(function()
+    while (true) do
+        RageUI.IsVisible(bonnetMenu, function()
+			for i = 1, #Config.Locations do
+                local chapeauPos = Config.Locations[i]["MagasinDeVetement"]["ChapeauPos"]
+                local plyCoords = GetEntityCoords(GetPlayerPed(-1), false)
+                local dist = GetDistanceBetweenCoords(plyCoords, chapeauPos["x"], chapeauPos["y"], chapeauPos["z"], true)
+
+                if dist <= 5.0 then
+                    Duree = 0
+                    RageUI.List('Chapeau', tChapeauLabel, indexChapeau, "", {}, true, {
+                        onListChange = function(Index, Item)
+                            indexChapeau = Index;
+                            SetPedPropIndex(GetPlayerPed(-1), 0, tChapeauValue[indexChapeau][1], 0, 0)
+                        end,
+                        onSelected = function(Index, Item)
+                            TriggerServerEvent("GTA_Vetement:NouveauBonnet", tChapeauValue[indexChapeau][1], tChapeauValue[indexChapeau][2])
+                            RageUI.CloseAll(true)
+                        end
+                    })
+                end
+            end
+		end, function()end)
+    Citizen.Wait(Duree)
+    end
+end)
+
+--> Accessoire Menu : 
+Citizen.CreateThread(function()
+    while (true) do
+        RageUI.IsVisible(accessMenu, function()
+			for i = 1, #Config.Locations do
+                local accessPos = Config.Locations[i]["MagasinDeVetement"]["AccessoirePos"]
+                local plyCoords = GetEntityCoords(GetPlayerPed(-1), false)
+                local dist = GetDistanceBetweenCoords(plyCoords, accessPos["x"], accessPos["y"], accessPos["z"], true)
+
+                if dist <= 5.0 then
+                    Duree = 0
+                    RageUI.List('Accessoire', tAccessLabel, indexAccess, "", {}, true, {
+                        onListChange = function(Index, Item)
+                            indexAccess = Index;
+                            SetPedComponentVariation(GetPlayerPed(-1), 7, tAccessValue[indexAccess][1], 0, 0)	
+                        end,
+                        onSelected = function(Index, Item)
+                            TriggerServerEvent("GTA_Vetement:NouveauAccessoire", tAccessValue[indexAccess][1], tAccessValue[indexAccess][2])
                             RageUI.CloseAll(true)
                         end
                     })
@@ -194,9 +251,17 @@ Citizen.CreateThread(function()
             if (IsControlJustReleased(0, 38) or IsControlJustReleased(0, 214)) then  
                 RageUI.Visible(chaussureMenu, not RageUI.Visible(chaussureMenu))
             end
+        elseif GetNearZone() == "chapeauMenu" then 
+            if (IsControlJustReleased(0, 38) or IsControlJustReleased(0, 214)) then  
+                RageUI.Visible(bonnetMenu, not RageUI.Visible(bonnetMenu))
+            end
+        elseif GetNearZone() == "accessMenu" then 
+            if (IsControlJustReleased(0, 38) or IsControlJustReleased(0, 214)) then  
+                RageUI.Visible(accessMenu, not RageUI.Visible(accessMenu))
+            end
         end
 
-        if RageUI.Visible(tShirtMenu) or RageUI.Visible(pullMenu) or RageUI.Visible(vesteMenu) or RageUI.Visible(pantalonMenu) or RageUI.Visible(chaussureMenu) == true then 
+        if RageUI.Visible(tShirtMenu) or RageUI.Visible(pullMenu) or RageUI.Visible(vesteMenu) or RageUI.Visible(pantalonMenu) or RageUI.Visible(chaussureMenu) or RageUI.Visible(bonnetMenu) or RageUI.Visible(accessMenu) == true then 
             DisableControlAction(0, 140, true) --> DESACTIVER LA TOUCHE POUR PUNCH
             DisableControlAction(0, 172,true) --DESACTIVE CONTROLL HAUT  
         end
