@@ -6,9 +6,6 @@ chaussureMenu = RageUI.CreateMenu("Chaussure",  "Magasin de vetement.")
 bonnetMenu = RageUI.CreateMenu("Chapeau",  "Magasin de vetement.")
 accessMenu = RageUI.CreateMenu("Accessoire",  "Magasin de vetement.")
 
-
-
-local prix = 0
 local itemName = " "
 local Duree = 0
 local index_tShirt, index_pull, indexVeste, indexPantalon, indexChaussure, indexChapeau, indexAccess = 1, 1, 1, 1, 1, 1, 1

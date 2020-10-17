@@ -1,4 +1,3 @@
-Config.Sex = ""
 tTshirtLabel, tTshirtValue = {}, {}
 tPullLabel, tPullValue = {}, {}
 tVesteLabel, tVesteValue = {}, {}
@@ -7,15 +6,6 @@ tChaussureLabel, tChaussureValue = {}, {}
 tChapeauLabel, tChapeauValue = {}, {}
 tAccessLabel, tAccessValue = {}, {}
 
-
-RegisterNetEvent("GTA:GetSexPlayer")
-AddEventHandler("GTA:GetSexPlayer", function() 
-	if IsPedModel(GetPlayerPed(-1), "mp_m_freemode_01") then
-		Config.Sex = "mp_m_freemode_01"
-	else
-		Config.Sex = "mp_f_freemode_01"
-	end
-end)
 
 Ninja_Core__DisplayHelpAlert = function(msg)
 	BeginTextCommandDisplayHelp("STRING");  
@@ -39,7 +29,6 @@ function getSexVetement()
 		end
 	end
 end
-
 
 --> Return vrais si vous êtes proche de la zone :
 function IsNearOfZones()
@@ -66,6 +55,7 @@ function IsNearOfZones()
         local dAccess = getDistance(plyCoords, accessPos, true)
 
 
+
         if (dTShirt <= 1.0) or (dPull <= 1.0) or (dPull <= 1.0) or (dVeste <= 1.0) or (dPantalon <= 1.0) or (dChaussure <= 1.0) or (dChapeau <= 1.0) or (dAccess <= 1.0) then
             return true
         else
@@ -87,7 +77,8 @@ function GetNearZone()
 		local pantalonPos = Config.Locations[i]["MagasinDeVetement"]["PantalonPos"]
 		local chaussurePos = Config.Locations[i]["MagasinDeVetement"]["ChaussurePos"]
 		local chapeauPos = Config.Locations[i]["MagasinDeVetement"]["ChapeauPos"]
-		local accesPos = Config.Locations[i]["MagasinDeVetement"]["AccessoirePos"]
+        local accesPos = Config.Locations[i]["MagasinDeVetement"]["AccessoirePos"]
+        
         
         
         
@@ -198,7 +189,6 @@ end)
 local firstspawn = 0
 AddEventHandler('playerSpawned', function(spawn)
 	if firstspawn == 0 then
-		TriggerEvent("GTA:GetSexPlayer")
         TriggerEvent("GTA:ShowVetementBlips",true)
         getSexMenu = getSexVetement()
         Wait(150)
