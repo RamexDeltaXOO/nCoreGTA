@@ -189,7 +189,6 @@ end)
 local firstspawn = 0
 AddEventHandler('playerSpawned', function(spawn)
 	if firstspawn == 0 then
-        TriggerEvent("GTA:ShowVetementBlips",true)
         getSexMenu = getSexVetement()
         Wait(150)
     
