@@ -1,5 +1,5 @@
 DureeZone = 0
-local isMenuEnable = false
+local isMenuEnableCar = false
 local estJoueurMenotter = false
 local prevMaleVariation = 0
 local prevFemaleVariation = 0
@@ -97,7 +97,7 @@ AddEventHandler("GTA_Police:ValiderVehLSPD", function(pVeh, primaryColor, second
         end
     end
     
-    isMenuEnable = false
+    isMenuEnableCar = false
     
     local monVeh = CreateVehicle(car, 462.95, -1019.51, 28.1, 90.31, true, false)
     SetVehicleColours(monVeh, tonumber(primaryColor), tonumber(secondaryColor))
@@ -282,10 +282,11 @@ Citizen.CreateThread(function()
     while true do
         DureeZone = 250
 
+        if Config.Police.job ~= "LSPD" then
+            return
+        end
+
         if IsNearOfZones() then
-            if Config.Police.job ~= "LSPD" then
-              return
-            end
             DureeZone = 0
 
             if GetLastInputMethod(0) then
@@ -303,7 +304,7 @@ Citizen.CreateThread(function()
             end
         elseif GetNearZone() == "GarageMenu" then 
              if (IsControlJustReleased(0, 38) or IsControlJustReleased(0, 214)) then 
-                isMenuEnable = true
+                isMenuEnableCar = true
                 DoScreenFadeOut(1000)
                 Citizen.Wait(1000)
                 
@@ -333,7 +334,7 @@ Citizen.CreateThread(function()
             DisableControlAction(0, 23, true)
             
             if (IsControlJustReleased(0, 177) or IsControlJustReleased(0, 214)) then
-                isMenuEnable = false
+                isMenuEnableCar = false
                 local veh = GetVehiclePedIsIn(GetPlayerPed(-1)) 
                 SetEntityAsMissionEntity(veh, true, true)
                 Citizen.InvokeNative(0xEA386986E786A54F, Citizen.PointerValueIntInitialized(veh))
@@ -352,7 +353,8 @@ Citizen.CreateThread(function()
     while true do
         if Config.Police.job ~= "LSPD" then
             return
-          end
+        end
+
         if IsControlJustReleased(0, 167) then
             TriggerServerEvent("GTA:LoadJobsJoueur")
             Wait(250)
@@ -364,7 +366,6 @@ Citizen.CreateThread(function()
             DisableControlAction(0, 140, true) --> DESACTIVER LA TOUCHE POUR PUNCH
             DisableControlAction(0, 172,true) --> DESACTIVE CONTROLL HAUT  
         end
-
 
         if estJoueurMenotter == true then
             DisableControlAction(0, 69, true) -- INPUT_VEH_ATTACK
@@ -408,7 +409,7 @@ function Collision()
 end
 
 function Visible()
-    while isMenuEnable == true do
+    while isMenuEnableCar == true do
         Citizen.Wait(0)
         Collision()
     end
