@@ -5,10 +5,6 @@ local qtyArgentPropre = 0;
 local isEnablePosition = false
 
 -----------------------------------------------> Function :
-function LocalPed()
-	return GetPlayerPed(-1)
-end
-
 local function SaisitNombre(max)
     local text = ""
     DisplayOnscreenKeyboard(1, "FMMC_KEY_TTTIP8", "", " ", "", "", "", max)
@@ -111,12 +107,12 @@ local function togglePosition()
 end
 
 -----------------------------------------------> EVENT :
-TriggerServerEvent("GTA:CheckAdmin")
-
 RegisterNetEvent("GTA:UpdatePlayerAdmin")
 AddEventHandler("GTA:UpdatePlayerAdmin", function(admin)
     isPlayerAdmin = admin
 end)
+
+
 
 --> Commande pour se tp sur un marker :
 --> /tpt 
@@ -129,6 +125,8 @@ RegisterCommand("tpt", function()
     end
 end, false)
 
+
+
 --> Commande pour être invincible : 
 --> /Invincible
 RegisterCommand("Invincible", function()
@@ -137,17 +135,6 @@ RegisterCommand("Invincible", function()
     
     if (isPlayerAdmin == true) then 
         toggleGodmode()
-    end
-end, false)
-
---> Commande pour se mettre en No-Clip : 
---> /nc
-RegisterCommand("nc", function()
-    TriggerServerEvent("GTA:CheckAdmin")
-    Wait(50)
-    
-    if (isPlayerAdmin == true) then 
-        toggleNoClip()
     end
 end, false)
 
@@ -193,7 +180,6 @@ RegisterCommand("gas", function(source, args, rawCommand)
 end, false)
 
 
-
 --> Commande pour s'ajouté de l'argent en banque :
 --> /gab montant
 RegisterCommand("gab", function(source, args, rawCommand)
@@ -212,6 +198,7 @@ RegisterCommand("gab", function(source, args, rawCommand)
         end
     end
 end, false)
+
 
 --> Commande pour s'ajouté une arme
 --> Pour vous give une arme faite /givepistol (nombre du munition avec)
@@ -279,6 +266,9 @@ RegisterCommand("pos", function(source, args, rawCommand)
     end
 end, false)
 
+
+--> Commande pour vous give un véhicule
+--> Pour vous give un véhicule faite /v
 RegisterCommand('v', function(source, args, rawCommand)
     local x,y,z = table.unpack(GetOffsetFromEntityInWorldCoords(PlayerPedId(), 0.0, 8.0, 0.5))
     local veh = args[1]
@@ -300,110 +290,7 @@ RegisterCommand('v', function(source, args, rawCommand)
     end)
 end)
 
-conf = {
-    controls = {
-        goUp = 85, -- [[Q]]
-        goDown = 48, -- [[Z]]
-        turnLeft = 34, -- [[A]]
-        turnRight = 35, -- [[D]]
-        goForward = 32,  -- [[W]]
-        goBackward = 33, -- [[S]]
-        changeSpeed = 21, -- [[L-Shift]]
-    },
-
-    speeds = {
-        -- [[If you wish to change the speeds or labels there are associated with then here is the place.]]
-        { label = "Escargot", speed = 0},
-        { label = "Doucement", speed = 0.5},
-        { label = "Normal", speed = 2},
-        { label = "Rapide", speed = 4},
-        { label = "Trop Rapide", speed = 6},
-        { label = "Flash", speed = 10},
-        { label = "Flash V2", speed = 20},
-        { label = "Vitesse Max", speed = 25}
-    },
-
-    offsets = {
-        y = 0.5, -- [[How much distance you move forward and backward while the respective button is pressed]]
-        z = 0.2, -- [[How much distance you move upward and downward while the respective button is pressed]]
-        h = 3, -- [[How much you rotate. ]]
-    },
-}
-
-noclipActive = false
-index = 1 -- [[Used to determine the index of the speeds table.]]
-
-local waitNoclip = 1000
-Citizen.CreateThread(function()
-    buttons = setupScaleform("instructional_buttons")
-    currentSpeed = conf.speeds[index].speed
-    while true do
-        Citizen.Wait(waitNoclip)
-
-        if IsPedInAnyVehicle(PlayerPedId(), false) then
-            noclipEntity = GetVehiclePedIsIn(PlayerPedId(), false)
-        else
-            noclipEntity = PlayerPedId()
-        end
-        
-
-
-        if noclipActive then
-		    waitNoclip = 1
-            DrawScaleformMovieFullscreen(buttons)
-
-            local yoff = 0.0
-            local zoff = 0.0
-
-            if IsControlJustPressed(1, conf.controls.changeSpeed) then
-                if index ~= 8 then
-                    index = index+1
-                    currentSpeed = conf.speeds[index].speed
-                else
-                    currentSpeed = conf.speeds[1].speed
-                    index = 1
-                end
-                setupScaleform("instructional_buttons")
-            end
-
-            if IsControlPressed(0, conf.controls.goForward) then
-                yoff = conf.offsets.y
-            end
-            
-            if IsControlPressed(0, conf.controls.goBackward) then
-                yoff = -conf.offsets.y
-            end
-            
-            if IsControlPressed(0, conf.controls.turnLeft) then
-                SetEntityHeading(noclipEntity, GetEntityHeading(noclipEntity)+conf.offsets.h)
-            end
-            
-            if IsControlPressed(0, conf.controls.turnRight) then
-                SetEntityHeading(noclipEntity, GetEntityHeading(noclipEntity)-conf.offsets.h)
-            end
-            
-            if IsControlPressed(0, conf.controls.goUp) then
-                zoff = conf.offsets.z
-            end
-            
-            if IsControlPressed(0, conf.controls.goDown) then
-                zoff = -conf.offsets.z
-            end
-            
-            local newPos = GetOffsetFromEntityInWorldCoords(noclipEntity, 0.0, yoff * (currentSpeed + 0.3), zoff * (currentSpeed + 0.3))
-            local heading = GetEntityHeading(noclipEntity)
-            SetEntityVelocity(noclipEntity, 0.0, 0.0, 0.0)
-            SetEntityRotation(noclipEntity, 0.0, 0.0, 0.0, 0, false)
-            SetEntityHeading(noclipEntity, heading)
-            SetEntityCoordsNoOffset(noclipEntity, newPos.x, newPos.y, newPos.z, noclipActive, noclipActive, noclipActive)
-		else
-		    waitNoclip = 1000
-        end
-    end
-end)
-
 local waitEnablePostition = 1000
-
 Citizen.CreateThread(function () 
     while true do 
         Citizen.Wait(waitEnablePostition)
@@ -429,15 +316,4 @@ Citizen.CreateThread(function ()
 		    waitEnablePostition = 1000
         end
     end 
-end)
-
-
-AddEventHandler('playerSpawned', function(spawn)
-    TriggerServerEvent("GTA:CheckAdmin")
-    
-    Wait(250)
-
-    if (isPlayerAdmin == true) then
-        TriggerEvent("ActiverNoClipLoop")
-    end
 end)

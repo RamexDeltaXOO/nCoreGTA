@@ -1,7 +1,13 @@
 mainMenu = RageUI.CreateMenu("Emplois",  "Voici la liste des jobs disponible.")
 local Duree = 0
-
 local listEmploi = {}
+
+local Ninja_Core__DisplayHelpAlert = function(msg)
+	BeginTextCommandDisplayHelp("STRING");  
+    AddTextComponentSubstringPlayerName(msg);  
+    EndTextCommandDisplayHelp(0, 0, 1, -1);
+end
+
 RegisterNetEvent("GTA:ListEmploi")
 AddEventHandler("GTA:ListEmploi", function(jobsDispo)
 	for k in pairs(listEmploi) do
@@ -32,11 +38,9 @@ end)
 Citizen.CreateThread(function()
     while true do
         Duree = 250
-        for shop = 1, #Config.Locations do
-           local sPed = Config.Locations[shop]["sPed"]
+        for i = 1, #Config.Locations do
            local plyCoords = GetEntityCoords(GetPlayerPed(-1), false)
-           local dist = GetDistanceBetweenCoords(plyCoords, sPed["x"], sPed["y"], sPed["z"], true)
-
+           local dist = GetDistanceBetweenCoords(plyCoords, Config.Locations[i]["x"], Config.Locations[i]["y"], Config.Locations[i]["z"], true)
             if dist <= 5.0 then
                 Duree = 0
                 if GetLastInputMethod(0) then
@@ -59,4 +63,20 @@ Citizen.CreateThread(function()
         end
        Citizen.Wait(Duree)
    end
+end)
+
+
+Citizen.CreateThread(function()
+    for i = 1, #Config.Locations do
+        blip = AddBlipForCoord(Config.Locations[i]["x"], Config.Locations[i]["y"], Config.Locations[i]["z"])
+
+        SetBlipSprite(blip, 408)
+        SetBlipDisplay(blip, 4)
+        SetBlipScale(blip, 0.9)
+        SetBlipColour(blip, 57)
+        SetBlipAsShortRange(blip, true)
+        BeginTextCommandSetBlipName("STRING")
+        AddTextComponentString("Emplois")
+        EndTextCommandSetBlipName(blip)
+    end
 end)

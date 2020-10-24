@@ -7,7 +7,7 @@ AddEventHandler('GTA_Notif:OnPlayerJoin', function()
 	local source = source
 	local license = ""
     local Identifiers = GetPlayerIdentifiers(source)
-    for i,identifier in ipairs(Identifiers) do
+    for _,identifier in ipairs(Identifiers) do
         if string.find(identifier, "license:") then
             license = identifier
         end
@@ -27,7 +27,7 @@ AddEventHandler('playerDropped', function()
 	local source = source
 	local license = ""
     local Identifiers = GetPlayerIdentifiers(source)
-    for i,identifier in ipairs(Identifiers) do
+    for _,identifier in ipairs(Identifiers) do
         if string.find(identifier, "license:") then
             license = identifier
         end
@@ -44,7 +44,7 @@ AddEventHandler('playerDropped', function()
 end)
 
 function Player:GetLicense(source)
-	for k,v in ipairs(GetPlayerIdentifiers(source)) do
+	for _,v in ipairs(GetPlayerIdentifiers(source)) do
 		if string.sub(v, 1, string.len("license")) == "license" then
 			return v
 		end
@@ -57,7 +57,7 @@ function Player:Find(source, callback)
 	local Parameters = {['license'] = pLicense}
 
 	exports.ghmattimysql:execute("SELECT * FROM gta_joueurs WHERE license = @license", Parameters, function(data)
-		for k, v in pairs(data) do
+		for _, v in pairs(data) do
 			if callback then
 				callback(v)
 			end
@@ -95,7 +95,7 @@ end)
 RegisterServerEvent('GTA:GetInfoJoueurs')  --> cette event sert uniquement a get les donnée de votre perso.
 AddEventHandler('GTA:GetInfoJoueurs', function(source, callback)
 	local src = source
-	for k,v in ipairs(GetPlayerIdentifiers(src)) do
+	for _,v in ipairs(GetPlayerIdentifiers(src)) do
 		if string.sub(v, 1, string.len("license")) == "license" then
 			pLicense = v
 		end
@@ -104,7 +104,7 @@ AddEventHandler('GTA:GetInfoJoueurs', function(source, callback)
 	local Parameters = {['license'] = pLicense}
 	exports.ghmattimysql:scalar("SELECT license FROM gta_joueurs WHERE license = @license", Parameters, function(result)
 		exports.ghmattimysql:execute("SELECT * FROM gta_joueurs WHERE license = @license", Parameters, function(data)
-			for k, v in pairs(data) do
+			for _, v in pairs(data) do
 				if callback then
 					callback(v)
 				end
@@ -116,7 +116,7 @@ end)
 RegisterServerEvent('GTA:CreationJoueur')  --> cette event sert uniquement a créer votre perso.
 AddEventHandler('GTA:CreationJoueur', function(source)
     local src = source
-    for k,v in ipairs(GetPlayerIdentifiers(src)) do
+    for _,v in ipairs(GetPlayerIdentifiers(src)) do
         if string.sub(v, 1, string.len("license")) == "license" then
             pLicense = v
         end
@@ -126,7 +126,7 @@ AddEventHandler('GTA:CreationJoueur', function(source)
 
     local license = ""
     local Identifiers = GetPlayerIdentifiers(source)
-    for i,identifier in ipairs(Identifiers) do
+    for _,identifier in ipairs(Identifiers) do
         if string.find(identifier, "license:") then
             license = identifier
         end
@@ -148,7 +148,7 @@ AddEventHandler('GTA:salaire', function()
 	local src = source
 	local license = ""
     local Identifiers = GetPlayerIdentifiers(src)
-    for i,identifier in ipairs(Identifiers) do
+    for _,identifier in ipairs(Identifiers) do
         if string.find(identifier, "license:") then
             license = identifier
         end

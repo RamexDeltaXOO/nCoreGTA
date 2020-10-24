@@ -6,7 +6,7 @@ AddEventHandler("GTA:SAVEPOS", function( LastPosX , LastPosY , LastPosZ )
 	local source = source
 	local license = ""
     local Identifiers = GetPlayerIdentifiers(source)
-    for i,identifier in ipairs(Identifiers) do
+    for _,identifier in ipairs(Identifiers) do
         if string.find(identifier, "license:") then
             license = identifier
         end
@@ -21,7 +21,7 @@ AddEventHandler("GTA:SPAWNPLAYER", function()
 	local source = source
 	local license = ""
     local Identifiers = GetPlayerIdentifiers(source)
-    for i,identifier in ipairs(Identifiers) do
+    for _,identifier in ipairs(Identifiers) do
         if string.find(identifier, "license:") then
             license = identifier
         end
@@ -31,7 +31,6 @@ AddEventHandler("GTA:SPAWNPLAYER", function()
 
 		Wait(50)
 
-		
 		-- On envoie la derniere position vers le client pour le spawn
 		TriggerClientEvent("GTA:LASTPOS", source, newPos[1], newPos[2], newPos[3])
 	end)
@@ -42,7 +41,7 @@ AddEventHandler("GTA:SetPositionPlayer", function()
 	local source = source
 	local license = ""
     local Identifiers = GetPlayerIdentifiers(source)
-    for i,identifier in ipairs(Identifiers) do
+    for _,identifier in ipairs(Identifiers) do
         if string.find(identifier, "license:") then
             license = identifier
         end

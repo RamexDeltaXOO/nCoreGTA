@@ -12,6 +12,17 @@ AddEventHandler('GTA:updateWeather', function(NewWeather, newblackout)
     blackout = newblackout
 end)
 
+RegisterNetEvent('GTA:updateTime')
+AddEventHandler('GTA:updateTime', function(base, offset, freeze)
+    freezeTime = freeze
+    timeOffset = offset
+    baseTime = base
+end)
+
+AddEventHandler('playerSpawned', function()
+    TriggerServerEvent('GTA:requestSync')
+end)
+
 Citizen.CreateThread(function()
     while true do
         if lastWeather ~= CurrentWeather then
@@ -36,13 +47,6 @@ Citizen.CreateThread(function()
     end
 end)
 
-RegisterNetEvent('GTA:updateTime')
-AddEventHandler('GTA:updateTime', function(base, offset, freeze)
-    freezeTime = freeze
-    timeOffset = offset
-    baseTime = base
-end)
-
 Citizen.CreateThread(function()
     local hour = 0
     local minute = 0
@@ -63,6 +67,3 @@ Citizen.CreateThread(function()
     end
 end)
 
-AddEventHandler('playerSpawned', function()
-    TriggerServerEvent('GTA:requestSync')
-end)

@@ -18,10 +18,10 @@ server_scripts {
 client_scripts {
     'config/config.lua',
     'utils/functionsExported.lua',
-    'client/notif_main.lua',
-    'client/admin_main.lua',
-    'client/main.lua',
-    'client/spawn.lua',
+    'client_main/notif_main.lua',
+    'client_main/admin_main.lua',
+    'client_main/main.lua',
+    'client_main/spawn.lua',
     'synchronisation/client.lua',
     'services/client.lua'
 }

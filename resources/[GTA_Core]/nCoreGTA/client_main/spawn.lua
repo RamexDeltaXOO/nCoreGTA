@@ -1,16 +1,30 @@
 --@Super.Cool.Ninja
 local firstTick = false
-local firstspawn = 0
-local cam = nil
-local cam2 = nil
 local isPlayerSpawn = false
+
+function LocalPed()
+	return GetPlayerPed(-1)
+end
+
+local function spawnPlayerLastPos(PosX, PosY)
+	--Definit la position du joueur : 
+	for height = 1, 1000 do
+		SetPedCoordsKeepVehicle(LocalPed(), tonumber(PosX), tonumber(PosY), height + 0.0)
+
+		local foundGround, zPos = GetGroundZFor_3dCoord(tonumber(PosX), tonumber(PosY), height + 0.0)
+
+		if foundGround then
+			SetPedCoordsKeepVehicle(LocalPed(), tonumber(PosX), tonumber(PosY), height + 0.0)
+			break
+		end
+		Citizen.Wait(1)
+	end
+end
+
 
 RegisterNetEvent("GTA:LASTPOS")
 AddEventHandler("GTA:LASTPOS", function(PosX, PosY, PosZ)
-	--Definit la position du joueur : 
-	SetEntityCoords(GetPlayerPed(-1), tonumber(PosX), tonumber(PosY), tonumber(PosZ) + 0.0, 1, 0, 0, 1)
-	NetworkResurrectLocalPlayer(tonumber(PosX), tonumber(PosY), tonumber(PosZ) + 0.0, 0, true, true, false)
-	SetTimecycleModifier('default')
+	spawnPlayerLastPos(PosX,PosY) 
 end)
 
 RegisterNetEvent("GTA:NewPlayerPosition")
@@ -26,25 +40,9 @@ AddEventHandler("GTA:NewPlayerPosition", function(PosX, PosY, PosZ)
 	
 	Citizen.Wait(1000)
 	
-	--Definit la position du joueur : 
-	SetEntityCoords(GetPlayerPed(-1), tonumber(PosX), tonumber(PosY), tonumber(PosZ) + 0.0, 1, 0, 0, 1)
+
+	spawnPlayerLastPos(PosX, PosY) 
 	NetworkResurrectLocalPlayer(tonumber(PosX), tonumber(PosY), tonumber(PosZ) + 0.0, 0, true, true, false)
-	SetTimecycleModifier('default')
-
-	--> On ajoute une cam de départ : 
-	cam2 = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", -1355.93,-1487.78,520.75, 300.00,0.00,0.00, 100.00, false, 0)
-	PointCamAtCoord(cam2, PosX,PosY,PosZ+200)
-	SetCamActiveWithInterp(cam2, cam, 900, true, true)
-	
-	Citizen.Wait(900)
-
-	--> On ajoute une cam de fin avec une interpolation sur le joueur :
-	cam = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", PosX,PosY,PosZ+200, 300.00,0.00,0.00, 100.00, false, 0)
-	PointCamAtCoord(cam, PosX,PosY,PosZ+2)
-	SetCamActiveWithInterp(cam, cam2, 3700, true, true)
-	
-	Citizen.Wait(3700)
-	
 
 	PlaySoundFrontend(-1, "Zoom_Out", "DLC_HEIST_PLANNING_BOARD_SOUNDS", 1)
 	RenderScriptCams(false, true, 500, true, true)
@@ -59,20 +57,20 @@ AddEventHandler("GTA:NewPlayerPosition", function(PosX, PosY, PosZ)
 		BGColor = "rgba(0, 0, 0, 0.8)"
 	})
 
+	TriggerServerEvent("GTA:CheckAdmin")
 	TriggerServerEvent("GTA_Notif:OnPlayerJoin")
 	TriggerServerEvent("GTA:CreationPersonnage")
 	TriggerServerEvent('GTA:LoadArgent')
 	TriggerEvent("GTA:LoadWeaponPlayer")
 	Citizen.Wait(1700)
 
-	--> on detruit la cam puis rend controlable notre player :
-	SetCamActive(cam, false)
-	DestroyCam(cam, true)
+	--> Rend controlable notre player :
 	FreezeEntityPosition(GetPlayerPed(-1), false)
 	SetEntityVisible(PlayerPedId(), true, 0)
 	DisplayRadar(true)
 	DisplayHud(true)
 	TriggerEvent('EnableDisableHUDFS', true)
+    TriggerServerEvent("GTA:CheckAdmin")
 end)
 
 --> Executer une Une fois la ressource start : 
@@ -91,12 +89,6 @@ AddEventHandler('onClientResourceStart', function (resourceName)
 
 			DisplayHud(false)
 			DisplayRadar(false)
-	
-			SetTimecycleModifier('hud_def_blur')
-			FreezeEntityPosition(GetPlayerPed(-1), true)
-			cam = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", -1355.93,-1487.78,520.75, 300.00,0.00,0.00, 100.00, false, 0)
-			SetCamActive(cam, true)
-			RenderScriptCams(true, false, 1, true, true)
 	
 			if not IsPlayerSwitchInProgress() then
 				SetEntityVisible(PlayerPedId(), false, 0)

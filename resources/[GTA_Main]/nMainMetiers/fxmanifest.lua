@@ -3,9 +3,7 @@ game 'gta5'
 
 dependencies {'ghmattimysql'}
 
-server_scripts {
-    'server/server_main.lua'
-}
+server_script 'server/server_main.lua'
 
 client_scripts {
     "src/RMenu.lua",
@@ -19,6 +17,5 @@ client_scripts {
     "src/menu/windows/*.lua",
 
     'config/config.lua',
-    'client/client_main.lua',
     'client/client_menu.lua'
 }

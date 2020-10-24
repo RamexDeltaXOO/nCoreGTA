@@ -3,13 +3,21 @@ local haveTarget = false
 local isCall = false
 local work = {}
 local target = {}
-
 local square = math.sqrt
+
+
 local function getDistance(a, b) 
     local x, y, z = a.x-b.x, a.y-b.y, a.z-b.z
     return square(x*x+y*y+z*z)
 end
 
+local function AlertNotif()
+    PlaySound(-1, "Out_Of_Bounds_Timer", "DLC_HEISTS_GENERAL_FRONTEND_SOUNDS", 0, 0, 1)
+    Citizen.Wait(600)
+    PlaySound(-1, "Out_Of_Bounds_Timer", "DLC_HEISTS_GENERAL_FRONTEND_SOUNDS", 0, 0, 1)
+    Citizen.Wait(300)
+    PlaySound(-1, "Out_Of_Bounds_Timer", "DLC_HEISTS_GENERAL_FRONTEND_SOUNDS", 0, 0, 1)
+end
 
 local function Ninja_Core__GetPedMugshot(ped) 
 	local mugshot = RegisterPedheadshot(ped)
@@ -32,37 +40,8 @@ local Ninja_Core__ShowNinjaNotification = function(title, subject, msg)
 	UnregisterPedheadshot(mugshot)
 end
 
-Citizen.CreateThread(function()
-    while true do
-        Citizen.Wait(1)
-        if IsControlJustPressed(1, 246) and callActive then
-			if isCall == false then
-				TriggerServerEvent("call:getCall", work)
-                Ninja_Core__ShowNinjaNotification("Notification Alert", "Vous avez pris l'appel.", "")
-				target.blip = AddBlipForCoord(target.pos.x, target.pos.y, target.pos.z)
-				SetBlipRoute(target.blip, true)
-				haveTarget = true
-				isCall = true
-				callActive = false
-			else
-                Ninja_Core__ShowNinjaNotification("Notification Alert", "Vous avez déjà une intervention.", "")
-			end
-        -- Press L key to decline the call
-        elseif IsControlJustPressed(1, 182) and callActive then
-            Ninja_Core__ShowNinjaNotification("Notification Alert", "Vous avez refuser l'appel.", "")
-            callActive = false
-        end
-        if haveTarget then
-            DrawMarker(25, target.pos.x, target.pos.y, target.pos.z-1, 0, 0, 0, 0, 0, 0, 2.001, 2.0001, 0.5001, 255, 255, 0, 200, 0, 0, 0, 0)
-            local playerPos = GetEntityCoords(GetPlayerPed(-1), true)
-            if getDistance(target.pos, playerPos) < 5.0 then
-                RemoveBlip(target.blip)
-                haveTarget = false
-				isCall = false
-            end
-        end
-    end
-end)
+
+
 
 RegisterNetEvent("call:cancelCall")
 AddEventHandler("call:cancelCall", function()
@@ -81,11 +60,7 @@ AddEventHandler("call:callIncoming", function(job, pos, msg)
     PlaySound(-1, "Out_Of_Bounds_Timer", "DLC_HEISTS_GENERAL_FRONTEND_SOUNDS", 0, 0, 1)
     Ninja_Core__ShowNinjaNotification("Notification Alert", "", "~y~ Y ~w~pour prendre l'appel\n ~r~L ~w~ pour ignorer l'appel")
     Citizen.Wait(300)
-    PlaySound(-1, "Out_Of_Bounds_Timer", "DLC_HEISTS_GENERAL_FRONTEND_SOUNDS", 0, 0, 1)
-    Citizen.Wait(600)
-    PlaySound(-1, "Out_Of_Bounds_Timer", "DLC_HEISTS_GENERAL_FRONTEND_SOUNDS", 0, 0, 1)
-    Citizen.Wait(300)
-    PlaySound(-1, "Out_Of_Bounds_Timer", "DLC_HEISTS_GENERAL_FRONTEND_SOUNDS", 0, 0, 1)
+    AlertNotif()
 	if work == "police" or "medic" then
         Ninja_Core__ShowNinjaNotification("Alert : ", " ","~h~ ~r~Situation~w~ :~h~ "..tostring(msg))
 	end
@@ -117,8 +92,6 @@ AddEventHandler('playerDropped', function()
 	TriggerServerEvent("player:serviceOff", nil)
 end)
 
-
-
 --------------||SYSTEM DE CALL||------------------
 RegisterNetEvent('nAppelMobile:callPolice') -------> POLICE
 AddEventHandler('nAppelMobile:callPolice', function()
@@ -149,5 +122,38 @@ AddEventHandler('nAppelMobile:callMedic', function()
     end
     if message ~= nil and message ~= "" then
         TriggerServerEvent("call:makeCall", "medic", {x=plyPos.x,y=plyPos.y,z=plyPos.z}, message)
+    end
+end)
+
+
+Citizen.CreateThread(function()
+    while true do
+        Citizen.Wait(1)
+        if IsControlJustPressed(1, 246) and callActive then
+			if isCall == false then
+				TriggerServerEvent("call:getCall", work)
+                Ninja_Core__ShowNinjaNotification("Notification Alert", "Vous avez pris l'appel.", "")
+				target.blip = AddBlipForCoord(target.pos.x, target.pos.y, target.pos.z)
+				SetBlipRoute(target.blip, true)
+				haveTarget = true
+				isCall = true
+				callActive = false
+			else
+                Ninja_Core__ShowNinjaNotification("Notification Alert", "Vous avez déjà une intervention.", "")
+			end
+        -- Press L key to decline the call
+        elseif IsControlJustPressed(1, 182) and callActive then
+            Ninja_Core__ShowNinjaNotification("Notification Alert", "Vous avez refuser l'appel.", "")
+            callActive = false
+        end
+        if haveTarget then
+            DrawMarker(25, target.pos.x, target.pos.y, target.pos.z-1, 0, 0, 0, 0, 0, 0, 2.001, 2.0001, 0.5001, 255, 255, 0, 200, 0, 0, 0, 0)
+            local playerPos = GetEntityCoords(GetPlayerPed(-1), true)
+            if getDistance(target.pos, playerPos) < 5.0 then
+                RemoveBlip(target.blip)
+                haveTarget = false
+				isCall = false
+            end
+        end
     end
 end)

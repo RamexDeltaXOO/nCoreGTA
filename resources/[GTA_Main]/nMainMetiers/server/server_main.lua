@@ -1,6 +1,5 @@
 --||@SuperCoolNinja.||--
 local jobsDispo = {}
-local ServerCallbacks = {}
 
 function nameJob(metiers)
 	return exports.ghmattimysql:execute("SELECT metiers FROM gta_metiers WHERE metiers = @metiers", {['@metiers'] = tostring(metiers)})
@@ -41,11 +40,11 @@ AddEventHandler("GTA:GetJobsList", function()
 	local source = source
 	local license = GetPlayerIdentifiers(source)[1]
 	exports.ghmattimysql:execute("SELECT metiers FROM gta_metiers WHERE emploi = @emploi", {['@emploi'] = "public"}, function(result)
-		for k, v in pairs(jobsDispo) do
+		for k in pairs(jobsDispo) do
 			jobsDispo[k] = nil
 		end
 
-		for k,v in ipairs(result) do 
+		for k in ipairs(result) do 
 			table.insert(jobsDispo, {
 				jobName = result[k].metiers
 			})
