@@ -6,8 +6,6 @@ MenuActionCivil = RageUI.CreateMenu("Intéraction",  "menu interaction.")
 
 GarageMenu.EnableMouse = false
 
---local subBoissons =  RageUI.CreateSubMenu(mainMenu, "Boissons", "rien de mieux pour s'hydrater !")
---local subMutlimedia =  RageUI.CreateSubMenu(mainMenu, "Mutlimédia", "quoi de mieux que de s'occuper ?")
 local isEnService, isGiletJauneOn, isGiletOn, isVitreTeinteOn = false, false, false, false
 local isMenotter = false
 local index = 1
@@ -140,10 +138,7 @@ Citizen.CreateThread(function()
 
         -- Menu Action LSPD :
         RageUI.IsVisible(MenuAction, function()
-            RageUI.Button("Intéraction Civil", "", {}, true, { 
-                onSelected = function()
-                    
-                end}, MenuActionCivil)
+            RageUI.Button("Intéraction Civil", "", {}, true, {}, MenuActionCivil)
         end, function() end)
 
         -- Menu Intéraction LSPD :

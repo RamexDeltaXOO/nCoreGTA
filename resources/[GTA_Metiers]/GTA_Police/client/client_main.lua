@@ -283,9 +283,9 @@ Citizen.CreateThread(function()
         DureeZone = 250
 
         if IsNearOfZones() then
-            --if Config.Police.job ~= "LSPD" then
-              --  return
-            --end
+            if Config.Police.job ~= "LSPD" then
+              return
+            end
             DureeZone = 0
 
             if GetLastInputMethod(0) then
@@ -350,6 +350,9 @@ end)
 ---> Core du menu Action LSPD :
 Citizen.CreateThread(function()
     while true do
+        if Config.Police.job ~= "LSPD" then
+            return
+          end
         if IsControlJustReleased(0, 167) then
             TriggerServerEvent("GTA:LoadJobsJoueur")
             Wait(250)
