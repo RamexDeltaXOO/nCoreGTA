@@ -24,10 +24,10 @@ Avant de faire quoi que ce soit ! lisez bien.
 - ghmattimysql pour ce qui est de requete sql.
 - connexion du joueur via license, plus besoin de steam.
 - system de service pour recevoir vos call d'urgence.
+- Magasin de vêtement
 
 - System de coma joueur. --> EN PROGRESSION !
 - jobs urgence Police/Medic --> EN PROGRESSION !
-- Magasin de vêtement --> EN PROGRESSION !
 
 
 
