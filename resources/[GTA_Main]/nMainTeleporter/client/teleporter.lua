@@ -54,12 +54,12 @@ Citizen.CreateThread(function ()
                 Duree = 8
 
                 if GetLastInputMethod(0) then
-                    DisplayHelpAlert("~INPUT_TALK~ pour ~g~entrer")
+                    Ninja_Core__DisplayHelpAlert("~INPUT_PICKUP~ pour ~b~intéragir")
                 else
-                    DisplayHelpAlert("~INPUT_CELLPHONE_RIGHT~ pour ~g~entrer")
+                    Ninja_Core__DisplayHelpAlert("~INPUT_CELLPHONE_EXTRA_OPTION~ pour ~b~intéragir")
                 end
 
-                if (IsControlJustReleased(0, 54) or IsControlJustReleased(0, 175)) then
+                if (IsControlJustReleased(0, 38) or IsControlJustReleased(0, 214)) then 
                     if IsPedInAnyVehicle(player, true) then
                         SetEntityCoords(GetVehiclePedIsUsing(player), zone2.x, zone2.y, zone2.z)
                         SetEntityHeading(GetVehiclePedIsUsing(player), zone2.heading)
@@ -77,7 +77,7 @@ Citizen.CreateThread(function ()
                     DisplayHelpAlert("~INPUT_CELLPHONE_RIGHT~ pour ~r~sortir")
                 end
 
-                if (IsControlJustReleased(0, 54) or IsControlJustReleased(0, 175)) then
+                if (IsControlJustReleased(0, 38) or IsControlJustReleased(0, 214)) then 
                     if IsPedInAnyVehicle(player, true) then
                         SetEntityCoords(GetVehiclePedIsUsing(player), zone1.x, zone1.y, zone1.z)
                         SetEntityHeading(GetVehiclePedIsUsing(player), zone1.heading)

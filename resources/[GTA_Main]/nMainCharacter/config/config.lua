@@ -1,75 +1,81 @@
 config = {}
 
-config.Sex = ""
-config.Visage = 0
-config.Peau = 0
-config.Cheveux = 0
-config.CouleurCheveux = 0
-config.Nom = "Sans Nom"
-config.Prenom = "Sans Prenom"
-config.Age = 0
-config.Taille = 0
-config.Origine = "A mettre a jours"
-config.MenuOpen = false
-config.cam = nil
+config.Parents = {mom = 0, dad = 0, ShapeMixData = 0.5, SkinMixData  = 0.5, ressemblance = 5, couleur = 5}
+config.Parents.momIndex = 1
+config.Parents.dadIndex = 1
 
---[[ --=============================================================================
------------------------------- INFO : ----------------------------------------- 
-Pour le system de tenue plus d'info : https://wiki.rage.mp/index.php?title=Clothes
+config.isMenuEnable = false
+config.Camera = {
+    face = {x = 402.92, y = -1000.72, z = -98.45, fov = 10.00},
+    body = {x = 402.92, y = -1000.72, z = -99.01, fov = 30.00},
+    cam = nil,
+    cam2 = nil,
+    cam3 = nil
+}
 
-config.Tops = ID COMPONENT : 11
-config.Undershirts = ID COMPONENT : 8
-config.Shoes = ID COMPONENT : 6
-config.Legs = ID COMPONENT : 4
-config.Torsos = ID COMPONENT : 3
---=============================================================================]]
+config.CamPerso = nil
+config.PlayerSpawnPos = {x = -1042.635, y =-2745.828, z = 21.359, h = -30.0}
 
---[[ --=============================================================================
-    ------------------------------ INFO : ----------------------------------------- 
-Pour modifier la couleur de votre menu, vous pouvez vous rendre sur : https://www.rapidtables.com/web/color/RGB_Color.html
-R = Rouge
-G = Vert
-B = Bleu
-A = Opacité
+config.Sex = "mp_m_freemode_01"
+config.Character = {
+    sex = {"Homme", "Femme"},
+    index_sex = 1,
+    mom = { "Hannah", "Aubrey", "Jasmine", "Gisele", "Amelia", "Isabella", "Zoe", "Ava", "Camila", "Violet", "Sophia", "Evelyn", "Nicole", "Ashley", "Gracie", "Brianna", "Natalie", "Olivia", "Elizabeth", "Charlotte", "Emma" },
+    dad = { "Benjamin", "Daniel", "Joshua", "Noah", "Andrew", "Juan", "Alex", "Isaac", "Evan", "Ethan", "Vincent", "Angel", "Diego", "Adrian", "Gabriel", "Michael", "Santiago", "Kevin", "Louis", "Samuel", "Anthony", " Claude", "Niko" },
+    hairCut = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 ,16, 17, 18, 19, 20, 21, 22, 23},
+    hairIndex = 1,
+    hairColors = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 ,16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30},
+    hairColorIndex = 1,
+    eyesColor = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20},
+    eyesColorIndex = 20,
+    nom = "Sans Nom",
+    prenom = "Sans Prenom",
+    age = 0,
+    taille = 0,
+    nationaliter = ""
+}
 
-
-couleurTopMenu = --> Couleur sur la barre au top du menu la ou se situe le titre de votre main menu.
-couleurTextMenu = --> Couleur du text en général quand vous ouvré votre menu.
-couleurTextSelectMenu = --> Couleur du text qui change quand vous le séléctionner.
-couleurRectSelectMenu = --> Couleur de la barre qui s'affiche quand vous séléctionner un boutton.
---=============================================================================]]
-
-
----> Couleur du rect au top du menu :
-couleurTopMenu = {}
-
-couleurTopMenu.r = 0
-couleurTopMenu.g = 0
-couleurTopMenu.b = 0
-couleurTopMenu.a = 255
-
----> Couleur du rect de séléction :
-couleurRectSelectMenu = {}
-
-couleurRectSelectMenu.r = 255
-couleurRectSelectMenu.g = 255
-couleurRectSelectMenu.b = 255
-couleurRectSelectMenu.a = 255
-
-
----> Couleur du text principale :
-couleurTextMenu = {}
-
-couleurTextMenu.r = 255
-couleurTextMenu.g = 255
-couleurTextMenu.b = 255
-couleurTextMenu.a = 255
-
-
----> Couleur du text qui change une fois le button séléctionner :
-couleurTextSelectMenu = {}
-
-couleurTextSelectMenu.r = 0
-couleurTextSelectMenu.g = 0
-couleurTextSelectMenu.b = 0
-couleurTextSelectMenu.a = 255
+config.Outfit = {
+	{
+		label = 'Tenue Détente',
+		id = {
+			male = {
+				Tops = {componentId = 11, drawableId = 126, textureId = 10, paletteId = 0},
+                Undershirts = {componentId = 8, drawableId = 15, textureId= 0,paletteId = 0},
+                Shoes = {componentId = 6, drawableId = 12, textureId = 0, paletteId = 0},
+                Accessories = {componentId = 7, drawableId = 0, textureId = 0, paletteId = 0},
+                Legs = {componentId = 4, drawableId = 82, textureId = 0,  paletteId = 0},
+                Torsos = {componentId = 3, drawableId = 1, textureId = 0, paletteId = 0}
+			},
+			female = {
+                Tops = {componentId = 11, drawableId = 106, textureId = 0, paletteId = 0},
+                Undershirts = {componentId = 8, drawableId = 15, textureId= 0,paletteId = 0},
+                Shoes = {componentId = 6, drawableId = 32, textureId = 0, paletteId = 0},
+                Accessories = {componentId = 7, drawableId = 0, textureId = 0, paletteId = 0},
+                Legs = {componentId = 4, drawableId = 44, textureId = 0,  paletteId = 0},
+                Torsos = {componentId = 3, drawableId = 6, textureId = 0, paletteId = 0}
+			}
+		}
+	},
+	{
+		label = 'Tenue Pro',
+		id = {
+			male = {
+                Tops = {componentId = 11, drawableId = 10, textureId = 0, paletteId = 0},
+                Undershirts = {componentId = 8, drawableId = 10, textureId= 0,paletteId = 0},
+                Shoes = {componentId = 6, drawableId = 10, textureId = 0, paletteId = 0},
+                Accessories = {componentId = 7, drawableId = 12, textureId = 2, paletteId = 0},
+                Legs = {componentId = 4, drawableId = 10, textureId = 0, paletteId = 0},
+                Torsos = {componentId = 3, drawableId = 4, textureId = 0,paletteId = 0}
+			},
+			female = {
+                Tops = {componentId = 11, drawableId = 6, textureId = 0, paletteId = 0},
+                Undershirts = {componentId = 8, drawableId = 41, textureId= 0,paletteId = 0},
+                Shoes = {componentId = 6, drawableId = 6, textureId = 0, paletteId = 0},
+                Accessories = {componentId = 7, drawableId = 0, textureId = 0, paletteId = 0},
+                Legs = {componentId = 4, drawableId = 7, textureId = 0, paletteId = 0},
+                Torsos = {componentId = 3, drawableId = 5, textureId = 0,paletteId = 0}
+			}
+		}
+	}
+}

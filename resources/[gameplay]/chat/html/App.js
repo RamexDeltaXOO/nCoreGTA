@@ -86,7 +86,7 @@ window.APP = {
         return;
       }
       if (!suggestion.params) {
-        suggestion.params = []; //TODO Move somewhere else
+        suggestion.params = [];
       }
       this.backingSuggestions.push(suggestion);
     },

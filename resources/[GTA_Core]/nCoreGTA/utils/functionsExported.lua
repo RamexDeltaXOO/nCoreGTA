@@ -1,124 +1,3 @@
-
-
-local body = {
-	scale = 0.3,
-	offsetLine = 0.02,
-	offsetX = 0.005,
-	offsetY = 0.004,
-	dict = 'commonmenu',
-	sprite = 'gradient_bgd',
-	width = 0.14,
-	height = 0.012,
-	heading = -90.0,
-	gap = 0.002,
-}
-
-RequestStreamedTextureDict(body.dict)
-
-
---> NOTIF SOUND :	PlaySoundFrontend(-1, "Goon_Paid_Small", "GTAO_Boss_Goons_FM_Soundset", 0)
- 
-
-local function goDown(v, id) -- Notifications will go under the previous notifications
-	for i = 1, #v do
-		if v[i].draw and i ~= id then
-			v[i].y = v[i].y + (body.height + (v[id].lines*2 + 1)*body.offsetLine)/2 + body.gap
-		end
-	end
-end
-
-local function goUp(v, id) -- Notifications will go above the previous notifications
-	for i = 1, #v do
-		if v[i].draw and i ~= id then
-			v[i].y = v[i].y - (body.height + (v[id].lines*2 + 1)*body.offsetLine)/2 - body.gap
-		end
-	end
-end
-
-local function centeredDown(v, id) -- Notification will stay centered from the default position and new notification will go at the bottom
-	for i = 1, #v do
-		if v[i].draw and i ~= id then
-			v[i].y = v[i].y - (body.height + (v[id].lines*2 + 1)*body.offsetLine)/4 - body.gap/2
-			v[id].y = v[i].y + (body.height + (v[id].lines*2 + 1)*body.offsetLine)/2 + body.gap
-		end
-	end
-end
-
-local function centeredUp(v, id) -- Notification will stay centered from the default position and new notification will go at the top
-	for i = 1, #v do
-		if v[i].draw and i ~= id then
-			v[i].y = v[i].y + (body.height + (v[id].lines*2 + 1)*body.offsetLine)/4 + body.gap/2
-			v[id].y = v[i].y - (body.height + (v[id].lines*2 + 1)*body.offsetLine)/2 - body.gap
-		end
-	end
-end
-
-local function CountLines(v, text)
-	BeginTextCommandLineCount("STRING")
-    SetTextScale(body.scale, body.scale)
-    SetTextWrap(v.x, v.x + body.width - body.offsetX)
-	AddTextComponentSubstringPlayerName(text)
-	local nbrLines = GetTextScreenLineCount(v.x + body.offsetX, v.y + body.offsetY)
-	return nbrLines
-end
-
-local function DrawText(v, text)
-	SetTextScale(body.scale, body.scale)
-    SetTextWrap(v.x, v.x + body.width - body.offsetX)
-
-    BeginTextCommandDisplayText("STRING")
-    AddTextComponentSubstringPlayerName(text)
-    EndTextCommandDisplayText(v.x + body.offsetX, v.y + body.offsetY)
-end
-
-local function DrawBackground(v)
-	DrawSprite(body.dict, body.sprite, v.x + body.width/2, v.y + (body.height + v.lines*body.offsetLine)/2, body.width, body.height + v.lines*body.offsetLine, body.heading, 255, 255, 255, 255)
-end
-
-local positions = {
-	['centrerDroit'] = { x = 0.85, y = 0.5, notif = {}, offset = centeredUp },
-	['centrerGauche'] = { x = 0.01, y = 0.5, notif = {}, offset = centeredUp },
-	['hautDroit'] = { x = 0.85, y = 0.015, notif = {}, offset = goDown },
-	['hautGauche'] = { x = 0.01, y = 0.015, notif = {}, offset = goDown },
-	['milieuDroit'] = { x = 0.85, y = 0.955, notif = {}, offset = goUp },
-	['milieuGauche'] = { x = 0.015, y = 0.75, notif = {}, offset = goUp },
-	['basGauche'] = { x = 0.16, y = 0.93, notif = {}, offset = goUp },
-}
-
-function nNotificationMain(options)
-	local text = options.text
-	local type = options.type
-	local nTimeNotif = options.nTimeNotif
-
-	local p = positions[type]
-	local id = #p.notif + 1
-	local nbrLines = CountLines(p, text)
-
-	p.notif[id] = {
-		x = p.x,
-		y = p.y,
-		lines = nbrLines, 
-		draw = true,
-	}
-
-	if id > 1 then
-		p.offset(p.notif, id)
-	end
-
-	Citizen.CreateThread(function()
-		Wait(nTimeNotif)
-		p.notif[id].draw = false
-	end)
-
-	Citizen.CreateThread(function()
-		while p.notif[id].draw do
-			Wait(0)
-			DrawBackground(p.notif[id])
-			DrawText(p.notif[id], text)
-		end
-	end)
-end
-
 -----||Notification utilisé plus souvent coté serveur||-----
 function ShowNotification(text)
     SetNotificationTextEntry( "STRING" )
@@ -157,7 +36,7 @@ Ninja_Core__ShowNinjaNotification = function(title, subject, msg)
 end
 ]]
 
------||Uniquement utilis� pour l'interaction avec peds||-----
+-----||Interaction avec peds||-----
 Ninja_Core_PedsText = function(text, time)
     ClearPrints()
     SetTextEntry_2("STRING")
@@ -165,7 +44,7 @@ Ninja_Core_PedsText = function(text, time)
     DrawSubtitleTimed(time, 1)
 end
 
------||Uniquement utilis� pour les start vos anims||-----
+-----||Start vos anims||-----
 Ninja_Core_StartAnim = function(entity, lib, anim)
     RequestAnimDict(lib)
     while not HasAnimDictLoaded(lib) do
@@ -174,7 +53,7 @@ Ninja_Core_StartAnim = function(entity, lib, anim)
 	TaskPlayAnim(entity, lib, anim, 8.0, -8.0, -1, 0, 0, false, false, false)
 end
 
------||Uniquement utiliser pour les Anim Set Attitude (demarche)||-----
+-----||Anim Set Attitude (demarche)||-----
 Ninja_Core_nRequestAnimSet = function(lib, animSet)
 	if not HasAnimSetLoaded(animSet) then
 		RequestAnimSet(animSet)
@@ -264,4 +143,91 @@ function progression(time)
 		display = true,
 		time = time
 	})
+end
+
+
+TextHeight = GetTextScaleHeight(config.Scale, config.Font)
+function GetCharacterCount(string)
+    local len = 0
+    for c in string:gmatch("[%z\1-\127\194-\244][\128-\191]*") do
+        len = len + 1
+    end
+    return len
+end
+
+function GetLineCount(Text, X, Y, X1, X2)
+    SetTextFont(config.Font)
+    SetTextScale(config.Scale, config.Scale)
+    SetTextColour(255, 255, 255, 255)
+    SetTextDropShadow()
+    SetTextEdge(4, 0, 0, 0, 255)
+    SetTextOutline()
+    SetTextWrap(X1, X2)
+
+    BeginTextCommandLineCount("STRING")
+
+    local chars = GetCharacterCount(Text)
+    if chars < 100 then
+        AddTextComponentSubstringPlayerName(Text)
+    else
+        local len = (chars % 100 == 0) and chars / 100 or (chars / 100) + 1
+        for i = 0, len do
+            AddTextComponentSubstringPlayerName(Text:sub(i * 100, (i * 100) + 100))
+        end
+    end
+
+    return EndTextCommandGetLineCount(X, Y)
+end
+
+function GetMessageHeight(Message, X, Y)
+    local Lines = GetLineCount(Message.Message,
+        X,
+        Y,
+        (config.Positions[config.Position].x - (config.Width / 2)) + config.Padding, 
+        (config.Positions[config.Position].x + (config.Width / 2)) - config.Padding                            
+    ) 
+
+    Message.Lines = Lines  
+
+    return (TextHeight * Lines) + (config.Padding * 2)
+end
+
+function RenderText(Text, X, Y, A, X1, X2)
+    SetTextWrap(X1, X2)
+    SetTextFont(config.Font)
+    SetTextProportional(true)
+    SetTextScale(config.Scale, config.Scale)
+    SetTextColour(255, 255, 255, A)
+    SetTextDropShadow(0, 0, 0, 0, A)
+    SetTextDropShadow()
+    SetTextEdge(4, 0, 0, 0, A)
+    SetTextOutline()
+    SetTextEntry("STRING")
+    AddTextComponentSubstringPlayerName(Text)
+    DrawText(X, Y)
+end
+
+function showLoadingPromt(label, time)
+    Citizen.CreateThread(function()
+        BeginTextCommandBusyString(tostring(label))
+        EndTextCommandBusyString(3)
+        Citizen.Wait(time)
+        RemoveLoadingPrompt()
+    end)
+end
+
+function DrawMissionText(m_text, showtime)
+    ClearPrints()
+	SetTextScale(0.5, 0.5)
+	SetTextFont(0)
+	SetTextProportional(1)
+	SetTextColour(255, 255, 255, 255)
+	SetTextDropshadow(0, 0, 0, 0, 255)
+	SetTextEdge(2, 0, 0, 0, 150)
+	SetTextDropShadow()
+	SetTextOutline()
+	SetTextEntry("STRING")
+	SetTextCentre(1)
+	AddTextComponentString(m_text)
+	DrawText(0.5, 0.9)
 end

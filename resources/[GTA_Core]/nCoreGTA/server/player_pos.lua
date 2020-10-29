@@ -6,7 +6,7 @@ AddEventHandler("GTA:SAVEPOS", function( LastPosX , LastPosY , LastPosZ )
 	local source = source
 	local license = ""
     local Identifiers = GetPlayerIdentifiers(source)
-    for i,identifier in ipairs(Identifiers) do
+    for _,identifier in ipairs(Identifiers) do
         if string.find(identifier, "license:") then
             license = identifier
         end
@@ -21,18 +21,37 @@ AddEventHandler("GTA:SPAWNPLAYER", function()
 	local source = source
 	local license = ""
     local Identifiers = GetPlayerIdentifiers(source)
-    for i,identifier in ipairs(Identifiers) do
+    for _,identifier in ipairs(Identifiers) do
         if string.find(identifier, "license:") then
             license = identifier
         end
     end
 	exports.ghmattimysql:scalar("SELECT lastpos FROM gta_joueurs WHERE ?", {{['license'] = license}}, function(lastpos)
-		local ToSpawnPos = json.decode(lastpos)
-		local PosX = ToSpawnPos[1]
-		local PosY = ToSpawnPos[2]
-		local PosZ = ToSpawnPos[3]
+		local newPos = json.decode(lastpos)
+
+		Wait(50)
 
 		-- On envoie la derniere position vers le client pour le spawn
-		TriggerClientEvent("GTA:LASTPOS", source, PosX, PosY, PosZ)
+		TriggerClientEvent("GTA:LASTPOS", source, newPos[1], newPos[2], newPos[3])
+	end)
+end)
+
+RegisterServerEvent("GTA:SetPositionPlayer")
+AddEventHandler("GTA:SetPositionPlayer", function()
+	local source = source
+	local license = ""
+    local Identifiers = GetPlayerIdentifiers(source)
+    for _,identifier in ipairs(Identifiers) do
+        if string.find(identifier, "license:") then
+            license = identifier
+        end
+    end
+	exports.ghmattimysql:scalar("SELECT lastpos FROM gta_joueurs WHERE ?", {{['license'] = license}}, function(lastpos)
+		local newPos = json.decode(lastpos)
+
+		Wait(50)
+
+		-- On envoie la derniere position vers le client pour le spawn
+		TriggerClientEvent("GTA:NewPlayerPosition", source, newPos[1], newPos[2], newPos[3])
 	end)
 end)

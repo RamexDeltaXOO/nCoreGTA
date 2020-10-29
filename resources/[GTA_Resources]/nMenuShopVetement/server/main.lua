@@ -1,141 +1,150 @@
-RegisterServerEvent("GTA:UpdateTShirtVestePull")
-AddEventHandler("GTA:UpdateTShirtVestePull", function(topsid, topsdraw, topscouleur, torsosid, torsosdraw, undershirtid, undershirtdraw, prix)
-local source = source
-local license = GetPlayerIdentifiers(source)[1]
-prix = prix or 0
-
-TriggerEvent('GTA:GetInfoJoueurs', source, function(data)
-        local argentPropre = data.argent_propre
-
-        if (tonumber(argentPropre) >= prix) then
-            exports.ghmattimysql:execute(
-                "UPDATE gta_joueurs_vetement SET topsID=@topsid, topsDraw=@topsdraw, topsCouleur=@topscouleur, undershirtsID=@undershirtid,undershirtsDraw=@undershirtdraw,torsosID=@torsosid,torsosDraw=@torsosdraw WHERE license=@license", {
-                ['@license'] = license,
-                ['@topsid'] = topsid, 
-                ['@topsdraw'] = topsdraw,
-                ['@topscouleur'] = topscouleur, 
-                ['@undershirtid'] = undershirtid, 
-                ['@undershirtdraw'] = undershirtdraw, 
-                ['@torsosid'] = torsosid, 
-                ['@torsosdraw'] = torsosdraw})
+RegisterServerEvent("GTA_Vetement:NouveauTshirt")
+AddEventHandler("GTA_Vetement:NouveauTshirt", function(drawID, couleurID, prix, torsosID, undershirtID)
+    prix = prix or 0
+    local source = source	
+    local player = GetPlayerIdentifiers(source)[1]
+    TriggerEvent('GTA:GetInfoJoueurs', source, function(data)
+        if (data.argent_propre >= prix) then 
             TriggerEvent('GTA:RetirerArgentPropre', source, tonumber(prix))
-            TriggerClientEvent('nMenuNotif:showNotification', source, "~g~Tenue reçue !")
+			TriggerClientEvent('nMenuNotif:showNotification', source, "Paiement accepté !")
+            exports.ghmattimysql:execute(
+                "UPDATE gta_joueurs_vetement SET topsDraw=@drawID,topsCouleur=@couleurID, torsosDraw=@torsosDraw, undershirtsDraw=@undershirtsDraw WHERE license=@license", {
+                ['@license'] = player,
+                ['@drawID'] = drawID, 
+                ['@couleurID'] = couleurID,
+                ['@torsosDraw'] = torsosID,
+                ['@undershirtsDraw'] = undershirtID
+            })
         else
-            TriggerClientEvent('nMenuNotif:showNotification', source, "~r~Tu n'as pas suffisamment d'argent !")
+			TriggerClientEvent('nMenuNotif:showNotification', source, "Paiement refusé !")
         end
-        TriggerClientEvent('GTA_Vetement:ChargerTenuePersoaa', source)
     end)
 end)
 
-
-RegisterServerEvent("GTA:UpdateSousVeste")
-AddEventHandler("GTA:UpdateSousVeste", function(undershirtid, undershirtdraw, prix)
-	local source = source
-	local license = GetPlayerIdentifiers(source)[1]
+RegisterServerEvent("GTA_Vetement:NouveauPull")
+AddEventHandler("GTA_Vetement:NouveauPull", function(drawID, couleurID, prix, torsosID, undershirtID)
     prix = prix or 0
+    local source = source	
+    local player = GetPlayerIdentifiers(source)[1]
     TriggerEvent('GTA:GetInfoJoueurs', source, function(data)
-        local argentPropre = data.argent_propre
-        if (tonumber(argentPropre) >= prix) then
-            exports.ghmattimysql:execute(
-                "UPDATE gta_joueurs_vetement SET undershirtsID=@undershirtid,undershirtsDraw=@undershirtdraw WHERE license=@license", {
-                ['@license'] = license,
-                ['@undershirtid'] = undershirtid, 
-                ['@undershirtdraw'] = undershirtdraw})
+        if (data.argent_propre >= prix) then 
             TriggerEvent('GTA:RetirerArgentPropre', source, tonumber(prix))
-            TriggerClientEvent('nMenuNotif:showNotification', source, "~g~Tenue reçue !")
+			TriggerClientEvent('nMenuNotif:showNotification', source, "Paiement accepté !")
+            exports.ghmattimysql:execute(
+                "UPDATE gta_joueurs_vetement SET topsDraw=@drawID,topsCouleur=@couleurID, torsosDraw=@torsosDraw, undershirtsDraw=@undershirtsDraw WHERE license=@license", {
+                ['@license'] = player,
+                ['@drawID'] = drawID, 
+                ['@couleurID'] = couleurID,
+                ['@torsosDraw'] = torsosID,
+                ['@undershirtsDraw'] = undershirtID
+            })
         else
-            TriggerClientEvent('nMenuNotif:showNotification', source, "~r~Tu n'as pas suffisamment d'argent !")
+			TriggerClientEvent('nMenuNotif:showNotification', source, "Paiement refusé !")
         end
-        TriggerClientEvent('GTA_Vetement:ChargerTenuePersoaa', source)
     end)
 end)
 
-RegisterServerEvent("GTA:UpdatePantalonShop")
-AddEventHandler("GTA:UpdatePantalonShop", function(legsid, legsdraw, legscouleur, prix)
-	local source = source
-    local license = GetPlayerIdentifiers(source)[1]
+RegisterServerEvent("GTA_Vetement:NouvelVeste")
+AddEventHandler("GTA_Vetement:NouvelVeste", function(drawID, couleurID, prix, torsosID, undershirtID)
     prix = prix or 0
-
+    local source = source	
+    local player = GetPlayerIdentifiers(source)[1]
     TriggerEvent('GTA:GetInfoJoueurs', source, function(data)
-        local argentPropre = data.argent_propre
-        if (tonumber(argentPropre) >= prix) then
-            exports.ghmattimysql:execute(
-                "UPDATE gta_joueurs_vetement SET legsID=@legsid,legsDraw=@legsdraw, legsCouleur=@legscouleur WHERE license=@license", {
-                ['@license'] = license,
-                ['@legsid'] = legsid, 
-                ['@legsdraw'] = legsdraw,
-                ['@legscouleur'] = legscouleur})
+        if (data.argent_propre >= prix) then 
             TriggerEvent('GTA:RetirerArgentPropre', source, tonumber(prix))
-            TriggerClientEvent('nMenuNotif:showNotification', source, "~g~Tenue reçue !")
+			TriggerClientEvent('nMenuNotif:showNotification', source, "Paiement accepté !")
+            exports.ghmattimysql:execute(
+                "UPDATE gta_joueurs_vetement SET topsDraw=@drawID,topsCouleur=@couleurID, torsosDraw=@torsosDraw, undershirtsDraw=@undershirtsDraw WHERE license=@license", {
+                ['@license'] = player,
+                ['@drawID'] = drawID, 
+                ['@couleurID'] = couleurID,
+                ['@torsosDraw'] = torsosID,
+                ['@undershirtsDraw'] = undershirtID
+            })
         else
-            TriggerClientEvent('nMenuNotif:showNotification', source, "~r~Tu n'as pas suffisamment d'argent !")
+			TriggerClientEvent('nMenuNotif:showNotification', source, "Paiement refusé !")
         end
-        TriggerClientEvent('GTA_Vetement:ChargerTenuePerso', source)
     end)
 end)
 
-RegisterServerEvent("GTA:UpdateChaussure")
-AddEventHandler("GTA:UpdateChaussure", function(shoesid, shoesdraw, prix)
-	local source = source
-    local license = GetPlayerIdentifiers(source)[1]
+RegisterServerEvent("GTA_Vetement:NouveauPantalon")
+AddEventHandler("GTA_Vetement:NouveauPantalon", function(drawID, couleurID, prix)
     prix = prix or 0
+    local source = source	
+    local player = GetPlayerIdentifiers(source)[1]
     TriggerEvent('GTA:GetInfoJoueurs', source, function(data)
-        local argentPropre = data.argent_propre
-        if (tonumber(argentPropre) >= prix) then
-            exports.ghmattimysql:execute(
-                "UPDATE gta_joueurs_vetement SET shoesID=@shoesid,shoesDraw=@shoesdraw WHERE license=@license", {
-                ['@license'] = license,
-                ['@shoesid'] = shoesid, 
-                ['@shoesdraw'] = shoesdraw})
+        if (data.argent_propre >= prix) then 
             TriggerEvent('GTA:RetirerArgentPropre', source, tonumber(prix))
-            TriggerClientEvent('nMenuNotif:showNotification', source, "~g~Tenue reçue !")
+			TriggerClientEvent('nMenuNotif:showNotification', source, "Paiement accepté !")
+            exports.ghmattimysql:execute(
+                "UPDATE gta_joueurs_vetement SET legsDraw=@drawID,legsCouleur=@couleurID WHERE license=@license", {
+                ['@license'] = player,
+                ['@drawID'] = drawID, 
+                ['@couleurID'] = couleurID
+            })
         else
-            TriggerClientEvent('nMenuNotif:showNotification', source, "~r~Tu n'as pas suffisamment d'argent !")
+			TriggerClientEvent('nMenuNotif:showNotification', source, "Paiement refusé !")
         end
-        TriggerClientEvent('GTA_Vetement:ChargerTenuePerso', source)
     end)
 end)
 
-RegisterServerEvent("GTA:UpdateAccessoires")
-AddEventHandler("GTA:UpdateAccessoires", function(acessoireid, acessoiredraw, prix)
-	local source = source
-    local license = GetPlayerIdentifiers(source)[1]
+RegisterServerEvent("GTA_Vetement:NouvelChaussure")
+AddEventHandler("GTA_Vetement:NouvelChaussure", function(drawID, couleurID, prix)
     prix = prix or 0
+    local source = source	
+    local player = GetPlayerIdentifiers(source)[1]
     TriggerEvent('GTA:GetInfoJoueurs', source, function(data)
-        local argentPropre = data.argent_propre
-        if (tonumber(argentPropre) >= prix) then
-            exports.ghmattimysql:execute(
-                "UPDATE gta_joueurs_vetement SET AccessoiresID=@acessoireid, AccessoiresDraw=@acessoiredraw WHERE license=@license", {
-                ['@license'] = license,
-                ['@acessoireid'] = acessoireid, 
-                ['@acessoiredraw'] = acessoiredraw})
+        if (data.argent_propre >= prix) then 
             TriggerEvent('GTA:RetirerArgentPropre', source, tonumber(prix))
-            TriggerClientEvent('nMenuNotif:showNotification', source, "~g~Tenue reçue !")
+			TriggerClientEvent('nMenuNotif:showNotification', source, "Paiement accepté !")
+            exports.ghmattimysql:execute(
+                "UPDATE gta_joueurs_vetement SET shoesDraw=@drawID,shoesCouleur=@couleurID WHERE license=@license", {
+                ['@license'] = player,
+                ['@drawID'] = drawID, 
+                ['@couleurID'] = couleurID
+            })
         else
-            TriggerClientEvent('nMenuNotif:showNotification', source, "~r~Tu n'as pas suffisamment d'argent !")
+			TriggerClientEvent('nMenuNotif:showNotification', source, "Paiement refusé !")
         end
-        TriggerClientEvent('GTA_Vetement:ChargerTenuePerso', source)
     end)
 end)
 
-RegisterServerEvent("GTA:UpdateChapeau")
-AddEventHandler("GTA:UpdateChapeau", function(hatsid, hatsdraw, prix)
-	local source = source
-    local license = GetPlayerIdentifiers(source)[1]
+RegisterServerEvent("GTA_Vetement:NouveauBonnet")
+AddEventHandler("GTA_Vetement:NouveauBonnet", function(drawID, prix)
     prix = prix or 0
+    local source = source	
+    local player = GetPlayerIdentifiers(source)[1]
     TriggerEvent('GTA:GetInfoJoueurs', source, function(data)
-        local argentPropre = data.argent_propre
-        if (tonumber(argentPropre) >= prix) then
-            exports.ghmattimysql:execute(
-                "UPDATE gta_joueurs_vetement SET HatsID=@hatsid, HatsDraw=@hatsdraw WHERE license=@license", {
-                ['@license'] = license,
-                ['@hatsid'] = hatsid, 
-                ['@hatsdraw'] = hatsdraw})
+        if (data.argent_propre >= prix) then 
             TriggerEvent('GTA:RetirerArgentPropre', source, tonumber(prix))
-            TriggerClientEvent('nMenuNotif:showNotification', source, "~g~Tenue reçue !")
+			TriggerClientEvent('nMenuNotif:showNotification', source, "Paiement accepté !")
+            exports.ghmattimysql:execute(
+                "UPDATE gta_joueurs_vetement SET HatsDraw=@drawID WHERE license=@license", {
+                ['@license'] = player,
+                ['@drawID'] = drawID
+            })
         else
-            TriggerClientEvent('nMenuNotif:showNotification', source, "~r~Tu n'as pas suffisamment d'argent !")
+			TriggerClientEvent('nMenuNotif:showNotification', source, "Paiement refusé !")
         end
-        TriggerClientEvent('GTA_Vetement:ChargerTenuePerso', source)
+    end)
+end)
+
+RegisterServerEvent("GTA_Vetement:NouveauAccessoire")
+AddEventHandler("GTA_Vetement:NouveauAccessoire", function(drawID, prix)
+    prix = prix or 0
+    local source = source	
+    local player = GetPlayerIdentifiers(source)[1]
+    TriggerEvent('GTA:GetInfoJoueurs', source, function(data)
+        if (data.argent_propre >= prix) then 
+            TriggerEvent('GTA:RetirerArgentPropre', source, tonumber(prix))
+			TriggerClientEvent('nMenuNotif:showNotification', source, "Paiement accepté !")
+            exports.ghmattimysql:execute(
+                "UPDATE gta_joueurs_vetement SET AccessoiresDraw=@drawID WHERE license=@license", {
+                ['@license'] = player,
+                ['@drawID'] = drawID
+            })
+        else
+			TriggerClientEvent('nMenuNotif:showNotification', source, "Paiement refusé !")
+        end
     end)
 end)

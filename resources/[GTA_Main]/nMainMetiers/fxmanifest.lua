@@ -1,18 +1,21 @@
 fx_version 'cerulean'
-games { 'gta5' }
-
+game 'gta5'
 
 dependencies {'ghmattimysql'}
 
-files {
-    'json/**/*'
-}
-
-server_script 'server/main.lua'
+server_script 'server/server_main.lua'
 
 client_scripts {
+    "src/RMenu.lua",
+    "src/menu/RageUI.lua",
+    "src/menu/Menu.lua",
+    "src/menu/MenuController.lua",
+    "src/components/*.lua",
+    "src/menu/elements/*.lua",
+    "src/menu/items/*.lua",
+    "src/menu/panels/*.lua",
+    "src/menu/windows/*.lua",
+
     'config/config.lua',
-    'client/blips.lua',
-	"client/client.lua",
-    'client/menu.lua'
+    'client/client_menu.lua'
 }

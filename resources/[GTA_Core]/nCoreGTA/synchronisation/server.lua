@@ -18,7 +18,6 @@ function ShiftToHour(hour)
     timeOffset = timeOffset - ( ( ((baseTime+timeOffset)/60) % 24 ) - hour ) * 60
 end
 
-
 Citizen.CreateThread(function()
     while true do
         Citizen.Wait(0)

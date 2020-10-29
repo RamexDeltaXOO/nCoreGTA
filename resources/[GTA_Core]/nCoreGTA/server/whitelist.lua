@@ -17,7 +17,7 @@ AddEventHandler('playerConnecting', function(name, setKickReason, deferrals)
 	local source = source
 	local license = ""
     local Identifiers = GetPlayerIdentifiers(source)
-    for i,identifier in ipairs(Identifiers) do
+    for _,identifier in ipairs(Identifiers) do
         if string.find(identifier, "license:") then
             license = identifier
         end
@@ -37,8 +37,8 @@ AddEventHandler('playerConnecting', function(name, setKickReason, deferrals)
     Wait(0)
 
     if config.activerWhitelist then
-        for k1, v in pairs(identifiers) do
-            for k2, i in ipairs(config.JoueursWhitelist) do
+        for _, v in pairs(identifiers) do
+            for _, i in ipairs(config.JoueursWhitelist) do
                 if string.match(v, i) then
                     if isBannis == true then
                         allowed = false
@@ -61,7 +61,7 @@ AddEventHandler('playerConnecting', function(name, setKickReason, deferrals)
             end)
             print("Joueur : [ "..GetPlayerName(source).. " ] vient de rejoindre. license : ", license)
         else
-            for k1, v in pairs(identifiers) do
+            for _, v in pairs(identifiers) do
                 oldInfo = newInfo
                 newInfo = string.format("%s\n%s", oldInfo, v)
             end

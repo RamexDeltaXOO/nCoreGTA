@@ -31,8 +31,8 @@ CREATE TABLE IF NOT EXISTS `gta_joueurs` (
   `taille` int(10) unsigned NOT NULL DEFAULT 0,
   `age` int(120) NOT NULL DEFAULT 0,
   `origine` varchar(50) COLLATE utf8mb4_bin DEFAULT '',
-  `faim` double DEFAULT 100,
-  `soif` double DEFAULT 100,
+  `faim` int(11) DEFAULT 100,
+  `soif` int(11) DEFAULT 100,
   `isAdmin` tinyint(1) DEFAULT 0,
   `enService` tinyint(1) NOT NULL DEFAULT 0,
   `lastpos` varchar(255) COLLATE utf8mb4_bin DEFAULT '{-887.48388671875, -2311.68872070313,  -3.50776553153992}',
@@ -43,6 +43,7 @@ CREATE TABLE IF NOT EXISTS `gta_joueurs` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
 -- Export de données de la table gta_serveur.gta_joueurs : ~0 rows (environ)
+DELETE FROM `gta_joueurs`;
 /*!40000 ALTER TABLE `gta_joueurs` DISABLE KEYS */;
 /*!40000 ALTER TABLE `gta_joueurs` ENABLE KEYS */;
 
@@ -58,6 +59,7 @@ CREATE TABLE IF NOT EXISTS `gta_joueurs_banni` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
 -- Export de données de la table gta_serveur.gta_joueurs_banni : ~0 rows (environ)
+DELETE FROM `gta_joueurs_banni`;
 /*!40000 ALTER TABLE `gta_joueurs_banni` DISABLE KEYS */;
 /*!40000 ALTER TABLE `gta_joueurs_banni` ENABLE KEYS */;
 
@@ -66,14 +68,18 @@ DROP TABLE IF EXISTS `gta_joueurs_humain`;
 CREATE TABLE IF NOT EXISTS `gta_joueurs_humain` (
   `license` varchar(50) COLLATE utf8mb4_bin NOT NULL DEFAULT '',
   `sex` varchar(30) COLLATE utf8mb4_bin NOT NULL DEFAULT 'mp_m_freemode_01',
-  `visage` int(11) DEFAULT 0,
-  `couleurPeau` int(11) DEFAULT 0,
   `cheveux` int(11) DEFAULT 0,
   `couleurCheveux` int(11) DEFAULT 0,
+  `couleurYeux` int(11) DEFAULT 0,
+  `pere` float DEFAULT 0,
+  `mere` float DEFAULT 0,
+  `couleurPeau` int(11) DEFAULT 0,
+  `visage` float DEFAULT 0,
   PRIMARY KEY (`license`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
 -- Export de données de la table gta_serveur.gta_joueurs_humain : ~0 rows (environ)
+DELETE FROM `gta_joueurs_humain`;
 /*!40000 ALTER TABLE `gta_joueurs_humain` DISABLE KEYS */;
 /*!40000 ALTER TABLE `gta_joueurs_humain` ENABLE KEYS */;
 
@@ -105,6 +111,7 @@ CREATE TABLE IF NOT EXISTS `gta_joueurs_vetement` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
 -- Export de données de la table gta_serveur.gta_joueurs_vetement : ~0 rows (environ)
+DELETE FROM `gta_joueurs_vetement`;
 /*!40000 ALTER TABLE `gta_joueurs_vetement` DISABLE KEYS */;
 /*!40000 ALTER TABLE `gta_joueurs_vetement` ENABLE KEYS */;
 
@@ -117,10 +124,11 @@ CREATE TABLE IF NOT EXISTS `gta_metiers` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Export de données de la table gta_serveur.gta_metiers : ~3 rows (environ)
+DELETE FROM `gta_metiers`;
 /*!40000 ALTER TABLE `gta_metiers` DISABLE KEYS */;
 INSERT INTO `gta_metiers` (`metiers`, `salaire`, `emploi`) VALUES
 	('Chomeur', 150, 'public'),
-	('Police', 500, 'priver'),
+	('LSPD', 500, 'priver'),
 	('Medic', 500, 'priver');
 /*!40000 ALTER TABLE `gta_metiers` ENABLE KEYS */;
 
@@ -133,6 +141,7 @@ CREATE TABLE IF NOT EXISTS `items` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Export de données de la table gta_serveur.items : ~17 rows (environ)
+DELETE FROM `items`;
 /*!40000 ALTER TABLE `items` DISABLE KEYS */;
 INSERT INTO `items` (`libelle`, `isUsable`, `type`) VALUES
 	('Pistolet', 1, 3),
@@ -141,7 +150,7 @@ INSERT INTO `items` (`libelle`, `isUsable`, `type`) VALUES
 	('Batte de baseball', 1, 3),
 	('Pied-de-biche', 1, 3),
 	('Couteau', 1, 3),
-	('Menotte', 1, 3),
+	('Menotte', 1, 0),
 	('Hache', 1, 3),
 	('Machette', 1, 3),
 	('Poing américain', 1, 3),
@@ -165,6 +174,7 @@ CREATE TABLE IF NOT EXISTS `phone_app_chat` (
 ) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
 
 -- Export de données de la table gta_serveur.phone_app_chat : ~0 rows (environ)
+DELETE FROM `phone_app_chat`;
 /*!40000 ALTER TABLE `phone_app_chat` DISABLE KEYS */;
 /*!40000 ALTER TABLE `phone_app_chat` ENABLE KEYS */;
 
@@ -178,9 +188,10 @@ CREATE TABLE IF NOT EXISTS `phone_calls` (
   `time` timestamp NOT NULL DEFAULT current_timestamp(),
   `accepts` int(11) NOT NULL COMMENT 'Appels accepter ou pas',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Export de données de la table gta_serveur.phone_calls : ~0 rows (environ)
+DELETE FROM `phone_calls`;
 /*!40000 ALTER TABLE `phone_calls` DISABLE KEYS */;
 /*!40000 ALTER TABLE `phone_calls` ENABLE KEYS */;
 
@@ -198,6 +209,7 @@ CREATE TABLE IF NOT EXISTS `phone_messages` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- Export de données de la table gta_serveur.phone_messages : 0 rows
+DELETE FROM `phone_messages`;
 /*!40000 ALTER TABLE `phone_messages` DISABLE KEYS */;
 /*!40000 ALTER TABLE `phone_messages` ENABLE KEYS */;
 
@@ -212,6 +224,7 @@ CREATE TABLE IF NOT EXISTS `phone_users_contacts` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- Export de données de la table gta_serveur.phone_users_contacts : 0 rows
+DELETE FROM `phone_users_contacts`;
 /*!40000 ALTER TABLE `phone_users_contacts` DISABLE KEYS */;
 /*!40000 ALTER TABLE `phone_users_contacts` ENABLE KEYS */;
 
@@ -227,6 +240,7 @@ CREATE TABLE IF NOT EXISTS `user_inventory` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Export de données de la table gta_serveur.user_inventory : ~0 rows (environ)
+DELETE FROM `user_inventory`;
 /*!40000 ALTER TABLE `user_inventory` DISABLE KEYS */;
 /*!40000 ALTER TABLE `user_inventory` ENABLE KEYS */;
 

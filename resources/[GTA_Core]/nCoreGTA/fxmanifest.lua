@@ -1,15 +1,9 @@
 fx_version 'cerulean'
-games { 'gta5' }
+game 'gta5'
 
 dependencies {'ghmattimysql'}
 
 ui_page 'progressBar/progressbar.html'
-
-export 'Ninja_Core_PedsText'
-export 'Ninja_Core_StartAnim'
-export 'Ninja_Core_nRequestAnimSet'
-export 'nNotificationMain'
-export 'progression'
 
 server_scripts {
     'config/config.lua',
@@ -22,11 +16,12 @@ server_scripts {
 }
 
 client_scripts {
-    'utils/functionsExported.lua',
     'config/config.lua',
-    'client/admin_main.lua',
-    'client/main.lua',
-    'client/spawn.lua',
+    'utils/functionsExported.lua',
+    'client_main/notif_main.lua',
+    'client_main/admin_main.lua',
+    'client_main/main.lua',
+    'client_main/spawn.lua',
     'synchronisation/client.lua',
     'services/client.lua'
 }
@@ -40,5 +35,12 @@ files {
 }
 
 loadscreen 'loadingscreen/index.html'
+
+export 'ShowNotification'
+export 'ShowAdvancedNotification'
+export 'Ninja_Core_PedsText'
+export 'Ninja_Core_StartAnim'
+export 'Ninja_Core_nRequestAnimSet'
+export 'progression'
 
 --@Super.Cool.Ninja
