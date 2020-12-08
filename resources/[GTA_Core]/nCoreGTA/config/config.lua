@@ -1,7 +1,7 @@
 --@Super.Cool.Ninja
 config = {}
 
-config.versionCore = "Version 1.4"
+config.versionCore = "Version 1.5"
 config.activerPoliceWanted = false
 config.activerPvp = true 
 config.salaireTime = 900000

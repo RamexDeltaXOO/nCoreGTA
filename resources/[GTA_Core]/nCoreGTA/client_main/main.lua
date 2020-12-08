@@ -111,6 +111,7 @@ AddEventHandler('onClientMapStart', function()
 	end
 end)
 
+--------------------------------> GESTION DU SYSTEM DE DISTANCE DE VOIX :
 Citizen.CreateThread(function()
  	while true do
  		Citizen.Wait(0)

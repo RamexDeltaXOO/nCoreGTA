@@ -31,46 +31,51 @@ RegisterNetEvent("GTA:NewPlayerPosition")
 AddEventHandler("GTA:NewPlayerPosition", function(PosX, PosY, PosZ)
 	--> On charge les donné du player : 
 	exports.rprogress:Custom({
-		Label = "Chargement de votre position",
-		Duration = 1000,
-		LabelPosition = "right",
-		Color = "rgba(255, 255, 255, 0.5)",
-		BGColor = "rgba(0, 0, 0, 0.8)"
-	})
-	
-	Citizen.Wait(1000)
-	
-
-	spawnPlayerLastPos(PosX, PosY) 
-	NetworkResurrectLocalPlayer(tonumber(PosX), tonumber(PosY), tonumber(PosZ) + 0.0, 0, true, true, false)
-
-	PlaySoundFrontend(-1, "Zoom_Out", "DLC_HEIST_PLANNING_BOARD_SOUNDS", 1)
-	RenderScriptCams(false, true, 500, true, true)
-	PlaySoundFrontend(-1, "CAR_BIKE_WHOOSH", "MP_LOBBY_SOUNDS", 1)
-
-	--> On charge les donné du player : 
-	exports.rprogress:Custom({
 		Label = "Chargement de votre personnage",
 		Duration = 1700,
 		LabelPosition = "right",
 		Color = "rgba(255, 255, 255, 0.5)",
 		BGColor = "rgba(0, 0, 0, 0.8)"
 	})
-
+	
+	--> On charge les donné du player : 
 	TriggerServerEvent("GTA:CheckAdmin")
 	TriggerServerEvent("GTA_Notif:OnPlayerJoin")
-	TriggerServerEvent("GTA:CreationPersonnage")
 	TriggerServerEvent('GTA:LoadArgent')
 	TriggerEvent("GTA:LoadWeaponPlayer")
+
 	Citizen.Wait(1700)
 
-	--> Rend controlable notre player :
-	FreezeEntityPosition(GetPlayerPed(-1), false)
+	spawnPlayerLastPos(PosX, PosY) 
+	NetworkResurrectLocalPlayer(tonumber(PosX), tonumber(PosY), tonumber(PosZ) + 0.0, 0, true, true, false)
+
+	if not IsPlayerSwitchInProgress() then
+		SetEntityVisible(PlayerPedId(), false, 0)
+		SwitchOutPlayer(PlayerPedId(), 32, 1)
+		Wait(3000)
+
+		showLoadingPromt("PCARD_JOIN_GAME", 8000)
+		
+		--> Rend controlable notre player :
+		FreezeEntityPosition(GetPlayerPed(-1), false)
+		SetEntityVisible(PlayerPedId(), true, 0)
+		Wait(500)
+		RenderScriptCams(false, true, 500, true, true)
+		exports.spawnmanager:setAutoSpawn(false)
+	end
+
+	TriggerServerEvent("GTA:CreationPersonnage")
+
+	SwitchInPlayer(PlayerPedId())
 	SetEntityVisible(PlayerPedId(), true, 0)
+
 	DisplayRadar(true)
 	DisplayHud(true)
 	TriggerEvent('EnableDisableHUDFS', true)
-    TriggerServerEvent("GTA:CheckAdmin")
+	TriggerServerEvent("GTA:CheckAdmin")
+
+	PlaySoundFrontend(-1, "Zoom_Out", "DLC_HEIST_PLANNING_BOARD_SOUNDS", 1)
+	PlaySoundFrontend(-1, "CAR_BIKE_WHOOSH", "MP_LOBBY_SOUNDS", 1)
 end)
 
 --> Executer une Une fois la ressource start : 
@@ -105,7 +110,13 @@ AddEventHandler('onResourceStart', function(resourceName)
 	end
 	
 	isPlayerSpawn = false
-    PlaySoundFrontend(-1, "Whistle", "DLC_TG_Running_Back_Sounds", 0)
+	TriggerEvent('EnableDisableHUDFS', true)
+	DisplayHud(true)
+	DisplayRadar(true)
+	SetEntityVisible(PlayerPedId(), true, 0)
+	TriggerServerEvent('GTA:LoadArgent')
+	PlaySoundFrontend(-1, "Whistle", "DLC_TG_Running_Back_Sounds", 0)
+	exports.spawnmanager:setAutoSpawn(false)
 end)
 
 Citizen.CreateThread(function ()

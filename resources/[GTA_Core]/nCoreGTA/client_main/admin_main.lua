@@ -113,11 +113,11 @@ AddEventHandler("GTA:UpdatePlayerAdmin", function(admin)
 end)
 
 
-
 --> Commande pour se tp sur un marker :
 --> /tpt 
 RegisterCommand("tpt", function()
     TriggerServerEvent("GTA:CheckAdmin")
+    
     Wait(50)
     
     if (isPlayerAdmin == true) then 
@@ -126,11 +126,11 @@ RegisterCommand("tpt", function()
 end, false)
 
 
-
 --> Commande pour être invincible : 
 --> /Invincible
 RegisterCommand("Invincible", function()
     TriggerServerEvent("GTA:CheckAdmin")
+    
     Wait(50)
     
     if (isPlayerAdmin == true) then 
@@ -144,7 +144,9 @@ end, false)
 RegisterCommand("gap", function(source, args, rawCommand)
     qtyArgentPropre = args[1]
     TriggerServerEvent("GTA:CheckAdmin")
+    
     Wait(50)
+    
     if (isPlayerAdmin == true) then
         if (tonumber(qtyArgentPropre) ~= nil) then
             TriggerServerEvent("GTA_Admin:AjoutArgentPropre", tonumber(qtyArgentPropre))
@@ -159,13 +161,14 @@ RegisterCommand("gap", function(source, args, rawCommand)
 end, false)
 
 
-
 --> Commande pour s'ajouté de l'argent sale :
 --> /gas montant
 RegisterCommand("gas", function(source, args, rawCommand)
     qtyArgentPropre = args[1]
     TriggerServerEvent("GTA:CheckAdmin")
+    
     Wait(50)
+
     if (isPlayerAdmin == true) then
         if (tonumber(qtyArgentPropre) ~= nil) then
             TriggerServerEvent("GTA_Admin:AjoutArgentSale", tonumber(qtyArgentPropre))
@@ -185,7 +188,9 @@ end, false)
 RegisterCommand("gab", function(source, args, rawCommand)
     qtyArgentPropre = args[1]
     TriggerServerEvent("GTA:CheckAdmin")
+    
     Wait(50)
+
     if (isPlayerAdmin == true) then
         if (tonumber(qtyArgentPropre) ~= nil) then
             TriggerServerEvent("GTA_Admin:AjoutArgentBanque", tonumber(qtyArgentPropre))
@@ -205,7 +210,9 @@ end, false)
 RegisterCommand("givepistol", function(source, args, rawCommand)
     qtyAmmo = args[1]
     TriggerServerEvent("GTA:CheckAdmin")
+    
     Wait(50)
+
     if (isPlayerAdmin == true) then
         if tonumber(qtyAmmo) == nil then
             qtyAmmo = 1
@@ -225,7 +232,9 @@ end, false)
 RegisterCommand("givemenotte", function(source, args, rawCommand)
     qty = args[1]
     TriggerServerEvent("GTA:CheckAdmin")
+    
     Wait(50)
+
     if (isPlayerAdmin == true) then
         if tonumber(qty) == nil then
             qty = 1
@@ -241,7 +250,9 @@ end, false)
 --> Pour supprimer un véhicule faite /pv
 RegisterCommand("pv", function(source, args, rawCommand)
     TriggerServerEvent("GTA:CheckAdmin")
+    
     Wait(50)
+
     if (isPlayerAdmin == true) then
         local playerPed = GetPlayerPed(-1)
         local veh = GetVehiclePedIsIn(playerPed)
@@ -260,7 +271,9 @@ end, false)
 --> Pour afficher votre position faite /pos
 RegisterCommand("pos", function(source, args, rawCommand)
     TriggerServerEvent("GTA:CheckAdmin")
+    
     Wait(50)
+
     if (isPlayerAdmin == true) then
         togglePosition()
     end
@@ -270,26 +283,36 @@ end, false)
 --> Commande pour vous give un véhicule
 --> Pour vous give un véhicule faite /v
 RegisterCommand('v', function(source, args, rawCommand)
-    local x,y,z = table.unpack(GetOffsetFromEntityInWorldCoords(PlayerPedId(), 0.0, 8.0, 0.5))
-    local veh = args[1]
-    if veh == nil then exports.nCoreGTA:ShowNotification("~y~Veuillez saisir un nom d'un véhicule.") end
-    vehiclehash = GetHashKey(veh)
-    RequestModel(vehiclehash)
+    TriggerServerEvent("GTA:CheckAdmin")
     
-    Citizen.CreateThread(function() 
-        local waiting = 0
-        while not HasModelLoaded(vehiclehash) do
-            waiting = waiting + 100
-            Citizen.Wait(100)
-            if waiting > 3000 then
-                exports.nCoreGTA:ShowNotification("~r~Veuillez saisir un nom d'un véhicule correct !")
-                break
+    Wait(50)
+
+    if (isPlayerAdmin == true) then
+
+        local x,y,z = table.unpack(GetOffsetFromEntityInWorldCoords(PlayerPedId(), 0.0, 8.0, 0.5))
+        local veh = args[1]
+        if veh == nil then exports.nCoreGTA:ShowNotification("~y~Veuillez saisir un nom d'un véhicule.") end
+        vehiclehash = GetHashKey(veh)
+        RequestModel(vehiclehash)
+        
+        Citizen.CreateThread(function() 
+            local waiting = 0
+            while not HasModelLoaded(vehiclehash) do
+                waiting = waiting + 100
+                Citizen.Wait(100)
+                if waiting > 3000 then
+                    exports.nCoreGTA:ShowNotification("~r~Veuillez saisir un nom d'un véhicule correct !")
+                    break
+                end
             end
-        end
-        CreateVehicle(vehiclehash, x, y, z, GetEntityHeading(PlayerPedId())+90, 1, 0)
-    end)
+            CreateVehicle(vehiclehash, x, y, z, GetEntityHeading(PlayerPedId())+90, 1, 0)
+            exports.nCoreGTA:ShowNotification(veh.. " spawn !")
+        end)
+    end
 end)
 
+
+----------------------------------> AFFICHER POSITION X,Y,Z :
 local waitEnablePostition = 1000
 Citizen.CreateThread(function () 
     while true do 

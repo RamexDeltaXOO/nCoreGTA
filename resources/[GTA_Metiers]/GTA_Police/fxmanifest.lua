@@ -2,9 +2,9 @@ fx_version 'cerulean'
 game 'gta5'
 
 dependency 'nMenuPersonnel'
-dependencies {'ghmattimysql'}
 
 server_scripts {
+    '@mysql-async/lib/MySQL.lua',
     'server/server_main.lua'
 }
 

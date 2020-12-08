@@ -2,7 +2,7 @@
 local jobsDispo = {}
 
 function nameJob(metiers)
-	return exports.ghmattimysql:execute("SELECT metiers FROM gta_metiers WHERE metiers = @metiers", {['@metiers'] = tostring(metiers)})
+	return MySQL.Async.execute("SELECT metiers FROM gta_metiers WHERE metiers = @metiers", {['@metiers'] = tostring(metiers)})
 end
 
 RegisterServerEvent('GTA:UpdateJob') --> Update le job du joueur.
@@ -10,7 +10,7 @@ AddEventHandler('GTA:UpdateJob', function(metiers)
 	local source = source
 	local license = GetPlayerIdentifiers(source)[1]
 	local job = tostring(metiers)
-	exports.ghmattimysql:execute("UPDATE gta_joueurs SET ? WHERE ?", { {['job'] = job}, {['license'] = license} })
+	MySQL.Async.execute("UPDATE gta_joueurs SET job=@job WHERE license=@license", { ['@license'] = license, ['@job'] = job})
 end)
 
 RegisterServerEvent('GTA:LoadJobsJoueur')
@@ -29,17 +29,16 @@ AddEventHandler("GTA:ShowJobsDispo", function()
 	local source = source
 	local license = GetPlayerIdentifiers(source)[1]
 
-	exports.ghmattimysql:execute("SELECT * FROM gta_joueurs WHERE license = @username", {['@username'] = license}, function(result)
+	MySQL.Async.fetchAll('SELECT * FROM gta_joueurs WHERE license = @license',{['@license'] = license}, function(result)
 		TriggerClientEvent("GTA:LoadClientJob", source, result[1].job, result[1].enService, result[1].grade) --> Refresh le job du joueur.
 	end)
 end)
-
 
 RegisterServerEvent("GTA:GetJobsList")
 AddEventHandler("GTA:GetJobsList", function()
 	local source = source
 	local license = GetPlayerIdentifiers(source)[1]
-	exports.ghmattimysql:execute("SELECT metiers FROM gta_metiers WHERE emploi = @emploi", {['@emploi'] = "public"}, function(result)
+	MySQL.Async.fetchAll("SELECT * FROM gta_metiers WHERE emploi = @emploi", {['@emploi'] = "public"}, function(result)
 		for k in pairs(jobsDispo) do
 			jobsDispo[k] = nil
 		end

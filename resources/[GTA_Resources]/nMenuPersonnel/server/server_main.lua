@@ -2,7 +2,7 @@ RegisterServerEvent("GTA_Interaction:GetinfoPlayers")
 AddEventHandler("GTA_Interaction:GetinfoPlayers", function()
     local source = source 
     local license = GetPlayerIdentifiers(source)[1]
-    exports.ghmattimysql:execute("SELECT nom, prenom FROM gta_joueurs WHERE license = @license", { ['@license'] = license}, function(res)
+    MySQL.Async.fetchAll("SELECT * FROM gta_joueurs WHERE license = @license", { ['@license'] = license}, function(res)
         TriggerClientEvent('GTA_Interaction:UpdateInfoPlayers', source, res[1].nom, res[1].prenom)
     end)
 
@@ -18,9 +18,9 @@ RegisterServerEvent("GTA:GetPlayerSexServer")
 AddEventHandler("GTA:GetPlayerSexServer", function()
 	local source = source
 	local license = GetPlayerIdentifiers(source)[1]
-	exports.ghmattimysql:scalar("SELECT sex FROM gta_joueurs_humain WHERE ?", {{['license'] = license}}, function(sex)
-		TriggerClientEvent("GTA:GetSexJoueur", source, sex)
-	end)
+
+	local sex = MySQL.Sync.fetchScalar("SELECT sex FROM gta_joueurs_humain WHERE license = @username", {['@username'] = license})
+	TriggerClientEvent("GTA:GetSexJoueur", source, sex)
 end)
 
 RegisterServerEvent('nArgent:DonnerArgentPropre')
@@ -103,7 +103,7 @@ AddEventHandler('GTA:GetHautJoueur', function()
 	local source = source
 	local license = GetPlayerIdentifiers(source)[1]
 
-	exports.ghmattimysql:execute("SELECT * FROM gta_joueurs_vetement WHERE license = @license", { ['@license'] = license}, function(res)
+	MySQL.Async.fetchAll("SELECT * FROM gta_joueurs_vetement WHERE license = @license", { ['@license'] = license}, function(res)
 		TriggerClientEvent("GTA:MettreHautJoueur", source, {res[1].topsID, res[1].topsDraw, res[1].topsCouleur, res[1].undershirtsID, res[1].undershirtsDraw, res[1].undershirtsCouleur, res[1].torsosID, res[1].torsosDraw})
 	end)
 end)
@@ -113,7 +113,7 @@ AddEventHandler('GTA:GetBasJoueur', function()
 	local source = source
 	local license = GetPlayerIdentifiers(source)[1]
 
-	exports.ghmattimysql:execute("SELECT * FROM gta_joueurs_vetement WHERE license = @license", { ['@license'] = license}, function(res)
+	MySQL.Async.fetchAll("SELECT * FROM gta_joueurs_vetement WHERE license = @license", { ['@license'] = license}, function(res)
 		TriggerClientEvent("GTA:MettreBasJoueur", source, {res[1].legsID, res[1].legsDraw, res[1].legsCouleur})
 	end)
 end)
@@ -124,7 +124,7 @@ AddEventHandler('GTA:GetChaussureJoueur', function()
 	local source = source
 	local license = GetPlayerIdentifiers(source)[1]
 
-	exports.ghmattimysql:execute("SELECT * FROM gta_joueurs_vetement WHERE license = @license", { ['@license'] = license}, function(res)
+	MySQL.Async.fetchAll("SELECT * FROM gta_joueurs_vetement WHERE license = @license", { ['@license'] = license}, function(res)
 		TriggerClientEvent("GTA:MettreChaussureJoueur", source, {res[1].shoesID, res[1].shoesDraw, res[1].shoesCouleur})
 	end)
 end)
@@ -134,7 +134,7 @@ AddEventHandler('GTA:GetBonnetJoueur', function()
 	local source = source
 	local license = GetPlayerIdentifiers(source)[1]
 
-	exports.ghmattimysql:execute("SELECT * FROM gta_joueurs_vetement WHERE license = @license", { ['@license'] = license}, function(res)
+	MySQL.Async.fetchAll("SELECT * FROM gta_joueurs_vetement WHERE license = @license", { ['@license'] = license}, function(res)
 		TriggerClientEvent("GTA:MettreBonnetJoueur", source, {res[1].HatsID, res[1].HatsDraw, res[1].HatsCouleurs})
 	end)
 end)

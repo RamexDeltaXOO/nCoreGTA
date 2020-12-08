@@ -6,6 +6,8 @@ RegisterServerEvent('hostedSession')
 local currentHosting
 local hostReleaseCallbacks = {}
 
+-- TODO: add a timeout for the hosting lock to be held
+-- TODO: add checks for 'fraudulent' conflict cases of hosting attempts (typically whenever the host can not be reached)
 AddEventHandler('hostingSession', function()
     -- if the lock is currently held, tell the client to await further instruction
     if currentHosting then
@@ -49,9 +51,10 @@ AddEventHandler('hostingSession', function()
 end)
 
 AddEventHandler('hostedSession', function()
+    -- check if the client is the original locker
     if currentHosting ~= source then
+        -- TODO: drop client as they're clearly lying
         print(currentHosting, '~=', source)
-        DropPlayer(source, 'sessionmanager: vous avez étais kick pour un problem de reseau.')
         return
     end
 

@@ -12,28 +12,27 @@ end)
 
 --Notif avec tête :
 --[[
-	
-function Ninja_Core__GetPedMugshot(ped) 
-	local mugshot = RegisterPedheadshot(ped)
-	while not IsPedheadshotReady(mugshot) do
-		Citizen.Wait(0)
-	end
-	return mugshot, GetPedheadshotTxdString(mugshot)
-end
+    function Ninja_Core__GetPedMugshot(ped) 
+        local mugshot = RegisterPedheadshot(ped)
+        while not IsPedheadshotReady(mugshot) do
+            Citizen.Wait(0)
+        end
+        return mugshot, GetPedheadshotTxdString(mugshot)
+    end
 
-Ninja_Core_ShowAdvancedNotification = function(title, subject, msg, icon, iconType) 
-	AddTextEntry('Ninja_Core_ShowAdvancedNotification', msg)
-	SetNotificationTextEntry('Ninja_Core_ShowAdvancedNotification')
-	SetNotificationMessage(icon, icon, false, iconType, title, subject)
-	DrawNotification(false, false)
-end
+    Ninja_Core_ShowAdvancedNotification = function(title, subject, msg, icon, iconType) 
+        AddTextEntry('Ninja_Core_ShowAdvancedNotification', msg)
+        SetNotificationTextEntry('Ninja_Core_ShowAdvancedNotification')
+        SetNotificationMessage(icon, icon, false, iconType, title, subject)
+        DrawNotification(false, false)
+    end
 
------||Notification avec votre t�te||-----
-Ninja_Core__ShowNinjaNotification = function(title, subject, msg)
-	local mugshot, mugshotStr = Ninja_Core__GetPedMugshot(GetPlayerPed(-1))
-    Ninja_Core_ShowAdvancedNotification(title, subject, msg, mugshotStr, 1)
-	UnregisterPedheadshot(mugshot)
-end
+    -----||Notification avec votre tête||-----
+    Ninja_Core__ShowNinjaNotification = function(title, subject, msg)
+        local mugshot, mugshotStr = Ninja_Core__GetPedMugshot(GetPlayerPed(-1))
+        Ninja_Core_ShowAdvancedNotification(title, subject, msg, mugshotStr, 1)
+        UnregisterPedheadshot(mugshot)
+    end
 ]]
 
 -----||Interaction avec peds||-----
@@ -144,7 +143,6 @@ function progression(time)
 		time = time
 	})
 end
-
 
 TextHeight = GetTextScaleHeight(config.Scale, config.Font)
 function GetCharacterCount(string)

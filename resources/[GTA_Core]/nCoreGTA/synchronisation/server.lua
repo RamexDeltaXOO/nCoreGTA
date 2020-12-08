@@ -11,11 +11,11 @@ AddEventHandler('GTA:requestSync', function()
 end)
 
 function ShiftToMinute(minute)
-    timeOffset = timeOffset - ( ( (baseTime+timeOffset) % 60 ) - minute )
+    timeOffset = timeOffset - (((baseTime+timeOffset)%60) - minute)
 end
 
 function ShiftToHour(hour)
-    timeOffset = timeOffset - ( ( ((baseTime+timeOffset)/60) % 24 ) - hour ) * 60
+    timeOffset = timeOffset - ((((baseTime+timeOffset)/60)%24) - hour) * 60
 end
 
 Citizen.CreateThread(function()
@@ -28,6 +28,7 @@ Citizen.CreateThread(function()
         baseTime = newBaseTime
     end
 end)
+
 
 Citizen.CreateThread(function()
     while true do

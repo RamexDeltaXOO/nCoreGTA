@@ -12,9 +12,8 @@ AddEventHandler("GTA:SAVEPOS", function( LastPosX , LastPosY , LastPosZ )
         end
     end
 	local lastPosition = "{" .. LastPosX .. ", " .. LastPosY .. ",  " .. LastPosZ.. "}"
-	exports.ghmattimysql:execute("UPDATE gta_joueurs SET ? WHERE ?", { {['lastpos'] = lastPosition}, {['license'] = license} })
+	MySQL.Async.execute("UPDATE gta_joueurs SET `lastpos`=@lastpos WHERE license = @username", {['@username'] = license, ['@lastpos'] = lastPosition})
 end)
-
 
 RegisterServerEvent("GTA:SPAWNPLAYER")
 AddEventHandler("GTA:SPAWNPLAYER", function()
@@ -25,15 +24,14 @@ AddEventHandler("GTA:SPAWNPLAYER", function()
         if string.find(identifier, "license:") then
             license = identifier
         end
-    end
-	exports.ghmattimysql:scalar("SELECT lastpos FROM gta_joueurs WHERE ?", {{['license'] = license}}, function(lastpos)
-		local newPos = json.decode(lastpos)
-
-		Wait(50)
-
+	end
+	
+	local res = MySQL.Sync.fetchScalar("SELECT lastpos FROM gta_joueurs WHERE license = @username", {['@username'] = license})	
+	if (res ~= nil) then
+		local newPos = json.decode(res)
 		-- On envoie la derniere position vers le client pour le spawn
 		TriggerClientEvent("GTA:LASTPOS", source, newPos[1], newPos[2], newPos[3])
-	end)
+	end
 end)
 
 RegisterServerEvent("GTA:SetPositionPlayer")
@@ -46,12 +44,11 @@ AddEventHandler("GTA:SetPositionPlayer", function()
             license = identifier
         end
     end
-	exports.ghmattimysql:scalar("SELECT lastpos FROM gta_joueurs WHERE ?", {{['license'] = license}}, function(lastpos)
-		local newPos = json.decode(lastpos)
 
-		Wait(50)
-
+	local res = MySQL.Sync.fetchScalar("SELECT lastpos FROM gta_joueurs WHERE license = @username", {['@username'] = license})	
+	if (res ~= nil) then
+		local newPos = json.decode(res)
 		-- On envoie la derniere position vers le client pour le spawn
 		TriggerClientEvent("GTA:NewPlayerPosition", source, newPos[1], newPos[2], newPos[3])
-	end)
+	end
 end)

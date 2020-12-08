@@ -17,7 +17,7 @@ function getSourceFromIdentifier(identifier, cb)
 end
 
 function addContact(source, identifier, number, display)
-    exports.ghmattimysql:execute("INSERT INTO phone_users_contacts (`identifier`, `number`,`display`) VALUES(@identifier, @number, @display)", {
+    MySQL.Async.execute("INSERT INTO phone_users_contacts (`identifier`, `number`,`display`) VALUES(@identifier, @number, @display)", {
         ['@identifier'] = identifier,
         ['@number'] = number,
         ['@display'] = display,
@@ -27,7 +27,7 @@ function addContact(source, identifier, number, display)
 end
 
 function updateContact(source, identifier, id, number, display)
-    exports.ghmattimysql:execute("UPDATE phone_users_contacts SET number = @number, display = @display WHERE id = @id", { 
+    MySQL.Async.execute("UPDATE phone_users_contacts SET number = @number, display = @display WHERE id = @id", { 
         ['@number'] = number,
         ['@display'] = display,
         ['@id'] = id,
@@ -37,7 +37,7 @@ function updateContact(source, identifier, id, number, display)
 end
 
 function deleteContact(source, identifier, id)
-    exports.ghmattimysql:execute("DELETE FROM phone_users_contacts WHERE `identifier` = @identifier AND `id` = @id", {
+    MySQL.Async.execute("DELETE FROM phone_users_contacts WHERE `identifier` = @identifier AND `id` = @id", {
         ['@identifier'] = identifier,
         ['@id'] = id,
     })
@@ -45,14 +45,14 @@ function deleteContact(source, identifier, id)
 end
 
 function deleteAllContact(identifier)
-    exports.ghmattimysql:execute("DELETE FROM phone_users_contacts WHERE `identifier` = @identifier", {
+    MySQL.Async.execute("DELETE FROM phone_users_contacts WHERE `identifier` = @identifier", {
         ['@identifier'] = identifier
     })
 end
 
 function notifyContactChange(source, identifier)
     if source ~= nil then 
-        exports.ghmattimysql:execute("SELECT * FROM phone_users_contacts WHERE identifier = @identifier", { ['@identifier'] = identifier}, function(res2)
+        MySQL.Async.fetchAll("SELECT * FROM phone_users_contacts WHERE identifier = @identifier", { ['@identifier'] = identifier}, function(res2)
             TriggerClientEvent("gcPhone:contactList", source, res2)
         end)
     end
@@ -85,51 +85,56 @@ AddEventHandler('gcPhone:_internalAddMessage', function(transmitter, receiver, m
     cb(_internalAddMessage(transmitter, receiver, message, owner))
 end)
 
+------------------------------------------------------------------------> GCPHONE A FINIR
 function _internalAddMessage(transmitter, receiver, message, owner)
-    local Query = "INSERT INTO phone_messages SET ?"
-    local Query2 = 'SELECT * from phone_messages WHERE ?'
-    local Parameters = {
-        ['transmitter'] = transmitter,
-        ['receiver'] = receiver,
-        ['message'] = message,
-        ['isRead'] = owner,
-        ['owner'] = owner
+    local Query = "INSERT INTO phone_messages (`transmitter`, `receiver`,`message`, `isRead`,`owner`) VALUES(@transmitter, @receiver, @message, @isRead, @owner);"
+    local Query2 = 'SELECT * from phone_messages WHERE `id` = @id;'
+	local Parameters = {
+        ['@transmitter'] = transmitter,
+        ['@receiver'] = receiver,
+        ['@message'] = message,
+        ['@isRead'] = owner,
+        ['@owner'] = owner
     }
-    local res = exports.ghmattimysql:executeSync(Query, { Parameters })
-    local id = res['insertId']
-    return exports.ghmattimysql:executeSync(Query2, {{
-        ['id'] = id
-    }})[1]
+    local id = MySQL.Sync.insert(Query, Parameters)
+    return MySQL.Sync.fetchAll(Query2, {
+        ['@id'] = id
+    })[1]
 end
 
 function addMessage(source, identifier, phone_number, message)
-    exports.ghmattimysql:scalar("SELECT license FROM gta_joueurs WHERE ?", {{['phone_number'] = phone_number}}, function(myPhone_number)
-        if myPhone_number ~= nil then 
-            exports.ghmattimysql:scalar("SELECT phone_number FROM gta_joueurs WHERE ?", {{['license'] = identifier}}, function(myPhone)
-                local tomess = _internalAddMessage(myPhone, phone_number, message, 0)
-                getSourceFromIdentifier(myPhone_number, function(osou)
-                    if tonumber(osou) ~= nil then 
-                        TriggerClientEvent("gcPhone:receiveMessage", tonumber(osou), tomess)
-                    end
-                end) 
-                local memess = _internalAddMessage(phone_number, myPhone, message, 1)
-                TriggerClientEvent("gcPhone:receiveMessage", source, memess)
-            end)
-        end
-    end)
+    local myPhone_number = MySQL.Sync.fetchScalar("SELECT license FROM gta_joueurs WHERE phone_number = @phone_number", {['@phone_number'] = phone_number})
+    if myPhone_number ~= nil then
+        local myPhone = MySQL.Sync.fetchScalar("SELECT phone_number FROM gta_joueurs WHERE license = @license", {['@license'] = identifier})
+        local tomess = _internalAddMessage(myPhone, phone_number, message, 0)
+        getSourceFromIdentifier(myPhone_number, function(osou)
+            if tonumber(osou) ~= nil then 
+                TriggerClientEvent("gcPhone:receiveMessage", tonumber(osou), tomess)
+            end
+        end) 
+        local memess = _internalAddMessage(phone_number, myPhone, message, 1)
+        TriggerClientEvent("gcPhone:receiveMessage", source, memess)
+    end
 end
 
 function setReadMessageNumber(identifier, num)
-    exports.ghmattimysql:scalar("SELECT phone_number FROM gta_joueurs WHERE ?", {{['license'] = identifier}}, function(getNumberPhone)
-        exports.ghmattimysql:execute("UPDATE phone_messages SET phone_messages.isRead = 1 WHERE phone_messages.receiver = @receiver AND phone_messages.transmitter = @transmitter", { 
-            ['@receiver'] = getNumberPhone,
-            ['@transmitter'] = num
-        })
-    end)
+    local getNumberPhone = MySQL.Sync.fetchScalar("SELECT phone_number FROM gta_joueurs WHERE license = @license", {['@license'] = identifier})
+    MySQL.Sync.execute("UPDATE phone_messages SET phone_messages.isRead = 1 WHERE phone_messages.receiver = @receiver AND phone_messages.transmitter = @transmitter", { 
+        ['@receiver'] = getNumberPhone,
+        ['@transmitter'] = num
+    })
+end
+
+function setReadMessageNumber(identifier, num)
+    local getNumberPhone = MySQL.Sync.fetchScalar("SELECT phone_number FROM gta_joueurs WHERE license = @license", {['@license'] = identifier})
+    MySQL.Sync.execute("UPDATE phone_messages SET phone_messages.isRead = 1 WHERE phone_messages.receiver = @receiver AND phone_messages.transmitter = @transmitter", { 
+        ['@receiver'] = mePhoneNumber,
+        ['@transmitter'] = num
+    })
 end
 
 function deleteMessage(msgId)
-    exports.ghmattimysql:execute("DELETE FROM phone_messages WHERE `id` = @id", {
+    MySQL.Sync.execute("DELETE FROM phone_messages WHERE `id` = @id", {
         ['@id'] = msgId
     })
 end
@@ -137,17 +142,15 @@ end
 function deleteAllMessageFromPhoneNumber(source, identifier, phone_number)
     local source = source
     local identifier = identifier
-    exports.ghmattimysql:scalar("SELECT phone_number FROM gta_joueurs WHERE ?", {{['license'] = identifier}}, function(mePhoneNumber)
-        exports.ghmattimysql:execute("DELETE FROM phone_messages WHERE `receiver` = @mePhoneNumber and `transmitter` = @phone_number", {['@mePhoneNumber'] = mePhoneNumber,['@phone_number'] = phone_number})
-    end)
+    local mePhoneNumber = MySQL.Sync.fetchScalar("SELECT phone_number FROM gta_joueurs WHERE license = @license", {['@license'] = identifier})
+    MySQL.Sync.execute("DELETE FROM phone_messages WHERE `receiver` = @mePhoneNumber and `transmitter` = @phone_number", {['@mePhoneNumber'] = mePhoneNumber,['@phone_number'] = phone_number})
 end
 
 function deleteAllMessage(identifier)
-    exports.ghmattimysql:scalar("SELECT phone_number FROM gta_joueurs WHERE ?", {{['license'] = identifier}}, function(mePhoneNumber)
-        exports.ghmattimysql:execute("DELETE FROM phone_messages WHERE `receiver` = @mePhoneNumber", {
-            ['@mePhoneNumber'] = mePhoneNumber
-        })
-    end)
+    local mePhoneNumber = MySQL.Sync.fetchScalar("SELECT phone_number FROM gta_joueurs WHERE license = @license", {['@license'] = identifier})
+    MySQL.Sync.execute("DELETE FROM phone_messages WHERE `receiver` = @mePhoneNumber", {
+        ['@mePhoneNumber'] = mePhoneNumber
+    })
 end
 
 RegisterServerEvent('gcPhone:sendMessage')
@@ -203,14 +206,14 @@ local PhoneFixeInfo = {}
 local lastIndexCall = 10
 
 function sendHistoriqueCall (src, num) 
-    exports.ghmattimysql:execute("SELECT * FROM phone_calls WHERE owner = @num ORDER BY time DESC LIMIT 120", { ['@num'] = num}, function(res2)
+    MySQL.Sync.fetchAll("SELECT * FROM phone_calls WHERE owner = @num ORDER BY time DESC LIMIT 120", { ['@num'] = num}, function(res2)
         TriggerClientEvent('gcPhone:historiqueCall', src, res2)
     end)
 end
 
 function saveAppels(appelInfo)
     if appelInfo.extraData == nil or appelInfo.extraData.useNumber == nil then
-        exports.ghmattimysql:execute("INSERT INTO phone_calls (`owner`, `num`,`incoming`, `accepts`) VALUES(@owner, @num, @incoming, @accepts)", {
+        MySQL.Sync.execute("INSERT INTO phone_calls (`owner`, `num`,`incoming`, `accepts`) VALUES(@owner, @num, @incoming, @accepts)", {
             ['@owner'] = appelInfo.transmitter_num,
             ['@num'] = appelInfo.receiver_num,
             ['@incoming'] = 1,
@@ -224,7 +227,7 @@ function saveAppels(appelInfo)
         if appelInfo.hidden == true then
             num = "###-###"
         end
-        exports.ghmattimysql:execute("INSERT INTO phone_calls (`owner`, `num`,`incoming`, `accepts`) VALUES(@owner, @num, @incoming, @accepts)", {
+        MySQL.Sync.execute("INSERT INTO phone_calls (`owner`, `num`,`incoming`, `accepts`) VALUES(@owner, @num, @incoming, @accepts)", {
             ['@owner'] = appelInfo.receiver_num,
             ['@num'] = num,
             ['@incoming'] = 0,
@@ -245,10 +248,9 @@ RegisterServerEvent('gcPhone:getHistoriqueCall')
 AddEventHandler('gcPhone:getHistoriqueCall', function()
     local _source = source
     local sourcePlayer = tonumber(_source)
-	local license = GetPlayerIdentifiers(_source)[1]
-    exports.ghmattimysql:scalar("SELECT phone_number FROM gta_joueurs WHERE ?", {{['license'] = license}}, function(getNumberPhone)
-        sendHistoriqueCall(getNumberPhone, num)
-    end)
+    local license = GetPlayerIdentifiers(_source)[1]
+    local getNumberPhone = MySQL.Sync.fetchScalar("SELECT phone_number FROM gta_joueurs WHERE license = @license", {['@license'] = license})
+    sendHistoriqueCall(getNumberPhone, num)
 end)
 
 RegisterServerEvent('gcPhone:register_FixePhone')
@@ -281,40 +283,39 @@ AddEventHandler('gcPhone:internal_startCall', function(source, phone_number, rtc
     local sourcePlayer = tonumber(source)
     local identifier = GetPlayerIdentifiers(source)[1]
 
-    exports.ghmattimysql:scalar("SELECT phone_number FROM gta_joueurs WHERE ?", {{['license'] = identifier}}, function(getNumberPhone)
-        exports.ghmattimysql:scalar("SELECT license FROM gta_joueurs WHERE ?", {{['phone_number'] = phone_number}}, function(res)
-            local is_valid = res ~= nil and res ~= identifier
-            AppelsEnCours[indexCall] = {
-                id = indexCall,
-                transmitter_src = sourcePlayer,
-                transmitter_num = getNumberPhone,
-                receiver_src = nil,
-                receiver_num = phone_number,
-                is_valid = res ~= nil,
-                is_accepts = false,
-                hidden = hidden,
-                rtcOffer = rtcOffer,
-                extraData = extraData
-            }
+    local getNumberPhone = MySQL.Sync.fetchScalar("SELECT phone_number FROM gta_joueurs WHERE license = @license", {['@license'] = identifier})
+    local res = MySQL.Sync.fetchScalar("SELECT license FROM gta_joueurs WHERE phone_number = @phone_number", {['@phone_number'] = phone_number})
 
-            if is_valid == true then
-                getSourceFromIdentifier(res, function (srcTo)
-                    if srcTo ~= nil then
-                        AppelsEnCours[indexCall].receiver_src = srcTo
-                        TriggerEvent('gcPhone:addCall', AppelsEnCours[indexCall])
-                        TriggerClientEvent('gcPhone:waitingCall', sourcePlayer, AppelsEnCours[indexCall], true)
-                        TriggerClientEvent('gcPhone:waitingCall', srcTo, AppelsEnCours[indexCall], false)
-                    else
-                        TriggerEvent('gcPhone:addCall', AppelsEnCours[indexCall])
-                        TriggerClientEvent('gcPhone:waitingCall', sourcePlayer, AppelsEnCours[indexCall], true)
-                    end
-                end)
+    local is_valid = res ~= nil and res ~= identifier
+    AppelsEnCours[indexCall] = {
+        id = indexCall,
+        transmitter_src = sourcePlayer,
+        transmitter_num = getNumberPhone,
+        receiver_src = nil,
+        receiver_num = phone_number,
+        is_valid = res ~= nil,
+        is_accepts = false,
+        hidden = hidden,
+        rtcOffer = rtcOffer,
+        extraData = extraData
+    }
+
+    if is_valid == true then
+        getSourceFromIdentifier(res, function (srcTo)
+            if srcTo ~= nil then
+                AppelsEnCours[indexCall].receiver_src = srcTo
+                TriggerEvent('gcPhone:addCall', AppelsEnCours[indexCall])
+                TriggerClientEvent('gcPhone:waitingCall', sourcePlayer, AppelsEnCours[indexCall], true)
+                TriggerClientEvent('gcPhone:waitingCall', srcTo, AppelsEnCours[indexCall], false)
             else
                 TriggerEvent('gcPhone:addCall', AppelsEnCours[indexCall])
                 TriggerClientEvent('gcPhone:waitingCall', sourcePlayer, AppelsEnCours[indexCall], true)
             end
         end)
-    end)
+    else
+        TriggerEvent('gcPhone:addCall', AppelsEnCours[indexCall])
+        TriggerClientEvent('gcPhone:waitingCall', sourcePlayer, AppelsEnCours[indexCall], true)
+    end
 end)
 
 function onCallFixePhone (source, phone_number, rtcOffer, extraData)
@@ -328,21 +329,21 @@ function onCallFixePhone (source, phone_number, rtcOffer, extraData)
     local sourcePlayer = tonumber(source)
     local identifier = GetPlayerIdentifiers(source)[1]
 
-    exports.ghmattimysql:scalar("SELECT phone_number FROM gta_joueurs WHERE ?", {{['license'] = identifier}}, function(getNumberPhone)
-        AppelsEnCours[indexCall] = {
-            id = indexCall,
-            transmitter_src = sourcePlayer,
-            transmitter_num = getNumberPhone,
-            receiver_src = nil,
-            receiver_num = phone_number,
-            is_valid = false,
-            is_accepts = false,
-            hidden = hidden,
-            rtcOffer = rtcOffer,
-            extraData = extraData,
-            coords = FixePhone[phone_number].coords
-        }
-    end)
+
+    local getNumberPhone = MySQL.Sync.fetchScalar("SELECT phone_number FROM gta_joueurs WHERE license = @license", {['@license'] = identifier})
+    AppelsEnCours[indexCall] = {
+        id = indexCall,
+        transmitter_src = sourcePlayer,
+        transmitter_num = getNumberPhone,
+        receiver_src = nil,
+        receiver_num = phone_number,
+        is_valid = false,
+        is_accepts = false,
+        hidden = hidden,
+        rtcOffer = rtcOffer,
+        extraData = extraData,
+        coords = FixePhone[phone_number].coords
+    }
     
     PhoneFixeInfo[indexCall] = AppelsEnCours[indexCall]
 
@@ -418,20 +419,18 @@ AddEventHandler('gcPhone:appelsDeleteHistorique', function (numero)
     local _source = source
     local sourcePlayer = tonumber(_source)
     local identifier = GetPlayerIdentifiers(_source)[1]
-    exports.ghmattimysql:scalar("SELECT phone_number FROM gta_joueurs WHERE ?", {{['license'] = identifier}}, function(getNumberPhone)
-        exports.ghmattimysql:execute("DELETE FROM phone_calls WHERE `owner` = @owner AND `num` = @num", {
-            ['@owner'] = getNumberPhone,
-            ['@num'] = numero
-        })
-    end)
+    local getNumberPhone = MySQL.Sync.fetchScalar("SELECT phone_number FROM gta_joueurs WHERE license = @license", {['@license'] = identifier})
+    MySQL.Sync.execute("DELETE FROM phone_calls WHERE `owner` = @owner AND `num` = @num", {
+        ['@owner'] = getNumberPhone,
+        ['@num'] = numero
+    })
 end)
 
 function appelsDeleteAllHistorique(srcIdentifier)
-    exports.ghmattimysql:scalar("SELECT phone_number FROM gta_joueurs WHERE ?", {{['license'] = srcIdentifier}}, function(getNumberPhone)
-        exports.ghmattimysql:execute("DELETE FROM phone_calls WHERE `owner` = @owner", {
-            ['@owner'] = getNumberPhone
-        })
-    end)
+    local getNumberPhone = MySQL.Sync.fetchScalar("SELECT phone_number FROM gta_joueurs WHERE license = @license", {['@license'] = srcIdentifier})
+    MySQL.Sync.execute("DELETE FROM phone_calls WHERE `owner` = @owner", {
+        ['@owner'] = getNumberPhone
+    })
 end
 
 RegisterServerEvent('gcPhone:appelsDeleteAllHistorique')
@@ -450,21 +449,20 @@ AddEventHandler("GTA:TelephoneLoaded",function()
     local source = source
 	local license = GetPlayerIdentifiers(source)[1]
 
-    exports.ghmattimysql:scalar("SELECT phone_number FROM gta_joueurs WHERE ?", {{['license'] = license}}, function(Myphone_number)
-		if Myphone_number then
-            TriggerClientEvent("gcPhone:myPhoneNumber", source, Myphone_number)
-            
-            exports.ghmattimysql:execute("SELECT * FROM phone_users_contacts WHERE identifier = @identifier", { ['@identifier'] = license}, function(res2)
-                TriggerClientEvent("gcPhone:contactList", source, res2)
-            end)
+    local Myphone_number = MySQL.Sync.fetchScalar("SELECT phone_number FROM gta_joueurs WHERE license = @license", {['@license'] = license})
+    if Myphone_number then
+        TriggerClientEvent("gcPhone:myPhoneNumber", source, Myphone_number)
+        
+        MySQL.Sync.fetchAll("SELECT * FROM phone_users_contacts WHERE identifier = @identifier", { ['@identifier'] = license}, function(res2)
+            TriggerClientEvent("gcPhone:contactList", source, res2)
+        end)
 
-            exports.ghmattimysql:execute("SELECT phone_messages.* FROM phone_messages LEFT JOIN gta_joueurs ON gta_joueurs.license = @identifier WHERE phone_messages.receiver = gta_joueurs.phone_number", { ['@identifier'] = license}, function(result)
-                if (result) then
-                    TriggerClientEvent("gcPhone:allMessage", source, result)
-                end
-            end)
-            
-			sendHistoriqueCall(source, Myphone_number)
-        end
-	end)
+        MySQL.Sync.fetchAll("SELECT phone_messages.* FROM phone_messages LEFT JOIN gta_joueurs ON gta_joueurs.license = @identifier WHERE phone_messages.receiver = gta_joueurs.phone_number", { ['@identifier'] = license}, function(result)
+            if (result) then
+                TriggerClientEvent("gcPhone:allMessage", source, result)
+            end
+        end)
+        
+        sendHistoriqueCall(source, Myphone_number)
+    end
 end)

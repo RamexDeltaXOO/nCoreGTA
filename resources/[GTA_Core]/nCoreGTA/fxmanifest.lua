@@ -1,11 +1,10 @@
 fx_version 'cerulean'
 game 'gta5'
 
-dependencies {'ghmattimysql'}
-
 ui_page 'progressBar/progressbar.html'
 
 server_scripts {
+    '@mysql-async/lib/MySQL.lua',
     'config/config.lua',
     'server/player.lua',
     'server/whitelist.lua',

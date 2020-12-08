@@ -6,7 +6,7 @@ local inService = {
 
 local callActive = {
     ["police"] = {taken = false},
-    ["medic"] = {taken = false},
+    ["medic"] =  {taken = false},
 }
 
 RegisterServerEvent("player:serviceOn")
@@ -36,7 +36,6 @@ local source = source
         CancelEvent()
     end
 
-    
     callActive[job].target = source
     callActive[job].taken = true
     for _, player in pairs(inService[job]) do
@@ -55,11 +54,13 @@ end)
 RegisterServerEvent("call:getCall")
 AddEventHandler("call:getCall", function(job)
     callActive[job].taken = false
+
     for _, player in pairs(inService[job]) do
         if player ~= source then
             TriggerClientEvent("call:taken", player)
         end
     end
+
     if not callActive[job].taken then
         TriggerClientEvent("target:call:taken", callActive[job].target, 1)
     end

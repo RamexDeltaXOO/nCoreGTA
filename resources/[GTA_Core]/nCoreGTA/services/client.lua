@@ -5,7 +5,6 @@ local work = {}
 local target = {}
 local square = math.sqrt
 
-
 local function getDistance(a, b) 
     local x, y, z = a.x-b.x, a.y-b.y, a.z-b.z
     return square(x*x+y*y+z*z)
@@ -39,8 +38,6 @@ local Ninja_Core__ShowNinjaNotification = function(title, subject, msg)
     Ninja_Core_ShowAdvancedNotification(title, subject, msg, mugshotStr, 1)
 	UnregisterPedheadshot(mugshot)
 end
-
-
 
 
 RegisterNetEvent("call:cancelCall")
@@ -92,18 +89,23 @@ AddEventHandler('playerDropped', function()
 	TriggerServerEvent("player:serviceOff", nil)
 end)
 
+
+
 --------------||SYSTEM DE CALL||------------------
 RegisterNetEvent('nAppelMobile:callPolice') -------> POLICE
 AddEventHandler('nAppelMobile:callPolice', function()
     local plyPos = GetEntityCoords(GetPlayerPed(-1), true)
     DisplayOnscreenKeyboard(1, "FMMC_MPM_NA", "", "", "", "", "", 200)
+    
     while (UpdateOnscreenKeyboard() == 0) do
-      DisableAllControlActions(0);
-      Wait(0);
+        DisableAllControlActions(0);
+        Wait(0);
     end
+    
     if (GetOnscreenKeyboardResult()) then
-      message =  GetOnscreenKeyboardResult()
+        message =  GetOnscreenKeyboardResult()
     end
+
     if message ~= nil and message ~= "" then
         TriggerServerEvent("call:makeCall", "police", {x=plyPos.x,y=plyPos.y,z=plyPos.z}, message)
     end
@@ -112,14 +114,17 @@ end)
 RegisterNetEvent('nAppelMobile:callMedic') -------> MEDIC
 AddEventHandler('nAppelMobile:callMedic', function()
     local plyPos = GetEntityCoords(GetPlayerPed(-1), true)
+
     DisplayOnscreenKeyboard(1, "FMMC_MPM_NA", "", "", "", "", "", 200)
     while (UpdateOnscreenKeyboard() == 0) do
       DisableAllControlActions(0);
       Wait(0);
     end
+
     if (GetOnscreenKeyboardResult()) then
       message =  GetOnscreenKeyboardResult()
     end
+
     if message ~= nil and message ~= "" then
         TriggerServerEvent("call:makeCall", "medic", {x=plyPos.x,y=plyPos.y,z=plyPos.z}, message)
     end
@@ -141,11 +146,11 @@ Citizen.CreateThread(function()
 			else
                 Ninja_Core__ShowNinjaNotification("Notification Alert", "Vous avez déjà une intervention.", "")
 			end
-        -- Press L key to decline the call
         elseif IsControlJustPressed(1, 182) and callActive then
             Ninja_Core__ShowNinjaNotification("Notification Alert", "Vous avez refuser l'appel.", "")
             callActive = false
         end
+
         if haveTarget then
             DrawMarker(25, target.pos.x, target.pos.y, target.pos.z-1, 0, 0, 0, 0, 0, 0, 2.001, 2.0001, 0.5001, 255, 255, 0, 200, 0, 0, 0, 0)
             local playerPos = GetEntityCoords(GetPlayerPed(-1), true)

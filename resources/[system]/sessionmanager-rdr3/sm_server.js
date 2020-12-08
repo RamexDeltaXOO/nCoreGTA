@@ -94,7 +94,7 @@ protobuf.load(GetResourcePath(GetCurrentResourceName()) + "/rline.proto", functi
 				const pda = Object.entries(playerDatas);
 				
 				if (pda.length > 0) {
-					hostIndex = pda[0][1].slot | 0;
+					hostIndex = pda[0][1].slot | 0; // TODO: actually use <=31 slot index *and* check for id
 					
 					for (const [ id, data ] of Object.entries(playerDatas)) {
 						emitHostChanged(id, {

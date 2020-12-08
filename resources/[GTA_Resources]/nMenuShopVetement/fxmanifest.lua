@@ -1,8 +1,6 @@
 fx_version 'cerulean'
 game 'gta5'
 
-dependencies {'ghmattimysql'}
-
 client_scripts {
     "src/RMenu.lua",
     "src/menu/RageUI.lua",
@@ -19,4 +17,6 @@ client_scripts {
     'client/menu.lua'
 }
 
+
+server_script '@mysql-async/lib/MySQL.lua'
 server_script 'server/main.lua'

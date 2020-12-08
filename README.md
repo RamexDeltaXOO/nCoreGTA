@@ -21,26 +21,20 @@ Avant de faire quoi que ce soit ! lisez bien.
 - System d'inventaire "Armes en items" compris.
 - Menu Personnel
 - Un "pole emploi" pour vos métier (priver/public)
-- ghmattimysql pour ce qui est de requete sql.
+- mysql-async pour ce qui est de requete sql.
 - connexion du joueur via license, plus besoin de steam.
 - system de service pour recevoir vos call d'urgence.
 - Magasin de vêtement
-
 - System de coma joueur. --> EN PROGRESSION !
 - jobs urgence Police/Medic --> EN PROGRESSION !
 
-
-
-
 ## Discord SourceV2 :
-
 https://discord.gg/NKHJTqn
 
 
 ## Installation :
 - Installé la dernière version recommandait des artefacts sur FiveM : https://runtime.fivem.net/artifacts/fivem/build_server_windows/master/
 - Installé puis configurer votre base de donnée, une vidéo est faite sur le discord.
-- Entrer votre mot de passe dans le fichier config qui se trouve dans [GTA_Core]/ghmattimysql/config.json
 - Installé le fichier GTA_Serveur.sql dans votre base de donnée.
 
 ## License :

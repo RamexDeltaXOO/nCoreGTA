@@ -1,13 +1,12 @@
 fx_version 'cerulean'
 game 'gta5'
 
-dependencies {'ghmattimysql'}
-
 files {
     'json/**/*'
 }
 
 server_scripts {
+    '@mysql-async/lib/MySQL.lua',
     'server/server_main.lua',
     'server/server_inventaire.lua'
 }

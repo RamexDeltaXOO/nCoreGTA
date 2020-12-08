@@ -51,7 +51,7 @@ AddEventHandler('playerConnecting', function(name, setKickReason, deferrals)
         end
 
         if allowed then
-            exports.ghmattimysql:execute("SELECT * FROM gta_joueurs_banni WHERE license = @username", {['@username'] = license}, function(result)
+            MySQL.Async.fetchAll('SELECT * FROM gta_joueurs_banni WHERE license = @username',{['@username'] = license}, function(result)
                 if result[1] then
                     deferrals.done("Vous êtes bannis !")
                     isBannis = true
@@ -75,14 +75,13 @@ AddEventHandler('playerConnecting', function(name, setKickReason, deferrals)
         end
     end
     if not config.activerWhitelist then
-        exports.ghmattimysql:scalar("SELECT license FROM gta_joueurs_banni WHERE ?", {{['license'] = license}}, function(license)
-            if license ~= nil then
-                deferrals.done("Vous êtes bannis !")
-                isBannis = true
-            else
-                deferrals.done()
-            end
-          end)
+        local resss = MySQL.Sync.fetchScalar("SELECT license FROM gta_joueurs_banni WHERE license = @username", {['@username'] = license})
+        if resss ~= nil then
+            deferrals.done("Vous êtes bannis !")
+            isBannis = true
+        else
+            deferrals.done()
+        end
         print("Joueur : [ "..GetPlayerName(source).. " ] vient de rejoindre. license : ", license)
     end
 end)
