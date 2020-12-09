@@ -70,11 +70,13 @@ end
 
 --> Gestion de l'introduction du personnage :
 function AnimCam()
-	local playerPed = PlayerPedId()
-
+	--> Chargement de l'animation du player :
+	LoadAnim("mp_character_creation@customise@male_a")
+	
 	DestroyAllCams(true)
 	DoScreenFadeOut(1000)
 	Citizen.Wait(2000)
+
 
 	--> Setup des camera d'introduction :
 	config.Camera.cam2 = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", config.Camera['body'].x, config.Camera['body'].y, config.Camera['body'].z, 0.00, 0.00, 0.00, config.Camera['body'].fov, false, 0)
@@ -84,24 +86,27 @@ function AnimCam()
 	Citizen.Wait(500)
 	DoScreenFadeIn(1000)
 
+	--> On charge un ped de sex homme :
+	GetPlayerModel("mp_m_freemode_01")
+
+
 	-->Spawn du ped juste avant de begin l'animation :
     SetEntityCoords(GetPlayerPed(-1), 405.59, -997.18, -99.00, 0.0, 0.0, 0.0, true)
 	SetEntityHeading(GetPlayerPed(-1), 90.00)
 
-	--> On charge un ped de sex homme :
-	GetPlayerModel("mp_m_freemode_01")
-
-    Citizen.Wait(500)
 
 	--> Setup de la derniere camera d'introduction :
 	config.Camera.cam3 = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", 402.99, -998.02, -99.00, 0.00, 0.00, 0.00, 50.00, false, 0)
     PointCamAtCoord(config.Camera.cam3, 402.99, -998.02, -99.00)
     SetCamActiveWithInterp(config.Camera.cam2, config.Camera.cam3, 5000, true, true)
 
-	--> Chargement de l'animation du player :
-	LoadAnim("mp_character_creation@customise@male_a")
     TaskPlayAnim(GetPlayerPed(-1), "mp_character_creation@customise@male_a", "intro", 1.0, 1.0, 4000, 0, 1, 0, 0, 0)
-    Citizen.Wait(5000)
+    Citizen.Wait(4000)
+
+	SetEntityCoords(PlayerPedId(), 402.9, -996.87, -99.01-2, 174.22, 0.0, 0.0, false)
+
+	Wait(500)
+
 	FreezeEntityPosition(GetPlayerPed(-1), true)
 
 	--> Ouverture du menu :

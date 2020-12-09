@@ -59,9 +59,8 @@ end
 function Player:Find(source, callback)
 	local src = source
 	local pLicense = Player:GetLicense(src)
-	local Parameters = {['license'] = pLicense}
 
-	MySQL.Async.fetchAll('SELECT * FROM gta_joueurs WHERE license = @license',{['@username'] = pLicense}, function(res)
+	MySQL.Async.fetchAll('SELECT * FROM gta_joueurs WHERE license = @username',{['@username'] = pLicense}, function(res)
 		for _, v in pairs(res) do
 			if callback then
 				callback(v)
@@ -100,14 +99,16 @@ end)
 
 RegisterServerEvent('GTA:GetInfoJoueurs')  --> cette event sert uniquement a get les donnée de votre perso.
 AddEventHandler('GTA:GetInfoJoueurs', function(source, callback)
-	local src = source
-	for _,v in ipairs(GetPlayerIdentifiers(src)) do
-		if string.sub(v, 1, string.len("license")) == "license" then
-			pLicense = v
-		end
-	end
+	local source = source
+    local license = ""
+    local Identifiers = GetPlayerIdentifiers(source)
+    for _,identifier in ipairs(Identifiers) do
+        if string.find(identifier, "license:") then
+            license = identifier
+        end
+    end
 
-	MySQL.Async.fetchAll('SELECT * FROM gta_joueurs WHERE license = @license',{['@license'] = pLicense}, function(res)
+	MySQL.Async.fetchAll('SELECT * FROM gta_joueurs WHERE license = @license',{['@license'] = license}, function(res)
 		for _, v in pairs(res) do
 			if callback then
 				callback(v)
@@ -118,15 +119,7 @@ end)
 
 RegisterServerEvent('GTA:CreationJoueur')  --> cette event sert uniquement a créer votre perso.
 AddEventHandler('GTA:CreationJoueur', function(source)
-    local src = source
-    for _,v in ipairs(GetPlayerIdentifiers(src)) do
-        if string.sub(v, 1, string.len("license")) == "license" then
-            pLicense = v
-        end
-    end
-
-    local Parameters = {['license'] = pLicense}
-
+	local source = source
     local license = ""
     local Identifiers = GetPlayerIdentifiers(source)
     for _,identifier in ipairs(Identifiers) do
@@ -135,34 +128,34 @@ AddEventHandler('GTA:CreationJoueur', function(source)
         end
     end
 
-	local result = MySQL.Sync.fetchScalar("SELECT license FROM gta_joueurs WHERE license = @username", {['@username'] = pLicense})
+	local result = MySQL.Sync.fetchScalar("SELECT license FROM gta_joueurs WHERE license = @username", {['@username'] = license})
 	if not result then
 		if config.activerWhitelist == false then
-			print('Creation de personnage pour : [' .. GetPlayerName(src) .. "] -  [License] : "..license)
+			print('Creation de personnage pour : [' .. GetPlayerName(source) .. "] -  [License] : "..license)
 		end
 
-		Player:New(pLicense, config.argentPropre, config.argentSale, config.banque)
+		Player:New(license, config.argentPropre, config.argentSale, config.banque)
 	end
 end)
 
 RegisterServerEvent('GTA:salaire')
 AddEventHandler('GTA:salaire', function()
-	local src = source
-	local license = ""
-    local Identifiers = GetPlayerIdentifiers(src)
+	local source = source
+    local license = ""
+    local Identifiers = GetPlayerIdentifiers(source)
     for _,identifier in ipairs(Identifiers) do
         if string.find(identifier, "license:") then
             license = identifier
         end
-	end
+    end
 
-	Player:Find(src, function(data)
+	Player:Find(source, function(data)
 		if data then
-			MySQL.Async.fetchAll('SELECT salaire FROM gta_joueurs INNER JOIN gta_metiers ON gta_joueurs.job = gta_metiers.metiers WHERE license = @license',{['@username'] = license}, function(res)
+			MySQL.Async.fetchAll('SELECT salaire FROM gta_joueurs INNER JOIN gta_metiers ON gta_joueurs.job = gta_metiers.metiers WHERE license = @license',{['@license'] = license}, function(res)
 				local newValue = data.banque + res[1].salaire
 				MySQL.Async.execute('UPDATE gta_joueurs SET banque=@newValue WHERE license = @license',{ ['license'] = tostring(data.license),['newValue'] = tostring(newValue)},function () end)
-				TriggerClientEvent('GTA:AfficherBanque', src, newValue)
-				TriggerClientEvent("nMenuNotif:showNotification", src, "~g~ Salaire reçu : + "..res[1].salaire.." ~g~$")
+				TriggerClientEvent('GTA:AfficherBanque', source, newValue)
+				TriggerClientEvent("nMenuNotif:showNotification", source, "~g~ Salaire reçu : + "..res[1].salaire.." ~g~$")
 			end)
 		end
 	end)
@@ -213,7 +206,7 @@ AddEventHandler('GTA:RetirerArgentPropre', function(source, value)
 			local getArgentPropre = data.argent_propre
 			if getArgentPropre >= value then
 				local newCash = data.argent_propre - value
-				MySQL.Async.execute('UPDATE gta_joueurs SET argent_propre=@newCash WHERE license = @license',{ ['license'] = tostring(data.license),['newValue'] = tostring(newCash)},function () end)
+				MySQL.Async.execute('UPDATE gta_joueurs SET argent_propre=@newCash WHERE license = @license',{ ['license'] = tostring(data.license),['newCash'] = tostring(newCash)},function () end)
 				TriggerClientEvent('GTA:AfficherArgentPropre', src, newCash)
 				TriggerClientEvent('GTA:AjoutSonPayer', src)
 			else

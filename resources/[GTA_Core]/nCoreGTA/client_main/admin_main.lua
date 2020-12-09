@@ -336,7 +336,7 @@ Citizen.CreateThread(function ()
 
             DrawMissionText("~r~x~w~ = ~r~"..posX.." ~g~y~w~ = ~g~"..posY.." ~b~z~w~ = ~b~"..posZ.." ~w~~h~h = "..posH)
 		else
-		    waitEnablePostition = 1000
+		   waitEnablePostition = 1000
         end
     end 
 end)
