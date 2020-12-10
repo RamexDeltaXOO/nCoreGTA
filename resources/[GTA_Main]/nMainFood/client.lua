@@ -184,15 +184,6 @@ Citizen.CreateThread(function()
 			drawStats(0.015, 0.760, 0.141, 0.0109999999999999, 209, 163, 117, 50) --Blackground Food
 			drawStats(0.015, 0.760, pFaim * 0.141 / 100, 0.0109999999999999, 194, 133, 71, 225) --Faim barre
 			drawStats(0.015, 0.778, pSoif * 0.141 / 100, 0.0109999999999999, 71, 133, 194, 225) --Soif barre
-			
-
-		--[[ --Ancien :
-			drawStats(0.868, 0.935, 0.121, 0.019999999999999 + 0.002, 0, 0, 0, 125)  --Blackground SOIF
-			drawStats(0.870, 0.940, pSoif * 0.117 / 100, 0.010899999999999, 71, 133, 194, 255)
-
-			drawStats(0.868, 0.960, 0.121, 0.0199999999999999, 0, 0, 0, 120)  --Blackground FAIM
-			drawStats(0.870, 0.965, pFaim * 0.117 / 100, 0.010899999999999, 255, 115, 0, 255)
-		]]
 		end
 	end
 end)

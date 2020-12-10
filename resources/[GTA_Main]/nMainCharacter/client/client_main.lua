@@ -103,7 +103,8 @@ function AnimCam()
     TaskPlayAnim(GetPlayerPed(-1), "mp_character_creation@customise@male_a", "intro", 1.0, 1.0, 4000, 0, 1, 0, 0, 0)
     Citizen.Wait(4000)
 
-	SetEntityCoords(PlayerPedId(), 402.9, -996.87, -99.01-2, 174.22, 0.0, 0.0, false)
+	SetEntityCoords(PlayerPedId(), 402.9, -996.87, -99.01-2, 0.0, 0.0, 0.0, true)
+	SetEntityHeading(GetPlayerPed(-1), 174.22)
 
 	Wait(500)
 
@@ -144,12 +145,13 @@ function EndCreation()
 	--> Nouvel position du joueur :
 	SetEntityCoords(playerPed, config.PlayerSpawnPos.x, config.PlayerSpawnPos.y, config.PlayerSpawnPos.z)
 	SetEntityHeading(playerPed, config.PlayerSpawnPos.h)
-
-	Wait(1000)
-	DisplayRadar(true)
+	
 	DoScreenFadeIn(1000)
 	Wait(1000)
+	
 	RageUI.Visible(mainMenu, false)
+	DisplayRadar(true)
+
 	TriggerEvent('EnableDisableHUDFS', true)
 end
 
